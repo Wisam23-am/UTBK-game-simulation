@@ -87,7 +87,7 @@ export default function GamePage() {
       return () => clearInterval(interval);
     } else if (timer === 0 || lives === 0) {
       // Game over
-      router.push(`/result?score=${score}&correct=${correctAnswers}&time=${300 - timer}`);
+      router.push(`/hasil?score=${score}&correct=${correctAnswers}&time=${300 - timer}`);
     }
   }, [timer, lives, score, correctAnswers, router]);
 
@@ -122,7 +122,7 @@ export default function GamePage() {
         setIsAnswered(false);
       } else {
         // Game finished
-        router.push(`/result?score=${score + (selectedAnswer === currentQuestion.correctAnswer ? 10 : 0)}&correct=${correctAnswers + (selectedAnswer === currentQuestion.correctAnswer ? 1 : 0)}&time=${300 - timer}`);
+        router.push(`/hasil?score=${score + (selectedAnswer === currentQuestion.correctAnswer ? 10 : 0)}&correct=${correctAnswers + (selectedAnswer === currentQuestion.correctAnswer ? 1 : 0)}&time=${300 - timer}`);
       }
     }, 1500);
   };
@@ -156,7 +156,7 @@ export default function GamePage() {
       </div> */}
 
       {/* Top Bar */}
-      <div className="relative z-10 mx-auto mb-6 max-w-5xl animate-slide-in">
+      <div className="relative z-10 mx-auto mb-6 max-w-5xl ">
         <div className="rounded-2xl bg-[#F9F7F7]/90 p-5 backdrop-blur-xl border border-[#3F72AF]/30 shadow-2xl shadow-[#3F72AF]/20">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="group flex items-center gap-3 rounded-xl bg-gradient-to-r from-[#DBE2EF]/40 to-[#3F72AF]/20 px-5 py-3 transition-all hover:scale-105 border border-[#3F72AF]/50">
@@ -183,24 +183,24 @@ export default function GamePage() {
       </div>
 
       {/* Question Card */}
-      <div className="relative z-10 mx-auto max-w-5xl animate-scale-in">
+      
         <div className="rounded-3xl bg-[#F9F7F7]/20 p-1 backdrop-blur-xl border border-[#3F72AF]/30 shadow-2xl shadow-[#3F72AF]/20">
           <div className="rounded-3xl bg-[#F9F7F7]/95 
-                          p-4 sm:p-6 md:p-8 max-h-[85vh] 
-                          overflow-y-auto">
-            {/* Question Number & Progress */}
-            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                          p-4 sm:p-6 md:p-8 max-h-[99vh] 
+                          ">
+                              {/* Question Number & Progress */}
+                              <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
 
-              <span className="rounded-full bg-gradient-to-r from-[#3F72AF] to-[#112D4E] px-5 py-2 text-sm font-bold text-white shadow-lg">
-                🎯 Soal {currentQuestionIndex + 1} dari {questions.length}
-              </span>
-              <div className="flex-1 ml-6 h-3 overflow-hidden rounded-full bg-[#DBE2EF] border border-[#3F72AF]/30">
-                <div
-                  className="h-full bg-gradient-to-r from-[#3F72AF] to-[#112D4E] transition-all duration-500 shadow-lg shadow-[#3F72AF]/50"
-                  style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
-                />
-              </div>
-            </div>
+                                <span className="rounded-full bg-gradient-to-r from-[#3F72AF] to-[#112D4E] px-5 py-2 text-sm font-bold text-white shadow-lg">
+                                  🎯 Soal {currentQuestionIndex + 1} dari {questions.length}
+                                </span>
+                                <div className="flex-1 ml-6 h-3 overflow-hidden rounded-full bg-[#DBE2EF] border border-[#3F72AF]/30">
+                                  <div
+                                    className="h-full bg-gradient-to-r from-[#3F72AF] to-[#112D4E] transition-all duration-500 shadow-lg shadow-[#3F72AF]/50"
+                                    style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+                                  />
+                                </div>
+                              </div>
 
             {/* Question Text */}
             <div className="mb-8 rounded-2xl bg-gradient-to-r from-[#DBE2EF]/40 to-[#3F72AF]/10 p-6 backdrop-blur-sm border border-[#3F72AF]/30">
@@ -311,6 +311,6 @@ export default function GamePage() {
           </div>
         </div>
       </div>
-    </div>
+    
   );
 }

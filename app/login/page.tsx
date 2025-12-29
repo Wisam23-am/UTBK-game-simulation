@@ -181,13 +181,13 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF] flex flex-col justify-center items-center p-4 font-sans text-[#112D4E]">
+    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center p-4 font-sans text-slate-800">
       {/* Container Utama */}
-      <div className="w-full max-w-md bg-[#F9F7F7]/95 rounded-3xl shadow-xl overflow-hidden border border-[#3F72AF]/30">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
         
         {/* Header/Logo Section */}
         <div className="pt-10 pb-6 flex flex-col items-center">
-          <div className="relative w-28 h-28 rounded-2xl flex items-center justify-center mb-4 shadow-lg overflow-hidden group cursor-pointer bg-[#F9F7F7] border-2 border-[#DBE2EF] hover:border-[#3F72AF] transition-all">
+          <div className="relative w-28 h-28 rounded-2xl flex items-center justify-center mb-4 shadow-lg overflow-hidden group cursor-pointer bg-white border-2 border-gray-200 hover:border-blue-400 transition-all">
            <img 
                 src="/logo.png" 
                 alt="Default Logo" 
@@ -215,10 +215,10 @@ const App = () => {
               </span>
             </label> */}
           </div>
-          <h1 className="text-2xl font-bold text-[#112D4E] tracking-tight">
-            {view === 'login' ? 'Selamat Datang' : 'Buat Akun Baru'}
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+            {view === 'login' ? 'Selamat Datang ' : 'Buat Akun Baru'}
           </h1>
-          <p className="text-[#3F72AF] text-sm mt-1">
+          <p className="text-gray-500 text-sm mt-1">
             {view === 'login' ? 'Masuk untuk memulai simulasi UTBK' : 'Lengkapi data diri untuk berjuang bersama'}
           </p>
         </div>
@@ -228,9 +228,9 @@ const App = () => {
           
           {view === 'register' && (
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-[#112D4E] ml-1">Nama Lengkap</label>
+              <label className="text-sm font-semibold text-gray-700 ml-1">Nama Lengkap</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#DBE2EF] group-focus-within:text-[#3F72AF] transition-colors">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                   <User size={18} />
                 </div>
                 <input
@@ -238,7 +238,7 @@ const App = () => {
                   name="name"
                   required
                   placeholder="Masukkan nama lengkap"
-                  className="block w-full pl-10 pr-3 py-3 bg-[#F9F7F7] border border-[#DBE2EF] rounded-xl focus:ring-2 focus:ring-[#3F72AF] focus:border-transparent outline-none transition-all text-sm text-[#112D4E]"
+                  className="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
                   onChange={handleInputChange}
                   value={formData.name}
                 />
@@ -247,9 +247,9 @@ const App = () => {
           )}
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-[#112D4E] ml-1">Email</label>
+            <label className="text-sm font-semibold text-gray-700 ml-1">Email</label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#DBE2EF] group-focus-within:text-[#3F72AF] transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                 <Mail size={18} />
               </div>
               <input
@@ -257,7 +257,7 @@ const App = () => {
                 name="email"
                 required
                 placeholder="email@contoh.com"
-                className="block w-full pl-10 pr-3 py-3 bg-[#F9F7F7] border border-[#DBE2EF] rounded-xl focus:ring-2 focus:ring-[#3F72AF] focus:border-transparent outline-none transition-all text-sm text-[#112D4E]"
+                className="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
                 onChange={handleInputChange}
                 value={formData.email}
               />
@@ -266,15 +266,15 @@ const App = () => {
 
           <div className="space-y-1">
             <div className="flex justify-between items-center ml-1">
-              <label className="text-sm font-semibold text-[#112D4E]">Kata Sandi</label>
+              <label className="text-sm font-semibold text-gray-700">Kata Sandi</label>
               {view === 'login' && (
-                <button type="button" className="text-xs font-medium text-[#3F72AF] hover:text-[#112D4E]">
+                <button type="button" className="text-xs font-medium text-blue-600 hover:text-blue-700">
                   Lupa Kata Sandi?
                 </button>
               )}
             </div>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#DBE2EF] group-focus-within:text-[#3F72AF] transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                 <Lock size={18} />
               </div>
               <input
@@ -282,13 +282,13 @@ const App = () => {
                 name="password"
                 required
                 placeholder="••••••••"
-                className="block w-full pl-10 pr-12 py-3 bg-[#F9F7F7] border border-[#DBE2EF] rounded-xl focus:ring-2 focus:ring-[#3F72AF] focus:border-transparent outline-none transition-all text-sm text-[#112D4E]"
+                className="block w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
                 onChange={handleInputChange}
                 value={formData.password}
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#DBE2EF] hover:text-[#3F72AF]"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -298,9 +298,9 @@ const App = () => {
 
           {view === 'register' && (
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-[#112D4E] ml-1">Konfirmasi Kata Sandi</label>
+              <label className="text-sm font-semibold text-gray-700 ml-1">Konfirmasi Kata Sandi</label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#DBE2EF] group-focus-within:text-[#3F72AF] transition-colors">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                   <Lock size={18} />
                 </div>
                 <input
@@ -308,7 +308,7 @@ const App = () => {
                   name="confirmPassword"
                   required
                   placeholder="Ulangi kata sandi"
-                  className="block w-full pl-10 pr-3 py-3 bg-[#F9F7F7] border border-[#DBE2EF] rounded-xl focus:ring-2 focus:ring-[#3F72AF] focus:border-transparent outline-none transition-all text-sm text-[#112D4E]"
+                  className="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
                   onChange={handleInputChange}
                   value={formData.confirmPassword}
                 />
@@ -320,7 +320,7 @@ const App = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-3.5 px-4 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] hover:from-[#112D4E] hover:to-[#3F72AF] text-white font-bold rounded-xl shadow-lg shadow-[#3F72AF]/50 flex items-center justify-center space-x-2 transition-all transform active:scale-[0.98] ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+            className={`w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-100 flex items-center justify-center space-x-2 transition-all transform active:scale-[0.98] ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
             {isLoading ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -334,12 +334,12 @@ const App = () => {
 
           {/* Toggle Login/Register */}
           <div className="text-center mt-6">
-            <p className="text-sm text-[#3F72AF]">
+            <p className="text-sm text-gray-500">
               {view === 'login' ? 'Belum punya akun?' : 'Sudah memiliki akun?'}
               <button
                 type="button"
                 onClick={toggleView}
-                className="ml-1 font-bold text-[#3F72AF] hover:text-[#112D4E] transition-all underline"
+                className="ml-1 font-bold text-blue-600 hover:underline transition-all"
               >
                 {view === 'login' ? 'Daftar' : 'Masuk'}
               </button>
@@ -350,7 +350,7 @@ const App = () => {
 
       {/* Footer Filosofis */}
       <footer className="mt-8 text-center max-w-sm px-4">
-        <p className="text-xs text-[#3F72AF] leading-relaxed italic">
+        <p className="text-xs text-gray-400 leading-relaxed italic">
           "Barang siapa yang menempuh jalan untuk mencari ilmu, maka Allah akan mudahkan baginya jalan menuju surga." (HR. Muslim)
         </p>
       </footer>
