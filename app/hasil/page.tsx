@@ -129,7 +129,7 @@ export default function ResultPage() {
                   : percentage >= 80
                   ? 'Sangat bagus! Anda memahami sebagian besar materi. Pelajari kembali soal yang salah.'
                   : percentage >= 70
-                  ? 'Bagus! Anda sudah memahami materi dengan cukup baik. Ada beberapa area yang perlu diperbaiki.'
+                  ? 'Hasil ini adalah bukti nyata bahwa Anda hanya melakukan syarat sah untuk bertahan hidup, bukan untuk berkembang. Anda berada di garis tipis antara "berusaha" dan "sekadar hadir".'
                   : percentage >= 60
                   ? 'Al-Quran berulang kali bertanya, Afala Taqilun? (Apakah kamu tidak menggunakan akalmu?). Namun, Anda sepertinya telah mencapai tingkat \'spiritualitas\' yang sangat tinggi, di mana Anda merasa tidak lagi memiliki nalar untuk memahami dunia.'
                   : 'Al-Qur\'an berulang kali bertanya, Afala Taqilun? (Apakah kamu tidak menggunakan akalmu?). Namun, Anda sepertinya telah mencapai tingkat \'spiritualitas\' yang sangat tinggi, di mana Anda merasa tidak lagi memiliki nalar untuk memahami dunia.'}
@@ -138,7 +138,7 @@ export default function ResultPage() {
 
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-4">
-              <Link href="/result" className="block">
+              <Link href="/" className="block">
                 <button className="w-full py-4 px-6 bg-[#DBE2EF] hover:bg-[#3F72AF]/20 text-[#3F72AF] font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border border-[#3F72AF]/30">
                   <Home size={20} />
                   <span>Ke Beranda</span>
