@@ -3,10 +3,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Card from '@/components/Card';
 import ButtonPrimary from '@/components/ButtonPrimary';
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,6 +18,14 @@ export default function RegisterPage() {
     // Static UI - no real registration
     console.log('Registration attempt:', { name, email, password });
     alert('Pendaftaran berhasil! (Demo only)');
+    
+    // Simpan status login ke localStorage
+    localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userName', name || email.split('@')[0]);
+    localStorage.setItem('userEmail', email);
+    
+    // Redirect ke dashboard (halaman utama)
+    router.push('/');
   };
 
   return (

@@ -147,7 +147,7 @@ const App = () => {
   });
 
   // Simulasi penanganan form
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
@@ -158,12 +158,18 @@ const App = () => {
         ? "Bismillah, Anda berhasil masuk ke simulasi." 
         : "Alhamdulillah, akun Anda telah terdaftar.";
       alert(message);
+      
+      // Simpan status login ke localStorage
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userName', formData.name || formData.email.split('@')[0]);
+      localStorage.setItem('userEmail', formData.email);
+      
       // Redirect ke dashboard (halaman utama)
       router.push('/');
     }, 1500);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
