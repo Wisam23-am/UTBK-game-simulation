@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { fetchLeaderboard, getUserRank, type LeaderboardEntry } from '@/lib/leaderboard/leaderboard-helpers';
+import { getCurrentUser } from '@/lib/auth/auth-helpers';
 
-interface LeaderboardEntry {
+interface DisplayEntry {
   rank: number;
   name: string;
   score: number;
@@ -15,111 +17,62 @@ interface LeaderboardEntry {
   badge?: string;
 }
 
-// Dummy data - nanti akan diganti dengan data dari database
-const dummyLeaderboard: LeaderboardEntry[] = [
-  {
-    rank: 1,
-    name: 'Ahmad Wijaya',
-    score: 950,
-    totalGames: 15,
-    correctAnswers: 95,
-    avgScore: 850,
-    badge: '🥇',
-  },
-  {
-    rank: 2,
-    name: 'Siti Nurhaliza',
-    score: 920,
-    totalGames: 12,
-    correctAnswers: 92,
-    avgScore: 820,
-    badge: '🥈',
-  },
-  {
-    rank: 3,
-    name: 'Budi Santoso',
-    score: 890,
-    totalGames: 14,
-    correctAnswers: 89,
-    avgScore: 800,
-    badge: '🥉',
-  },
-  {
-    rank: 4,
-    name: 'Dewi Lestari',
-    score: 870,
-    totalGames: 11,
-    correctAnswers: 87,
-    avgScore: 790,
-  },
-  {
-    rank: 5,
-    name: 'Andi Firmansyah',
-    score: 850,
-    totalGames: 13,
-    correctAnswers: 85,
-    avgScore: 780,
-  },
-  {
-    rank: 6,
-    name: 'Rina Kusuma',
-    score: 830,
-    totalGames: 10,
-    correctAnswers: 83,
-    avgScore: 770,
-  },
-  {
-    rank: 7,
-    name: 'Fajar Ramadhan',
-    score: 810,
-    totalGames: 12,
-    correctAnswers: 81,
-    avgScore: 760,
-  },
-  {
-    rank: 8,
-    name: 'Maya Anggraini',
-    score: 790,
-    totalGames: 9,
-    correctAnswers: 79,
-    avgScore: 750,
-  },
-  {
-    rank: 9,
-    name: 'Riko Pratama',
-    score: 770,
-    totalGames: 11,
-    correctAnswers: 77,
-    avgScore: 740,
-  },
-  {
-    rank: 10,
-    name: 'Lina Maharani',
-    score: 750,
-    totalGames: 8,
-    correctAnswers: 75,
-    avgScore: 730,
-  },
-];
-
 export default function LeaderboardPage() {
-  const [leaderboardData, setLeaderboardData] = useState<LeaderboardEntry[]>([]);
+  const [leaderboardData, setLeaderboardData] = useState<DisplayEntry[]>([]);
   const [currentUserRank, setCurrentUserRank] = useState<number | null>(null);
   const [filter, setFilter] = useState<'all' | 'weekly' | 'monthly'>('all');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load leaderboard data
-    setLeaderboardData(dummyLeaderboard);
-
-    // Check if user is in leaderboard
-    const userName = localStorage.getItem('userName');
-    if (userName) {
-      const userEntry = dummyLeaderboard.find(entry => entry.name === userName);
-      if (userEntry) {
-        setCurrentUserRank(userEntry.rank);
-      }
-    }
+    loadLeaderboard();
   }, []);
+
+  async function loadLeaderboard() {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // Fetch leaderboard from Supabase
+      const { data, error: fetchError } = await fetchLeaderboard(100);
+
+      if (fetchError || !data) {
+        console.error('❌ Error loading leaderboard:', fetchError);
+        setError('Gagal memuat leaderboard. Silakan coba lagi.');
+        setIsLoading(false);
+        return;
+      }
+
+      // Transform data to display format
+      const displayData: DisplayEntry[] = data.map((entry) => ({
+        rank: entry.rank,
+        name: entry.full_name || entry.username,
+        score: entry.best_score,
+        totalGames: entry.total_games,
+        correctAnswers: entry.total_correct,
+        avgScore: entry.avg_score,
+        badge: entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : undefined,
+      }));
+
+      setLeaderboardData(displayData);
+      console.log('✅ Leaderboard loaded:', displayData.length, 'entries');
+
+      // Check current user's rank
+      const { user } = await getCurrentUser();
+      if (user) {
+        const { rank } = await getUserRank(user.id);
+        setCurrentUserRank(rank);
+        if (rank) {
+          console.log('✅ User rank:', rank);
+        }
+      }
+    } catch (err) {
+      console.error('❌ Exception loading leaderboard:', err);
+      setError('Terjadi kesalahan. Silakan refresh halaman.');
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const getRankColor = (rank: number) => {
     if (rank === 1) return 'from-yellow-400 to-yellow-600';
@@ -148,42 +101,79 @@ export default function LeaderboardPage() {
           <p className="text-base sm:text-lg text-[#3F72AF]">Lihat peringkat dan tantang diri Anda!</p>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex justify-center gap-2 sm:gap-4 mb-8 animate-scale-in">
-          <button
-            onClick={() => setFilter('all')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${
-              filter === 'all'
-                ? 'bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-lg scale-105'
-                : 'bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF]'
-            }`}
-          >
-            🌟 Semua Waktu
-          </button>
-          <button
-            onClick={() => setFilter('weekly')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${
-              filter === 'weekly'
-                ? 'bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-lg scale-105'
-                : 'bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF]'
-            }`}
-          >
-            📅 Mingguan
-          </button>
-          <button
-            onClick={() => setFilter('monthly')}
-            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${
-              filter === 'monthly'
-                ? 'bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-lg scale-105'
-                : 'bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF]'
-            }`}
-          >
-            📆 Bulanan
-          </button>
-        </div>
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#3F72AF]"></div>
+            <p className="mt-4 text-[#3F72AF] font-semibold">Memuat leaderboard...</p>
+          </div>
+        )}
 
-        {/* Top 3 Podium */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+        {/* Error State */}
+        {error && !isLoading && (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-8 text-center">
+            <p className="text-red-600 font-semibold mb-4">{error}</p>
+            <button
+              onClick={loadLeaderboard}
+              className="px-6 py-3 bg-[#3F72AF] text-white rounded-xl font-semibold hover:bg-[#112D4E] transition-all"
+            >
+              🔄 Coba Lagi
+            </button>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!isLoading && !error && leaderboardData.length === 0 && (
+          <div className="bg-white rounded-xl p-8 text-center shadow-lg">
+            <p className="text-xl text-gray-600 mb-4">Belum ada data leaderboard.</p>
+            <p className="text-gray-500 mb-6">Jadilah yang pertama bermain!</p>
+            <Link href="/game">
+              <button className="px-6 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-xl font-semibold hover:scale-105 transition-all">
+                🎮 Mulai Bermain
+              </button>
+            </Link>
+          </div>
+        )}
+
+        {/* Leaderboard Content */}
+        {!isLoading && !error && leaderboardData.length > 0 && (
+          <>
+            {/* Filter Tabs */}
+            <div className="flex justify-center gap-2 sm:gap-4 mb-8 animate-scale-in">
+              <button
+                onClick={() => setFilter('all')}
+                className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${
+                  filter === 'all'
+                    ? 'bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-lg scale-105'
+                    : 'bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF]'
+                }`}
+              >
+                🌟 Semua Waktu
+              </button>
+              <button
+                onClick={() => setFilter('weekly')}
+                className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${
+                  filter === 'weekly'
+                    ? 'bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-lg scale-105'
+                    : 'bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF]'
+                }`}
+              >
+                📅 Mingguan
+              </button>
+              <button
+                onClick={() => setFilter('monthly')}
+                className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${
+                  filter === 'monthly'
+                    ? 'bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-lg scale-105'
+                    : 'bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF]'
+                }`}
+              >
+                📆 Bulanan
+              </button>
+                </div>
+
+            {/* Top 3 Podium */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
           {/* Rank 2 */}
           {leaderboardData[1] && (
             <div className="order-2 sm:order-1 animate-slide-up" style={{ animationDelay: '0.1s' }}>
@@ -328,6 +318,8 @@ export default function LeaderboardPage() {
             </button>
           </Link>
         </div>
+          </>
+        )}
       </div>
 
       <Footer />

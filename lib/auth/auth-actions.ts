@@ -63,3 +63,6 @@ export async function signOutAction() {
   await supabase.auth.signOut();
   redirect('/login');
 }
+
+// Export aliases for convenience
+export { signInAction as signIn, signUpAction as signUp, signOutAction as signOut };

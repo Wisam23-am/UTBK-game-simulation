@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { getCurrentUser, getUserProfile } from '@/lib/auth/auth-helpers';
+import { signOut } from '@/lib/auth/auth-actions';
 
 export default function Navbar() {
   const router = useRouter();
@@ -10,20 +12,49 @@ export default function Navbar() {
   const [userName, setUserName] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Cek status login dari localStorage
+  // Cek status login dari Supabase
   useEffect(() => {
-    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    const name = localStorage.getItem('userName') || 'User';
-    setIsLoggedIn(loggedIn);
-    setUserName(name);
+    checkAuthStatus();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userName');
-    setIsLoggedIn(false);
-    setIsMobileMenuOpen(false);
-    router.push('/');
+  async function checkAuthStatus() {
+    try {
+      const { user } = await getCurrentUser();
+      
+      if (user) {
+        setIsLoggedIn(true);
+        
+        // Try to get username from profile
+        const { profile } = await getUserProfile(user.id);
+        if (profile && profile.username) {
+          setUserName(profile.username);
+        } else if (profile && profile.full_name) {
+          setUserName(profile.full_name);
+        } else if (user.email) {
+          // Fallback to email username if profile doesn't exist yet
+          setUserName(user.email.split('@')[0]);
+        } else {
+          setUserName('User');
+        }
+      } else {
+        setIsLoggedIn(false);
+        setUserName('');
+      }
+    } catch (error) {
+      console.error('Error checking auth:', error);
+      setIsLoggedIn(false);
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      setIsLoggedIn(false);
+      setIsMobileMenuOpen(false);
+      router.push('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   // Get initials for avatar

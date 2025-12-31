@@ -159,11 +159,14 @@ Leaderboard materialized view otomatis refresh setiap ada game result baru.
 
 After database setup:
 
-1. ✅ Update game page to fetch questions from Supabase
-2. ✅ Update game page to save results to Supabase
-3. ✅ Update leaderboard to fetch from global_leaderboard
-4. ✅ Update profile to fetch from profiles table
-5. ✅ Add more questions (target: 500+)
+1. ✅ Update game page to fetch questions from Supabase - **DONE**
+2. ✅ Update game page to save results to Supabase - **DONE**
+3. ✅ Update leaderboard to fetch from global_leaderboard - **DONE**
+4. ✅ Update profile to fetch from profiles table - **DONE**
+5. ✅ Update dashboard to detect login status - **DONE**
+6. ✅ Update navbar with Supabase auth - **DONE**
+7. ✅ Update LeaderboardCard with real-time data - **DONE**
+8. 🔥 Add more questions (target: 500+) - **IN PROGRESS** (10/500)
 
 ---
 

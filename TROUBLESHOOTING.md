@@ -168,6 +168,31 @@ NEXT_PUBLIC_DEV_MODE=true
 - **Impact:** This session won't count in leaderboard
 - **Fix:** Run database schema, check `/diagnostic`
 
+### "⚠️ Profile not found for user: [userId]"
+
+- **Meaning:** User logged in but profile not created yet
+- **Impact:** Username will fallback to email
+- **Fix:** Normal for new users, profile auto-created on register
+
+### "Dashboard not showing logged-in state"
+
+- **Meaning:** Dev mode might be ON or auth not detected
+- **Impact:** Shows guest view instead of user view
+- **Fix:**
+  1. Set `NEXT_PUBLIC_DEV_MODE=false` in `.env.local`
+  2. Restart dev server
+  3. Clear browser cache and refresh
+  4. Login again
+
+### "Leaderboard showing old data"
+
+- **Meaning:** LeaderboardCard might be cached
+- **Impact:** Not showing latest rankings
+- **Fix:**
+  1. Hard refresh browser (Ctrl+Shift+R)
+  2. Check if DEV_MODE is false
+  3. Verify data in Supabase dashboard
+
 ---
 
 ## Quick Fixes
@@ -199,4 +224,50 @@ npm run dev
 
 ---
 
-**Last Updated:** January 1, 2026
+## Phase 2 Issues (Leaderboard, Profile, Auth)
+
+### Dashboard still shows "Guest" after login
+
+**Cause:** Using localStorage instead of Supabase session.
+
+**Solution:** Already fixed in code. Dashboard now uses `getCurrentUser()` from Supabase auth.
+
+**Verify:** After login, refresh page - should show username greeting.
+
+---
+
+### Leaderboard showing dummy data
+
+**Cause:** Page was using static dummy array instead of fetching from database.
+
+**Solution:** Already fixed. Now uses `fetchLeaderboard()` from `lib/leaderboard/leaderboard-helpers.ts`.
+
+**Verify:** Check `/leaderboard` page - should show real usernames from database.
+
+---
+
+### Profile page error for new users
+
+**Cause:** New users may not have profile record yet (async creation).
+
+**Solution:** Already fixed. `getUserProfile()` now handles PGRST116 error gracefully and returns null instead of throwing.
+
+**Verify:** Create new account and visit `/profile` - should show "Profile not found" message instead of error.
+
+---
+
+### Dev mode games appearing in leaderboard
+
+**Cause:** Game results being saved even in development mode.
+
+**Solution:** Already handled. When `NEXT_PUBLIC_DEV_MODE=true`, game results are NOT saved to database (see `lib/game/game-helpers.ts`).
+
+**Verify:**
+
+1. Set `NEXT_PUBLIC_DEV_MODE=true` in `.env.local`
+2. Play game
+3. Check `/leaderboard` - your test results should NOT appear
+
+---
+
+**Last Updated:** January 2, 2026

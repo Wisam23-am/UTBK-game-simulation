@@ -1,7 +1,10 @@
-import React from 'react';
-import Link from 'next/link';
+'use client';
 
-interface LeaderboardEntry {
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { fetchLeaderboard, type LeaderboardEntry } from '@/lib/leaderboard/leaderboard-helpers';
+
+interface DisplayEntry {
   rank: number;
   name: string;
   score: number;
@@ -13,14 +16,42 @@ interface LeaderboardCardProps {
 }
 
 export default function LeaderboardCard({ compact = false }: LeaderboardCardProps) {
-  // Top 5 leaderboard data - nanti akan diganti dengan data dari database
-  const topPlayers: LeaderboardEntry[] = [
-    { rank: 1, name: 'Ahmad Wijaya', score: 950, badge: '🥇' },
-    { rank: 2, name: 'Siti Nurhaliza', score: 920, badge: '🥈' },
-    { rank: 3, name: 'Budi Santoso', score: 890, badge: '🥉' },
-    { rank: 4, name: 'Dewi Lestari', score: 870 },
-    { rank: 5, name: 'Andi Firmansyah', score: 850 },
-  ];
+  const [topPlayers, setTopPlayers] = useState<DisplayEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    loadTopPlayers();
+  }, []);
+
+  async function loadTopPlayers() {
+    try {
+      setIsLoading(true);
+      const { data, error: fetchError } = await fetchLeaderboard(5); // Get top 5
+
+      if (fetchError || !data) {
+        console.error('Error loading top players:', fetchError);
+        setError('Gagal memuat leaderboard');
+        return;
+      }
+
+      // Transform to display format
+      const displayData: DisplayEntry[] = data.map((entry) => ({
+        rank: entry.rank,
+        name: entry.full_name || entry.username,
+        score: entry.best_score,
+        badge: entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : undefined,
+      }));
+
+      setTopPlayers(displayData);
+      console.log('✅ Top 5 players loaded');
+    } catch (err) {
+      console.error('Exception loading top players:', err);
+      setError('Terjadi kesalahan');
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   const getRankColor = (rank: number) => {
     if (rank === 1) return 'from-yellow-400 to-yellow-600';
@@ -53,8 +84,39 @@ export default function LeaderboardCard({ compact = false }: LeaderboardCardProp
         </div>
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="p-8 text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#3F72AF]"></div>
+          <p className="mt-4 text-gray-500 text-sm">Memuat leaderboard...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !isLoading && (
+        <div className="p-8 text-center">
+          <p className="text-red-600 font-semibold mb-4">{error}</p>
+          <button
+            onClick={loadTopPlayers}
+            className="px-4 py-2 bg-[#3F72AF] text-white rounded-lg hover:bg-[#112D4E] transition-all"
+          >
+            🔄 Coba Lagi
+          </button>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!isLoading && !error && topPlayers.length === 0 && (
+        <div className="p-8 text-center">
+          <p className="text-gray-600 mb-4">Belum ada pemain di leaderboard.</p>
+          <p className="text-gray-500 text-sm">Jadilah yang pertama!</p>
+        </div>
+      )}
+
       {/* Leaderboard List */}
-      <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
+      {!isLoading && !error && topPlayers.length > 0 && (
+        <>
+          <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
         {topPlayers.map((player, index) => (
           <div
             key={player.rank}
@@ -127,6 +189,8 @@ export default function LeaderboardCard({ compact = false }: LeaderboardCardProp
           </button>
         </Link>
       </div>
+        </>
+      )}
     </div>
   );
 }

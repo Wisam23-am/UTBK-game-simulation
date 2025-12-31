@@ -64,7 +64,13 @@ export async function getUserProfile(userId?: string) {
     .single();
 
   if (error) {
-    console.error('Get profile error:', error);
+    // If profile not found, it's not an error - just return null
+    if (error.code === 'PGRST116') {
+      console.log('⚠️ Profile not found for user:', userId);
+      return { profile: null, error: null };
+    }
+    
+    console.error('❌ Get profile error:', error);
     return { profile: null, error };
   }
 

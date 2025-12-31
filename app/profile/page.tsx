@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getCurrentUser, getUserProfile, updateUserProfile, DEV_MODE } from '@/lib/auth/auth-helpers';
+import { fetchGameHistory, fetchUserStats, formatDate, formatTimeSpent, type GameHistory } from '@/lib/profile/profile-helpers';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -19,6 +20,13 @@ export default function ProfilePage() {
     school: '',
     target_university: '',
   });
+  const [detailedStats, setDetailedStats] = useState({
+    avgScore: 0,
+    totalCorrect: 0,
+    accuracy: 0,
+    totalTimeSpent: 0,
+  });
+  const [gameHistory, setGameHistory] = useState<GameHistory[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState('');
   const [editedSchool, setEditedSchool] = useState('');
@@ -43,7 +51,7 @@ export default function ProfilePage() {
       if (profile) {
         setUserId(profile.id || '');
         setUserName(profile.full_name || profile.username);
-        setUserEmail(userData.email);
+        setUserEmail(userData.email || '');
         setUserStats({
           total_games: profile.total_games || 0,
           best_score: profile.best_score || 0,
@@ -53,6 +61,22 @@ export default function ProfilePage() {
         setEditedName(profile.full_name || profile.username);
         setEditedSchool(profile.school || '');
         setEditedUniversity(profile.target_university || '');
+
+        // Fetch detailed stats and game history
+        const { data: stats } = await fetchUserStats(userData.id);
+        if (stats) {
+          setDetailedStats({
+            avgScore: stats.avgScore,
+            totalCorrect: stats.totalCorrect,
+            accuracy: stats.accuracy,
+            totalTimeSpent: stats.totalTimeSpent,
+          });
+        }
+
+        const { data: history } = await fetchGameHistory(userData.id, 10);
+        if (history) {
+          setGameHistory(history);
+        }
       }
     } catch (error) {
       console.error('Error loading profile:', error);
@@ -202,7 +226,7 @@ export default function ProfilePage() {
             </div>
 
             {/* Statistik */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mt-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-8">
               <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl border border-blue-100 text-center">
                 <div className="text-3xl font-bold text-blue-600">{userStats.total_games}</div>
                 <div className="text-sm text-slate-600 mt-1">Latihan</div>
@@ -212,10 +236,54 @@ export default function ProfilePage() {
                 <div className="text-sm text-slate-600 mt-1">Skor Terbaik</div>
               </div>
               <div className="bg-gradient-to-br from-purple-50 to-white p-4 rounded-xl border border-purple-100 text-center">
-                <div className="text-3xl font-bold text-purple-600">-</div>
-                <div className="text-sm text-slate-600 mt-1">Peringkat</div>
+                <div className="text-3xl font-bold text-purple-600">{detailedStats.avgScore}</div>
+                <div className="text-sm text-slate-600 mt-1">Rata-rata</div>
+              </div>
+              <div className="bg-gradient-to-br from-pink-50 to-white p-4 rounded-xl border border-pink-100 text-center">
+                <div className="text-3xl font-bold text-pink-600">{detailedStats.accuracy}%</div>
+                <div className="text-sm text-slate-600 mt-1">Akurasi</div>
               </div>
             </div>
+
+            {/* Game History */}
+            {gameHistory.length > 0 && (
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">📊 Riwayat Latihan</h3>
+                <div className="space-y-3 max-h-96 overflow-y-auto">
+                  {gameHistory.map((game, index) => (
+                    <div
+                      key={game.id}
+                      className="bg-gradient-to-r from-gray-50 to-white p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-2xl font-bold text-blue-600">{game.score}</span>
+                            <span className="text-sm text-gray-500">poin</span>
+                            <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold">
+                              {game.category || 'Umum'}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-gray-600">
+                            <span>✅ {game.correct_answers} benar</span>
+                            <span>❌ {game.wrong_answers} salah</span>
+                            <span>⏱️ {formatTimeSpent(game.time_spent || 0)}</span>
+                          </div>
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {formatDate(game.created_at)}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {userStats.total_games > 10 && (
+                  <p className="text-center text-sm text-gray-500 mt-4">
+                    Menampilkan 10 latihan terakhir dari {userStats.total_games} total latihan
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8 pt-6 border-t border-gray-200">

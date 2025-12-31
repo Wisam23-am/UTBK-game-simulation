@@ -3,62 +3,99 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { signIn, signUp } from '@/lib/auth/auth-actions';
 
 const App = () => {
   const router = useRouter();
   const [view, setView] = useState('login'); // 'login' or 'register'
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [logoImage, setLogoImage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    name: '',
+    username: '',
     confirmPassword: ''
   });
 
-  // Simulasi penanganan form
-  const handleSubmit = (e: React.FormEvent) => {
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Logika simulasi: Dalam pencarian ilmu, kesabaran adalah kunci.
-    setTimeout(() => {
+    setError(null);
+
+    try {
+      if (view === 'login') {
+        // Login with Supabase
+        const { error: signInError } = await signIn(formData.email, formData.password);
+        
+        if (signInError) {
+          setError(signInError || 'Email atau password salah. Silakan coba lagi.');
+          setIsLoading(false);
+          return;
+        }
+
+        // Success - redirect to home
+        router.push('/');
+      } else {
+        // Register with Supabase
+        // Validate password match
+        if (formData.password !== formData.confirmPassword) {
+          setError('Password tidak cocok!');
+          setIsLoading(false);
+          return;
+        }
+
+        // Validate password length
+        if (formData.password.length < 6) {
+          setError('Password minimal 6 karakter!');
+          setIsLoading(false);
+          return;
+        }
+
+        // Validate username
+        if (!formData.username.trim()) {
+          setError('Username wajib diisi!');
+          setIsLoading(false);
+          return;
+        }
+
+        const { error: signUpError } = await signUp(
+          formData.email,
+          formData.password,
+          formData.username
+        );
+
+        if (signUpError) {
+          setError(signUpError || 'Gagal mendaftar. Silakan coba lagi.');
+          setIsLoading(false);
+          return;
+        }
+
+        // Success - show message and redirect
+        alert('Pendaftaran berhasil! Silakan login.');
+        setView('login');
+        setFormData({ email: formData.email, password: '', username: '', confirmPassword: '' });
+      }
+    } catch (err) {
+      console.error('Auth error:', err);
+      setError('Terjadi kesalahan. Silakan coba lagi.');
+    } finally {
       setIsLoading(false);
-      const message = view === 'login' 
-        ? "Bismillah, Anda berhasil masuk ke simulasi." 
-        : "Alhamdulillah, akun Anda telah terdaftar.";
-      alert(message);
-      
-      // Simpan status login ke localStorage
-      localStorage.setItem('isLoggedIn', 'true');
-      localStorage.setItem('userName', formData.name || formData.email.split('@')[0]);
-      localStorage.setItem('userEmail', formData.email);
-      
-      // Redirect ke dashboard (halaman utama)
-      router.push('/');
-    }, 1500);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoImage(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+    // Clear error when user starts typing
+    if (error) setError(null);
   };
 
   const toggleView = () => {
     setView(view === 'login' ? 'register' : 'login');
-    setFormData({ email: '', password: '', name: '', confirmPassword: '' });
+    setFormData({ email: '', password: '', username: '', confirmPassword: '' });
+    setError(null);
   };
 
   return (
@@ -86,21 +123,28 @@ const App = () => {
         {/* Form Section */}
         <form onSubmit={handleSubmit} className="px-8 pb-10 space-y-5">
           
+          {/* Error Message */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-600 animate-shake">
+              ⚠️ {error}
+            </div>
+          )}
+
           {view === 'register' && (
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-gray-700 ml-1">Nama Lengkap</label>
+              <label className="text-sm font-semibold text-gray-700 ml-1">Username</label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
                   <User size={18} />
                 </div>
                 <input
                   type="text"
-                  name="name"
+                  name="username"
                   required
-                  placeholder="Masukkan nama lengkap"
+                  placeholder="Masukkan username"
                   className="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
                   onChange={handleInputChange}
-                  value={formData.name}
+                  value={formData.username}
                 />
               </div>
             </div>

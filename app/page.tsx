@@ -5,15 +5,49 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import LeaderboardCard from '@/components/LeaderboardCard';
+import { getCurrentUser, getUserProfile } from '@/lib/auth/auth-helpers';
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Cek status login dari localStorage
-    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-    setIsLoggedIn(loggedIn);
+    checkAuthStatus();
   }, []);
+
+  async function checkAuthStatus() {
+    try {
+      const { user } = await getCurrentUser();
+      
+      if (user) {
+        setIsLoggedIn(true);
+        
+        // Try to get username from profile
+        const { profile } = await getUserProfile(user.id);
+        if (profile && profile.username) {
+          setUserName(profile.username);
+        } else if (profile && profile.full_name) {
+          setUserName(profile.full_name);
+        } else if (user.email) {
+          // Fallback to email username if profile doesn't exist yet
+          setUserName(user.email.split('@')[0]);
+        } else {
+          setUserName('User');
+        }
+        
+        console.log('✅ User logged in:', userName);
+      } else {
+        setIsLoggedIn(false);
+        setUserName(null);
+      }
+    } catch (error) {
+      console.error('Error checking auth:', error);
+      setIsLoggedIn(false);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
@@ -33,6 +67,17 @@ export default function Home() {
                 <span className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
                 Platform Latihan UTBK #1 di Indonesia
               </div>
+
+              {/* Greeting for logged in users */}
+              {isLoggedIn && userName && (
+                <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl">
+                  <p className="text-lg text-green-800">
+                    👋 Selamat datang kembali, <span className="font-bold">{userName}</span>!
+                  </p>
+                  <p className="text-sm text-green-600 mt-1">Ayo lanjutkan latihanmu hari ini!</p>
+                </div>
+              )}
+
               <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 mb-6 leading-tight">
                 Persiapan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">UTBK</span> yang Lebih Seru!
               </h1>
@@ -45,17 +90,32 @@ export default function Home() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/game" className="group">
-                  <button className="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold text-lg shadow-lg shadow-blue-600/30 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-600/40 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
-                    <span>🚀</span> Mulai Latihan Sekarang
-                  </button>
-                </Link>
-                {!isLoggedIn && (
-                  <Link href="/login" className="group">
-                    <button className="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 rounded-xl font-semibold text-lg border-2 border-gray-200 hover:border-blue-600 hover:text-blue-600 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
-                      <span>👤</span> Login / Daftar
-                    </button>
-                  </Link>
+                {isLoggedIn ? (
+                  <>
+                    <Link href="/game" className="group">
+                      <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold text-lg shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                        <span>🚀</span> Mulai Latihan
+                      </button>
+                    </Link>
+                    <Link href="/profile" className="group">
+                      <button className="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 rounded-xl font-semibold text-lg border-2 border-gray-200 hover:border-blue-600 hover:text-blue-600 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                        <span>👤</span> Lihat Profile
+                      </button>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link href="/game" className="group">
+                      <button className="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold text-lg shadow-lg shadow-blue-600/30 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-600/40 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                        <span>🚀</span> Mulai Latihan Sekarang
+                      </button>
+                    </Link>
+                    <Link href="/login" className="group">
+                      <button className="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 rounded-xl font-semibold text-lg border-2 border-gray-200 hover:border-blue-600 hover:text-blue-600 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                        <span>👤</span> Login / Daftar
+                      </button>
+                    </Link>
+                  </>
                 )}
               </div>
             </div>
