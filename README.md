@@ -1,53 +1,101 @@
 # 🎮 UTBK Game Simulation
 
-Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan pendekatan gamifikasi untuk membuat persiapan ujian lebih menyenangkan dan efektif.
+Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan **Dual Mode System**: **Game Mode** untuk practice cepat dengan leaderboard, dan **Try-Out Mode** untuk simulasi UTBK lengkap dengan scoring realistis.
 
-## � Status Proyek
+## 🌟 Status Proyek
 
 **Phase 2 Complete ✅** - Full Integration with Real-time Data  
-**Current:** Production-ready, needs more questions for launch
+**Phase 3 Planning ✅** - Dual Mode System Design Complete  
+**Current:** Production-ready base, needs questions & new modes
 
 ### ✅ Completed Features:
 
-#### Database & Game Core
+#### Database & Game Core (Phase 1-2)
 
-- Database fully integrated with Supabase
-- Real-time question fetching
-- Game result saving
-- Auto-update leaderboard stats
-- Dev mode for easy testing
-- Diagnostic tools
-- Error handling & logging
+- Database fully integrated with Supabase PostgreSQL
+- Real-time question fetching & caching
+- Game result saving with auto-stats update
+- Materialized view leaderboard (top 100)
+- Dev mode for easy testing & development
+- Comprehensive diagnostic tools
+- Robust error handling & logging
 
 #### User Features (Phase 2)
 
-- ✅ Leaderboard page with real-time data from database
-- ✅ Profile page with game history & statistics
-- ✅ Supabase authentication (login/register)
-- ✅ Dashboard login detection via Supabase
-- ✅ Navbar with proper auth state management
-- ✅ LeaderboardCard real-time data fetch
+- ✅ User authentication (Supabase Auth with JWT)
+- ✅ Dashboard with personalized greeting
+- ✅ Real-time leaderboard (global rankings)
+- ✅ Profile page (game history & detailed stats)
+- ✅ Responsive navbar (mobile-first)
+- ✅ LeaderboardCard component (top 5 live)
 
-### 🎯 Next Steps:
+### 🚀 Planned Features (Phase 3):
 
-- Add 200+ questions (currently only 10)
-- Deploy to production (Vercel)
-- Performance optimization
-- Add more question categories
+#### 🎮 **Dual Mode System:**
+
+**1. Game Mode (Enhanced)**
+
+- 🎮 Quick practice (10-20 soal, ~20 menit)
+- ⚡ Speed bonus system (faster = bonus points)
+- 🔥 Streak bonus (consecutive correct)
+- 🏆 **Public leaderboard** with tiebreaker
+- ❤️ Life system (3 nyawa)
+- 🎯 Category selection
+
+**2. Try-Out Mode (NEW!)**
+
+- 📝 Full UTBK simulation (95-175 soal)
+- ⏱️ Real section timers (25-35 min/section)
+- 🎯 IRT-based scoring (0-1000 like real UTBK)
+- 📊 **Private analytics** (no leaderboard)
+- 🔍 Strength/weakness identification
+- 📈 University target comparison
+- 📖 Complete review mode
+
+### 🔥 Next Priorities:
+
+1. **Add 200+ Questions** (HIGH) - TPS sections first
+2. **Try-Out Mode Implementation** (HIGH) - 5-7 hours
+3. **Enhanced Game Mode** (MEDIUM) - Bonus systems, 2-3 hours
+4. **Deploy to Production** - Vercel + testing
 
 ## 📋 Deskripsi
 
-UTBK Game Simulation adalah aplikasi web yang dirancang untuk membantu siswa mempersiapkan diri menghadapi UTBK dengan cara yang lebih interaktif dan menarik. Aplikasi ini menggunakan konsep gamifikasi dengan sistem nyawa, timer, dan leaderboard untuk meningkatkan motivasi belajar.
+UTBK Game Simulation adalah aplikasi web komprehensif yang membantu siswa mempersiapkan UTBK dengan **Dual Mode System**:
+
+- **🎮 Game Mode**: Practice cepat & menyenangkan dengan leaderboard kompetitif
+- **📝 Try-Out Mode**: Simulasi UTBK lengkap dengan scoring & analytics realistis
+
+Aplikasi ini menggabungkan gamifikasi untuk motivasi dengan simulasi realistis untuk persiapan maksimal.
 
 ### ✨ Fitur Utama
 
-- 🎯 **Simulasi Ujian Real-time**: Timer dan sistem penilaian otomatis yang menyerupai ujian UTBK sebenarnya
-- ❤️ **Sistem Nyawa**: Game mechanics dengan 3 nyawa untuk meningkatkan fokus dan tantangan
-- 🏆 **Leaderboard**: Kompetisi global dengan pengguna lain (powered by Supabase)
-- 📊 **Pelacakan Progress**: Riwayat hasil ujian dan analisis performa tersimpan di database
-- 👤 **Sistem Autentikasi**: Login dan register dengan Supabase Auth
-- 📱 **Responsive Design**: Dapat diakses dari desktop, tablet, dan mobile
-- 💡 **Penjelasan Soal**: Setiap soal dilengkapi dengan penjelasan detail
+#### 🎮 Game Mode Features:
+
+- ⚡ **Quick Practice**: 10-20 soal, selesai dalam 20 menit
+- ❤️ **Life System**: 3 nyawa untuk tantangan ekstra
+- 🏆 **Leaderboard Global**: Kompetisi dengan ribuan siswa
+- 🔥 **Bonus System**: Speed & streak bonuses
+- 🎯 **Category Selection**: Pilih topik yang ingin dipelajari
+
+#### 📝 Try-Out Mode Features:
+
+- 📊 **Full UTBK Simulation**: 95-175 soal (TPS + Skolastik)
+- ⏱️ **Real Timing**: Timer per section (25-35 menit)
+- 🎯 **IRT Scoring**: Scoring 0-1000 seperti UTBK asli
+- 📈 **Detailed Analytics**: Breakdown per section & topik
+- 🔍 **Weakness Identification**: Rekomendasi materi untuk dipelajari
+- 🎓 **University Comparison**: Bandingkan dengan passing grade PTN
+- 📖 **Review Mode**: Lihat semua jawaban & penjelasan
+- 🔒 **Private Results**: Tidak ada leaderboard, fokus ke improvement
+
+#### ⚙️ General Features:
+
+- 👤 **Authentication**: Login dengan Supabase Auth (aman & cepat)
+- 📊 **Progress Tracking**: Riwayat lengkap semua latihan & try-out
+- 📱 **Responsive Design**: Perfect di HP, tablet, & desktop
+- 💡 **Detailed Explanations**: Penjelasan lengkap setiap soal
+- 🔧 **Dev Mode**: Testing mode untuk development
 - 🔧 **Dev Mode**: Testing mode untuk development tanpa database
 
 ## 🛠️ Teknologi yang Digunakan

@@ -82,7 +82,7 @@ export default function Home() {
                 Persiapan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">UTBK</span> yang Lebih Seru!
               </h1>
               <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 leading-tight">
-                Dengan <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Sensasi</span> Game!
+                Raih <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Skor</span> Tertinggi!
               </h2>
               <p className="text-xl text-slate-600 mb-8 leading-relaxed">
                 Simulasi ujian dengan timer real-time, sistem scoring otomatis, dan pelacakan progres yang akurat. Raih skor impianmu dengan latihan yang lebih efektif!
