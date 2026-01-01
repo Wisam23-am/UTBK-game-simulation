@@ -87,20 +87,46 @@ User profile dengan game statistics:
 
 #### 2. `questions`
 
-Bank soal UTBK:
+Bank soal UTBK dengan struktur terbaru (UTBK 2024+):
 
 ```sql
 - id (UUID)
-- category (matematika, bahasa-indonesia, bahasa-inggris, tps)
-- subcategory (Aljabar, Geometri, Tata Bahasa, etc)
+- category (pu, pk, ppu, pbm, lbi, lbe, pm)
+  * pu  = Penalaran Umum
+  * pk  = Pengetahuan Kuantitatif
+  * ppu = Pemahaman Bacaan & Menulis
+  * pbm = Pengetahuan & Pemahaman Umum
+  * lbi = Literasi Bahasa Indonesia
+  * lbe = Literasi Bahasa Inggris
+  * pm  = Penalaran Matematika
+  * Legacy: matematika, bahasa-indonesia, bahasa-inggris
+- subcategory (Aljabar, Penalaran Induktif, Tata Bahasa, etc)
 - difficulty (easy, medium, hard)
+- difficulty_weight (8=easy, 10=medium, 12=hard untuk IRT scoring)
+- utbk_section (penalaran-umum, literasi-bahasa-indonesia, etc)
 - question (text)
+- question_image_url (URL gambar/diagram soal)
 - options (JSONB array)
 - correct_answer (A-E)
 - explanation
-- source (curated, ai-generated, utbk-2024, etc)
+- stimulus_id (FK to question_stimulus untuk soal dengan bacaan bersama)
+- source (curated, ai-generated, pdf-utbk-2024, etc)
 - verified (boolean)
 - usage_count, correct_rate
+```
+
+#### 2B. `question_stimulus`
+
+Bacaan/stimulus bersama untuk multiple questions:
+
+```sql
+- id (UUID)
+- title (Bacaan 1: Perubahan Iklim Global)
+- content (teks panjang/passage)
+- image_url (optional, gambar stimulus)
+- stimulus_type (text, chart, table, mixed)
+- section (utbk section)
+- created_at
 ```
 
 #### 3. `game_results`
@@ -276,6 +302,130 @@ CREATE POLICY "Users can update own tryout sessions"
 
 ---
 
+## 📊 UTBK 2024+ Category Structure
+
+### **Kategori Baru (Wajib Digunakan):**
+
+| **category** | **utbk_section**             | **Nama Lengkap**             | **Target Soal** |
+| ------------ | ---------------------------- | ---------------------------- | --------------- |
+| `pu`         | `penalaran-umum`             | Penalaran Umum               | 20 soal         |
+| `pk`         | `pengetahuan-kuantitatif`    | Pengetahuan Kuantitatif      | 15 soal         |
+| `ppu`        | `pemahaman-bacaan-menulis`   | Pemahaman Bacaan & Menulis   | 20 soal         |
+| `pbm`        | `pengetahuan-pemahaman-umum` | Pengetahuan & Pemahaman Umum | 20 soal         |
+| `lbi`        | `literasi-bahasa-indonesia`  | Literasi Bahasa Indonesia    | 15 soal         |
+| `lbe`        | `literasi-bahasa-inggris`    | Literasi Bahasa Inggris      | 15 soal         |
+| `pm`         | `penalaran-matematika`       | Penalaran Matematika         | 20 soal         |
+
+### **Format SQL dengan Kategori Baru:**
+
+```sql
+-- Contoh soal Penalaran Umum
+INSERT INTO questions (
+  category, subcategory, difficulty, difficulty_weight,
+  utbk_section, question, question_image_url, options,
+  correct_answer, explanation, stimulus_id, source, verified
+) VALUES
+('pu', 'Penalaran Induktif', 'medium', 10, 'penalaran-umum',
+ 'Jika semua A adalah B dan sebagian B adalah C, maka...',
+ NULL, -- atau URL gambar jika ada
+ '[
+   {"label":"A","text":"Semua A adalah C"},
+   {"label":"B","text":"Sebagian A adalah C"},
+   {"label":"C","text":"Tidak dapat disimpulkan"},
+   {"label":"D","text":"Semua C adalah A"},
+   {"label":"E","text":"Tidak ada A yang C"}
+ ]'::jsonb,
+ 'B',
+ 'Dari premis universal dan partikular...',
+ NULL, -- atau UUID stimulus jika ada bacaan bersama
+ 'pdf-utbk-2024',
+ true);
+```
+
+### **Difficulty Weight (untuk IRT Scoring):**
+
+| **difficulty** | **difficulty_weight** |
+| -------------- | --------------------- |
+| `easy`         | 8                     |
+| `medium`       | 10                    |
+| `hard`         | 12                    |
+
+---
+
+## 🖼️ Handling Gambar & Stimulus
+
+### **1. Soal dengan Gambar:**
+
+```sql
+-- Upload gambar ke Supabase Storage dulu
+-- Storage bucket: 'question-images' (public)
+-- Contoh URL: https://[project].supabase.co/storage/v1/object/public/question-images/math_001.png
+
+INSERT INTO questions (..., question_image_url, ...) VALUES
+('pm', 'Geometri', 'medium', 10, 'penalaran-matematika',
+ 'Perhatikan grafik berikut. Luas daerah yang diarsir adalah...',
+ 'https://yvmfjurfcrqjtbgecyhf.supabase.co/storage/v1/object/public/question-images/math_001.png',
+ '[...]'::jsonb,
+ 'C',
+ 'Luas = 1/2 × base × height...',
+ NULL, 'pdf-utbk-2024', true);
+```
+
+### **2. Soal dengan Stimulus (Bacaan Bersama):**
+
+```sql
+-- Step 1: Insert stimulus
+INSERT INTO question_stimulus (id, title, content, stimulus_type, section) VALUES
+('550e8400-e29b-41d4-a716-446655440001',
+ 'Bacaan 1: Perubahan Iklim Global',
+ 'Perubahan iklim global merupakan fenomena... [TEKS PANJANG 500+ KATA]',
+ 'text',
+ 'literasi-bahasa-indonesia');
+
+-- Step 2: Insert soal yang menggunakan stimulus
+INSERT INTO questions (..., stimulus_id, ...) VALUES
+('lbi', 'Pemahaman Bacaan', 'medium', 10, 'literasi-bahasa-indonesia',
+ 'Berdasarkan bacaan di atas, ide pokok paragraf pertama adalah...',
+ NULL,
+ '[...]'::jsonb,
+ 'A',
+ 'Paragraf pertama membahas...',
+ '550e8400-e29b-41d4-a716-446655440001', -- stimulus_id SAME
+ 'pdf-utbk-2024', true),
+
+('lbi', 'Pemahaman Bacaan', 'medium', 10, 'literasi-bahasa-indonesia',
+ 'Kata "fenomena" pada kalimat pertama bermakna...',
+ NULL,
+ '[...]'::jsonb,
+ 'C',
+ 'Fenomena = kejadian',
+ '550e8400-e29b-41d4-a716-446655440001', -- stimulus_id SAME
+ 'pdf-utbk-2024', true);
+```
+
+---
+
+## 🔄 Migrasi Database Existing
+
+Jika database Anda sudah ada dan ingin update ke struktur baru:
+
+**Run file:** `migration-utbk-categories.sql`
+
+```bash
+# Buka Supabase SQL Editor
+# Copy paste isi migration-utbk-categories.sql
+# Run (Ctrl+Enter)
+```
+
+Migration akan:
+
+- ✅ Add kolom baru: `difficulty_weight`, `utbk_section`, `question_image_url`, `stimulus_id`
+- ✅ Create table `question_stimulus`
+- ✅ Add indexes & RLS policies
+- ✅ Update existing questions dengan `difficulty_weight`
+
+---
+
 ## Question Format for Try-Out Mode
 
 When adding questions for Try-Out Mode, include these fields:
@@ -293,11 +443,11 @@ INSERT INTO questions (
   explanation,
   verified
 ) VALUES (
-  'tps',
-  'Penalaran Umum',
+  'pu',               -- UPDATED: use new category
+  'Penalaran Induktif',
   'medium',
-  10,                           -- Medium weight
-  'penalaran-umum',            -- UTBK section
+  10,                 -- Medium weight
+  'penalaran-umum',   -- UTBK section
   'Jika semua A adalah B...',
   '[
     {"label": "A", "text": "..."},
