@@ -89,45 +89,62 @@ User profile dengan game statistics:
 
 Bank soal UTBK dengan struktur terbaru (UTBK 2024+):
 
+**Status Soal: 350 Soal Verified ✅**
+
+| Kategori                           | Jumlah | Target | Status  |
+| ---------------------------------- | ------ | ------ | ------- |
+| PU (Penalaran Umum)                | 50     | 20     | ✅ 250% |
+| PK (Pengetahuan Kuantitatif)       | 50     | 30     | ✅ 167% |
+| PPU (Pengetahuan & Pemahaman Umum) | 50     | 20     | ✅ 250% |
+| PBM (Pemahaman Bacaan & Menulis)   | 50     | 20     | ✅ 250% |
+| LBI (Literasi Bahasa Indonesia)    | 50     | 15     | ✅ 333% |
+| LBE (Literasi Bahasa Inggris)      | 50     | 15     | ✅ 333% |
+| PM (Penalaran Matematika)          | 50     | 20     | ✅ 250% |
+
+**Struktur Database:**
+
 ```sql
 - id (UUID)
 - category (pu, pk, ppu, pbm, lbi, lbe, pm)
   * pu  = Penalaran Umum
   * pk  = Pengetahuan Kuantitatif
-  * ppu = Pemahaman Bacaan & Menulis
-  * pbm = Pengetahuan & Pemahaman Umum
+  * ppu = Pengetahuan & Pemahaman Umum
+  * pbm = Pemahaman Bacaan & Menulis
   * lbi = Literasi Bahasa Indonesia
   * lbe = Literasi Bahasa Inggris
   * pm  = Penalaran Matematika
-  * Legacy: matematika, bahasa-indonesia, bahasa-inggris
 - subcategory (Aljabar, Penalaran Induktif, Tata Bahasa, etc)
 - difficulty (easy, medium, hard)
 - difficulty_weight (8=easy, 10=medium, 12=hard untuk IRT scoring)
 - utbk_section (penalaran-umum, literasi-bahasa-indonesia, etc)
 - question (text)
-- question_image_url (URL gambar/diagram soal)
-- options (JSONB array)
+- question_image_url (URL gambar/diagram soal, optional)
+- options (JSONB array dengan format [{"label":"A","text":"..."}, ...])
 - correct_answer (A-E)
-- explanation
+- explanation (penjelasan lengkap dengan perhitungan)
 - stimulus_id (FK to question_stimulus untuk soal dengan bacaan bersama)
-- source (curated, ai-generated, pdf-utbk-2024, etc)
-- verified (boolean)
-- usage_count, correct_rate
+- source (pdf-utbk-2024, pdf-utbk-2025-wangsit, etc)
+- verified (boolean, semua soal sudah verified)
+- usage_count, correct_rate (auto-update)
 ```
 
 #### 2B. `question_stimulus`
 
-Bacaan/stimulus bersama untuk multiple questions:
+Bacaan/stimulus bersama untuk multiple questions (digunakan oleh LBI, LBE, PBM, PM):
 
 ```sql
 - id (UUID)
-- title (Bacaan 1: Perubahan Iklim Global)
-- content (teks panjang/passage)
-- image_url (optional, gambar stimulus)
-- stimulus_type (text, chart, table, mixed)
-- section (utbk section)
+- title (judul stimulus, contoh: "Ketepatan Bahasa dalam Komunikasi Publik")
+- content (teks panjang/passage, 180-250 kata untuk standar SNBT 2025)
 - created_at
 ```
+
+**Catatan Penting:**
+
+- Tabel ini **TIDAK PUNYA** kolom `source`, `image_url`, `stimulus_type`, atau `section`
+- Digunakan untuk kategori dengan stimulus: LBI, LBE, PBM, PM
+- 1 stimulus dapat digunakan oleh 5-10 soal
+- Panjang standar: 180-250 kata (SNBT 2025)
 
 #### 3. `game_results`
 
@@ -192,7 +209,7 @@ After database setup:
 5. ✅ Update dashboard to detect login status - **DONE**
 6. ✅ Update navbar with Supabase auth - **DONE**
 7. ✅ Update LeaderboardCard with real-time data - **DONE**
-8. 🔥 Add more questions (target: 500+) with UTBK sections - **IN PROGRESS** (10/500)
+8. ✅ Add more questions (target: 350+) with UTBK sections - **COMPLETE** (350/350)
 9. 🎯 Implement Try-Out Mode (Phase 3B) - **PLANNED**
 10. ⚡ Implement Enhanced Game Mode (Phase 3A) - **PLANNED**
 
@@ -302,19 +319,332 @@ CREATE POLICY "Users can update own tryout sessions"
 
 ---
 
-## 📊 UTBK 2024+ Category Structure
+## 📊 UTBK 2024+ Category Structure & Format Soal
 
-### **Kategori Baru (Wajib Digunakan):**
+### **Status Kategori (COMPLETE):**
 
-| **category** | **utbk_section**             | **Nama Lengkap**             | **Target Soal** |
-| ------------ | ---------------------------- | ---------------------------- | --------------- |
-| `pu`         | `penalaran-umum`             | Penalaran Umum               | 20 soal         |
-| `pk`         | `pengetahuan-kuantitatif`    | Pengetahuan Kuantitatif      | 15 soal         |
-| `ppu`        | `pemahaman-bacaan-menulis`   | Pemahaman Bacaan & Menulis   | 20 soal         |
-| `pbm`        | `pengetahuan-pemahaman-umum` | Pengetahuan & Pemahaman Umum | 20 soal         |
-| `lbi`        | `literasi-bahasa-indonesia`  | Literasi Bahasa Indonesia    | 15 soal         |
-| `lbe`        | `literasi-bahasa-inggris`    | Literasi Bahasa Inggris      | 15 soal         |
-| `pm`         | `penalaran-matematika`       | Penalaran Matematika         | 20 soal         |
+| **category** | **utbk_section**             | **Nama Lengkap**             | **Jumlah** | **Target** | **Status** |
+| ------------ | ---------------------------- | ---------------------------- | ---------- | ---------- | ---------- |
+| `pu`         | `penalaran-umum`             | Penalaran Umum               | 50         | 20         | ✅ 250%    |
+| `pk`         | `pengetahuan-kuantitatif`    | Pengetahuan Kuantitatif      | 50         | 30         | ✅ 167%    |
+| `ppu`        | `pengetahuan-pemahaman-umum` | Pengetahuan & Pemahaman Umum | 50         | 20         | ✅ 250%    |
+| `pbm`        | `pemahaman-bacaan-menulis`   | Pemahaman Bacaan & Menulis   | 50         | 20         | ✅ 250%    |
+| `lbi`        | `literasi-bahasa-indonesia`  | Literasi Bahasa Indonesia    | 50         | 15         | ✅ 333%    |
+| `lbe`        | `literasi-bahasa-inggris`    | Literasi Bahasa Inggris      | 50         | 15         | ✅ 333%    |
+| `pm`         | `penalaran-matematika`       | Penalaran Matematika         | 50         | 20         | ✅ 250%    |
+
+**Total: 350 soal verified ✅**
+
+### **Format Soal Berdasarkan Kategori:**
+
+#### 1. **PU (Penalaran Umum) - STANDALONE**
+
+- **Subcategory:** Analogi, Silogisme, Logika, Deret Angka, Pola Huruf
+- **Format:** Soal standalone (tanpa stimulus)
+- **Difficulty:** medium/hard
+- **Contoh:**
+
+```sql
+INSERT INTO questions (...) VALUES
+('pu','Analogi','medium',10,'penalaran-umum',
+'GURU : SEKOLAH = DOKTER : ...',
+NULL,
+'[{"label":"A","text":"Pasien"},{"label":"B","text":"Rumah Sakit"}...]'::jsonb,
+'B','Relasi profesi dengan tempat kerja.',
+NULL,'pdf-utbk-2024',true);
+```
+
+#### 2. **PK (Pengetahuan Kuantitatif) - STANDALONE**
+
+- **Subcategory:** Aljabar, Persentase, Perbandingan, Statistika, Geometri
+- **Format:** Soal singkat dengan perhitungan langsung (tanpa stimulus)
+- **Difficulty:** medium/hard
+- **Diagram:** Beberapa soal bisa pakai gambar diagram
+- **Contoh:**
+
+```sql
+INSERT INTO questions (...) VALUES
+('pk','Aljabar','medium',10,'pengetahuan-kuantitatif',
+'Jika 3x − 7 = 11, maka nilai x adalah ...',
+NULL,
+'[{"label":"A","text":"4"},{"label":"B","text":"5"}...]'::jsonb,
+'C','3x = 18 → x = 6.',
+NULL,'pdf-utbk-2025',true);
+```
+
+#### 3. **PPU (Pengetahuan & Pemahaman Umum) - DENGAN STIMULUS**
+
+- **Subcategory:** Kewarganegaraan, Sejarah, Geografi, Ekonomi, Sosiologi
+- **Format:** 1 stimulus → 5 soal terkait
+- **Panjang stimulus:** 150-200 kata
+- **Difficulty:** medium/hard
+- **Contoh:**
+
+```sql
+WITH new_stimulus AS (
+  INSERT INTO question_stimulus (title, content)
+  VALUES ('Kebijakan Publik', 'Pemerintah memiliki peran...')
+  RETURNING id
+)
+INSERT INTO questions (..., stimulus_id, ...)
+SELECT 'ppu','Kewarganegaraan','medium',10,'pengetahuan-pemahaman-umum',
+  'Tujuan kebijakan publik adalah...', NULL, '[...]'::jsonb, 'B', '...',
+  new_stimulus.id,'pdf-utbk-2025',true
+FROM new_stimulus;
+```
+
+#### 4. **PBM (Pemahaman Bacaan & Menulis) - DENGAN STIMULUS**
+
+- **Subcategory:** Gagasan Utama, Informasi Tersurat, Makna Tersirat, Hubungan Antarparagraf
+- **Format:** 1 stimulus → 5 soal terkait
+- **Panjang stimulus:** 200-250 kata (3-4 paragraf)
+- **Bahasa:** Indonesia, formal, akademis
+- **Difficulty:** medium/hard
+
+#### 5. **LBI (Literasi Bahasa Indonesia) - DENGAN STIMULUS**
+
+- **Subcategory:** Ide Pokok, Informasi Tersurat, Makna Kata, Keefektifan Kalimat, Simpulan
+- **Format:** 1 stimulus → 5 soal terkait
+- **Panjang stimulus:** 200-240 kata (4 paragraf)
+- **Bahasa:** Indonesia, formal, akademis
+- **Difficulty:** medium/hard
+- **Standar SNBT 2025:** ✅
+
+#### 6. **LBE (Literasi Bahasa Inggris) - DENGAN STIMULUS**
+
+- **Subcategory:** Main Idea, Explicit Information, Inference, Vocabulary in Context, Conclusion
+- **Format:** 1 stimulus → 5 soal terkait
+- **Panjang stimulus:** 180-220 kata (4 paragraf)
+- **Bahasa:** English, academic writing
+- **Difficulty:** medium/hard
+- **Standar SNBT 2025:** ✅
+
+#### 7. **PM (Penalaran Matematika) - DENGAN STIMULUS**
+
+- **Subcategory:** Logika, Aljabar, Geometri, Kombinatorik, Probabilitas
+- **Format:** 1 stimulus → 5 soal terkait
+- **Panjang stimulus:** 100-150 kata (konteks kompleks)
+- **Fokus:** Penalaran & analisis, bukan hitung-hitungan sederhana
+- **Difficulty:** medium/hard
+- **Contoh:**
+
+```sql
+WITH new_stimulus AS (
+  INSERT INTO question_stimulus (title, content)
+  VALUES ('Hubungan Pernyataan Logis',
+    'Dalam sistem penalaran: 1) Jika A benar, maka B salah...')
+  RETURNING id
+)
+INSERT INTO questions (..., stimulus_id, ...)
+SELECT 'pm','Logika','hard',12,'penalaran-matematika',
+  'Jika A benar, maka pernyataan yang PASTI benar...',
+  NULL, '[...]'::jsonb, 'C', 'A benar → B salah → C benar.',
+  new_stimulus.id,'pdf-utbk-2025',true
+FROM new_stimulus;
+```
+
+---
+
+## 📝 Format SQL untuk Insert Questions
+
+### **Format Dasar (Standalone)**
+
+Untuk kategori **PU, PK** yang tidak pakai stimulus:
+
+```sql
+INSERT INTO questions (
+  category, subcategory, difficulty, difficulty_weight, utbk_section,
+  question_text, question_image_url, options, correct_answer,
+  explanation, stimulus_id, source, verified
+) VALUES
+('pu', 'Analogi', 'medium', 10, 'penalaran-umum',
+ 'SOAL : JAWAB = MASALAH : ...',
+ NULL,
+ '[
+   {"label":"A", "text":"Solusi"},
+   {"label":"B", "text":"Kesulitan"},
+   {"label":"C", "text":"Pemikiran"},
+   {"label":"D", "text":"Pertanyaan"},
+   {"label":"E", "text":"Kebingungan"}
+ ]'::jsonb,
+ 'A',
+ 'Relasi soal dengan jawab adalah pertanyaan dan responnya. Masalah dan solusi memiliki relasi yang sama.',
+ NULL,
+ 'pdf-utbk-2025',
+ true
+);
+```
+
+### **Format dengan Stimulus (CTE + UNION ALL)**
+
+Untuk kategori **PPU, PBM, LBI, LBE, PM** yang pakai 1 stimulus → 5 soal:
+
+```sql
+WITH new_stimulus AS (
+  INSERT INTO question_stimulus (title, content)
+  VALUES (
+    'Judul Stimulus (30-50 karakter)',
+    'Isi stimulus 180-250 kata untuk SNBT 2025.
+     Dibagi 3-4 paragraf untuk LBI/LBE/PBM.
+     Untuk PM bisa 100-150 kata dengan konteks kompleks.
+     PENTING: Jangan terlalu panjang!'
+  )
+  RETURNING id
+)
+INSERT INTO questions (
+  category, subcategory, difficulty, difficulty_weight, utbk_section,
+  question_text, question_image_url, options, correct_answer,
+  explanation, stimulus_id, source, verified
+)
+SELECT 'lbi', 'Ide Pokok', 'medium', 10, 'literasi-bahasa-indonesia',
+  'Gagasan utama paragraf pertama adalah...',
+  NULL,
+  '[
+    {"label":"A", "text":"..."},
+    {"label":"B", "text":"..."},
+    {"label":"C", "text":"..."},
+    {"label":"D", "text":"..."},
+    {"label":"E", "text":"..."}
+  ]'::jsonb,
+  'B',
+  'Kalimat utama di paragraf 1 menyatakan...',
+  new_stimulus.id,
+  'pdf-utbk-2025',
+  true
+FROM new_stimulus
+
+UNION ALL
+
+SELECT 'lbi', 'Informasi Tersurat', 'medium', 10, 'literasi-bahasa-indonesia',
+  'Berdasarkan teks, manakah pernyataan yang BENAR?',
+  NULL,
+  '[...]'::jsonb,
+  'C',
+  'Paragraf 2 menyebutkan...',
+  new_stimulus.id,
+  'pdf-utbk-2025',
+  true
+FROM new_stimulus
+
+UNION ALL
+
+SELECT 'lbi', 'Makna Kata', 'medium', 10, 'literasi-bahasa-indonesia',
+  'Kata "signifikan" dalam teks memiliki makna...',
+  NULL,
+  '[...]'::jsonb,
+  'A',
+  'Konteks menunjukkan...',
+  new_stimulus.id,
+  'pdf-utbk-2025',
+  true
+FROM new_stimulus
+
+-- ... 2 soal lagi hingga total 5 soal
+;
+```
+
+### **✅ Checklist Sebelum Insert**
+
+Validasi wajib untuk setiap soal:
+
+#### **1. Field Wajib:**
+
+- [x] `category` sesuai tabel (pu, pk, ppu, pbm, lbi, lbe, pm)
+- [x] `subcategory` relevan dengan kategori
+- [x] `difficulty`: 'easy' / 'medium' / 'hard'
+- [x] `difficulty_weight`: **8** (easy), **10** (medium), **12** (hard) ← PENTING!
+- [x] `utbk_section` sesuai mapping kategori
+- [x] `question_text` jelas dan lengkap
+- [x] `options`: JSONB array 5 opsi (A-E)
+- [x] `correct_answer`: Huruf A/B/C/D/E
+- [x] `explanation` menjelaskan kenapa jawaban benar
+- [x] `verified`: **true** setelah validasi
+- [x] `source`: 'pdf-utbk-2024', 'pdf-utbk-2025', dll
+
+#### **2. Validasi Khusus:**
+
+**Opsi (options):**
+
+```json
+[
+  { "label": "A", "text": "Pilihan A" },
+  { "label": "B", "text": "Pilihan B" },
+  { "label": "C", "text": "Pilihan C" },
+  { "label": "D", "text": "Pilihan D" },
+  { "label": "E", "text": "Pilihan E" }
+]
+```
+
+- Wajib 5 opsi A-E
+- Format JSON valid
+- Semua opsi punya `label` dan `text`
+
+**Correct Answer:**
+
+- Harus huruf kapital: A, B, C, D, atau E
+- Harus cocok dengan perhitungan/logika di `explanation`
+- ❌ SALAH: '2', 'option_a', 'a'
+- ✅ BENAR: 'A'
+
+**Difficulty Weight:**
+
+- ❌ SALAH: 15, 20, null
+- ✅ BENAR: 8 (easy), 10 (medium), 12 (hard)
+
+**Stimulus (untuk LBI, LBE, PBM, PM, PPU):**
+
+- Panjang ideal: 180-250 kata
+- Struktur: 3-4 paragraf untuk bacaan
+- Bahasa formal, akademis
+- 1 stimulus → 5 soal terkait
+- Gunakan CTE dengan UNION ALL
+
+#### **3. Validasi Matematika (PK, PM):**
+
+- Hitung ulang setiap soal secara manual
+- Cek apakah `correct_answer` sesuai hasil perhitungan
+- Pastikan opsi A-E unik dan masuk akal
+- Jelaskan langkah perhitungan di `explanation`
+
+#### **4. Error Umum yang Sering Terjadi:**
+
+| Error                    | Penyebab                           | Solusi                                                     |
+| ------------------------ | ---------------------------------- | ---------------------------------------------------------- |
+| `difficulty_weight` = 15 | Salah standar                      | Gunakan 8/10/12                                            |
+| Answer key salah         | Perhitungan benar tapi huruf salah | Cek kembali label opsi                                     |
+| Stimulus column error    | Insert 'source' ke stimulus table  | Stimulus table hanya punya: id, title, content, created_at |
+| Pola huruf salah         | Hitung ulang posisi huruf          | M→N→O... cek urutan alphabet                               |
+| JSONB format error       | Tanda kutip/koma salah             | Gunakan JSON validator                                     |
+
+### **🔍 Contoh Error vs Fix**
+
+**❌ ERROR:**
+
+```sql
+-- difficulty_weight salah
+difficulty_weight = 15  -- SALAH!
+
+-- correct_answer tidak match dengan perhitungan
+correct_answer = 'B'  -- tapi di explanation: "x = 5, jadi jawaban C"
+
+-- stimulus punya column yang tidak exist
+INSERT INTO question_stimulus (title, content, source)  -- 'source' tidak ada!
+```
+
+**✅ FIX:**
+
+```sql
+-- difficulty_weight benar
+difficulty_weight = 12  -- hard question
+
+-- correct_answer match dengan perhitungan
+correct_answer = 'C'  -- sesuai explanation: "x = 5, opsi C"
+
+-- stimulus hanya pakai column yang exist
+INSERT INTO question_stimulus (title, content)  -- BENAR!
+```
+
+---
 
 ### **Format SQL dengan Kategori Baru:**
 
@@ -322,7 +652,7 @@ CREATE POLICY "Users can update own tryout sessions"
 -- Contoh soal Penalaran Umum
 INSERT INTO questions (
   category, subcategory, difficulty, difficulty_weight,
-  utbk_section, question, question_image_url, options,
+  utbk_section, question_text, question_image_url, options,
   correct_answer, explanation, stimulus_id, source, verified
 ) VALUES
 ('pu', 'Penalaran Induktif', 'medium', 10, 'penalaran-umum',
@@ -335,7 +665,7 @@ INSERT INTO questions (
    {"label":"D","text":"Semua C adalah A"},
    {"label":"E","text":"Tidak ada A yang C"}
  ]'::jsonb,
- 'B',
+ 'C',
  'Dari premis universal dan partikular...',
  NULL, -- atau UUID stimulus jika ada bacaan bersama
  'pdf-utbk-2024',

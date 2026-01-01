@@ -42,13 +42,26 @@
   - `profiles` - User profiles with stats
   - `questions` - Bank soal UTBK
   - `game_results` - Individual game sessions
+  - `question_stimulus` - Bacaan bersama untuk soal literasi
   - `global_leaderboard` - Materialized view (top 100)
 - ✅ Triggers & functions:
   - Auto-update profile stats after game
   - Auto-refresh leaderboard
 - ✅ Row Level Security (RLS) policies
 - ✅ Indexes for performance
-- ✅ 10 sample questions (5 Matematika, 5 Bahasa Indonesia)
+- ✅ **UTBK 2024+ Structure:**
+  - 7 categories: pu, pk, ppu, pbm, lbi, lbe, pm
+  - difficulty_weight (8/10/12 for IRT scoring)
+  - question_image_url support
+  - stimulus_id foreign key for shared passages
+- ✅ **350 verified questions (250% achievement):**
+  - PU: 50 questions (250% of 20 target)
+  - PK: 50 questions (167% of 30 target)
+  - PPU: 50 questions (250% of 20 target)
+  - PBM: 50 questions (250% of 20 target)
+  - LBI: 50 questions (333% of 15 target)
+  - LBE: 50 questions (333% of 15 target)
+  - PM: 50 questions (250% of 20 target)
 
 #### 3. **Game Integration** ✅ COMPLETE
 
@@ -75,10 +88,17 @@
   - Check authentication
   - Display detailed errors
 - ✅ Database check helpers (`lib/game/database-check.ts`)
-- ✅ Documentation:
-  - `DATABASE_SETUP.md` - Setup instructions
+- ✅ **Documentation:**
+  - `DATABASE_SETUP.md` - Complete setup guide with:
+    - Database setup instructions
+    - UTBK 2024+ category structure (7 categories)
+    - Comprehensive SQL format guide
+    - Validation checklist for question insertion
+    - Common errors & solutions
+    - Status: 350/350 questions complete
   - `TROUBLESHOOTING.md` - Common issues & solutions
   - `supabase-schema.sql` - Complete database schema
+  - `migration-utbk-categories.sql` - Migration script for existing databases
 
 #### 5. **Dev Mode Support** ✅ COMPLETE
 
@@ -101,6 +121,19 @@
 - Dev mode fully functional
 - Error handling & logging
 - Diagnostic tools
+- **350 verified questions across all 7 UTBK categories**
+- **Comprehensive documentation with SQL format guide**
+- **Validation workflow established**
+
+### **🎉 Recent Achievements:**
+
+- ✅ Completed 350 verified questions (250% of original target)
+- ✅ All 7 UTBK 2024+ categories fully populated
+- ✅ Mathematical correctness validated for all questions
+- ✅ Stimulus format standardized (180-250 words for SNBT 2025)
+- ✅ Documentation updated with comprehensive format guide
+- ✅ Validation checklist and common error patterns documented
+- ✅ Database schema documentation corrected
 
 ### **⏳ In Progress:**
 
@@ -108,16 +141,19 @@ None - all Phase 1 & 2 features completed! ✅
 
 ### **🎯 Next Priorities:**
 
-1. **Add More Questions** (Ongoing) - HIGH PRIORITY 🔥
+1. ~~**Add More Questions** (Ongoing) - HIGH PRIORITY 🔥~~ ✅ COMPLETE (350/350)
 
-   - Current: 10 questions
-   - Target: 200+ questions with UTBK section classification
-   - Include `utbk_section` field (penalaran-umum, kuantitatif, etc)
-   - Include `difficulty_weight` (8=easy, 10=medium, 12=hard)
-   - Priority: TPS sections first (needed for Try-Out Mode)
+   - ~~Current: 10 questions~~
+   - ~~Target: 200+ questions with UTBK section classification~~
+   - ✅ **Achievement: 350 verified questions**
+   - ✅ All categories: PU (50), PK (50), PPU (50), PBM (50), LBI (50), LBE (50), PM (50)
+   - ✅ Include `utbk_section` field (penalaran-umum, kuantitatif, etc)
+   - ✅ Include `difficulty_weight` (8=easy, 10=medium, 12=hard)
+   - ✅ All questions verified for mathematical correctness
 
 2. **Phase 3A: Enhanced Game Mode** (2-3 hours) - MEDIUM PRIORITY
 
+   - Category filter UI (let users practice specific categories)
    - Speed bonus system (based on answer time)
    - Streak bonus system (consecutive correct answers)
    - Enhanced leaderboard with tiebreaker logic
@@ -125,8 +161,8 @@ None - all Phase 1 & 2 features completed! ✅
 
 3. **Phase 3B: Try-Out Mode** (5-7 hours) - HIGH PRIORITY
 
-   - Full UTBK simulation (TPS + Skolastik)
-   - IRT-based scoring (0-1000 per section)
+   - Full UTBK simulation (105 questions total)
+   - IRT-based scoring using difficulty_weight (0-1000 per section)
    - Multi-section navigation with timer
    - Private results with detailed analytics
    - Review mode for all answers
