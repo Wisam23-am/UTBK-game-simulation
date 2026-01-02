@@ -15,6 +15,7 @@ export interface LeaderboardEntry {
   total_games: number;
   avg_score: number;
   total_correct: number;
+  best_time: number | null;
   rank: number;
 }
 

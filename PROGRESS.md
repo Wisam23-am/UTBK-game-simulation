@@ -1,5 +1,7 @@
 # 📋 Progress & Roadmap - UTBK Game Simulation
 
+**Last Updated:** January 3, 2026
+
 ## ✅ Yang Sudah Selesai
 
 ### **Phase 0 - MVP Complete** ✅
@@ -10,20 +12,59 @@
 - ✅ Halaman Login & Register (new clean design)
 - ✅ Halaman Profile (dengan edit profile)
 - ✅ Halaman Game (timer, scoring, life system) - **UPGRADED TO SUPABASE**
-- ✅ Halaman Hasil (dengan feedback + LeaderboardCard)
+- ✅ Halaman Hasil (dengan feedback + review cards + LeaderboardCard)
 - ✅ Halaman Leaderboard (dummy data) - **NEXT: Upgrade to real data**
-- ✅ Navbar & Footer components
+- ✅ Navbar (simplified - Profile & Logout only)
+- ✅ Footer component (dengan padding untuk dock)
+- ✅ Dock Navigation (macOS style dengan magnification)
 - ✅ LeaderboardCard component (top 5)
 
 #### 2. **UI/UX**
 
 - ✅ Responsive design untuk mobile & desktop
 - ✅ Gradient themes konsisten (#3F72AF, #112D4E, #DBE2EF)
-- ✅ Animations (slide-up, scale-in, pulse)
+- ✅ Animations (slide-up, scale-in, pulse, streak)
 - ✅ Hover effects & transitions
 - ✅ Mobile-first approach
 - ✅ Loading states & error handling
 - ✅ Dev mode indicator badge
+- ✅ **NEW: Dock Navigation System**
+  - Glass-morphism design (transparent backdrop-blur)
+  - Framer Motion animations
+  - Magnification effect on hover
+  - Colored icons (blue, purple, indigo)
+  - Fixed positioning at bottom
+  - Integrated across all pages
+- ✅ **NEW: Streak System UI**
+  - Fire icon indicator (🔥)
+  - Dynamic color change at streak ≥3
+  - Popup animation for streak bonus
+  - Visual feedback in results
+
+#### 3. **Game Mechanics - NEW SCORING SYSTEM** ✅
+
+- ✅ **Base Points System:**
+  - 10 base points per correct answer
+  - Time bonus: 5 points per second (max 30 seconds = 150 bonus)
+  - Faster answers = higher score
+- ✅ **Streak/Combo System:**
+  - Track consecutive correct answers
+  - Streak ≥3 = 1.5x multiplier
+  - Visual indicator changes color when active
+  - Popup animation for streak achievements
+  - Reset on wrong answer
+- ✅ **Scoring Formula:**
+  ```
+  Points = (Base 10 + Time Bonus) × Streak Multiplier
+  Max per question: (10 + 150) × 1.5 = 240 points
+  ```
+- ✅ **Answer Review System:**
+  - No correct answer shown during game
+  - Only show correct/incorrect feedback
+  - Full review cards in results page
+  - Display time spent per question
+  - Show points earned per question
+  - Explanation included
 
 ### **Phase 1 - Database & Supabase Integration** ✅
 
@@ -49,19 +90,26 @@
   - Auto-refresh leaderboard
 - ✅ Row Level Security (RLS) policies
 - ✅ Indexes for performance
+- ✅ **NEW: Advanced Leaderboard Ranking System:**
+  - **Primary:** Highest score (MAX score DESC)
+  - **Secondary:** Most correct answers (SUM correct DESC)
+  - **Tertiary:** Fastest time (MIN best_time ASC)
+  - Added `best_time` column to track speed
+  - Migration file: `migration-leaderboard-ranking.sql`
 - ✅ **UTBK 2024+ Structure:**
   - 7 categories: pu, pk, ppu, pbm, lbi, lbe, pm
   - difficulty_weight (8/10/12 for IRT scoring)
   - question_image_url support
   - stimulus_id foreign key for shared passages
 - ✅ **350 verified questions (250% achievement):**
-  - PU: 50 questions (250% of 20 target)
+  - PU: 50 questions (250% of 20 target) - **ACTIVE IN GAME**
   - PK: 50 questions (167% of 30 target)
   - PPU: 50 questions (250% of 20 target)
   - PBM: 50 questions (250% of 20 target)
   - LBI: 50 questions (333% of 15 target)
   - LBE: 50 questions (333% of 15 target)
   - PM: 50 questions (250% of 20 target)
+- ✅ **Sample questions removed** (using real database questions)
 
 #### 3. **Game Integration** ✅ COMPLETE
 
@@ -70,6 +118,7 @@
   - Save game results to database
   - Get user game history
   - Update question usage stats
+  - **Category filter support** (now using 'pu' category only)
 - ✅ Updated `app/game/page.tsx`:
   - Fetch real questions from database
   - Save results automatically
@@ -77,7 +126,18 @@
   - Display question explanations
   - Dev mode handling (skip save)
   - Better error logging
+  - **NEW: Time tracking per question**
+  - **NEW: Streak system implementation**
+  - **NEW: Dynamic scoring with time bonus**
+  - **NEW: Answer tracking for review**
+  - **NEW: Stimulus display with line breaks**
+- ✅ Updated `app/hasil/page.tsx`:
+  - **NEW: Max streak achievement badge**
+  - **NEW: Review answers section with toggle**
+  - **NEW: Time spent and points display per question**
+  - **NEW: Explanation included in review cards**
 - ✅ Auto-update profile stats via database trigger
+- ✅ **Game now uses category 'pu' (Penalaran Umum) only**
 
 #### 4. **Developer Tools** ✅ COMPLETE
 
@@ -115,8 +175,8 @@
 ### **✅ Working Features:**
 
 - Database fully set up and operational
-- Questions loading from Supabase
-- Game flow working perfectly
+- Questions loading from Supabase (category 'pu' only)
+- Game flow working perfectly with new scoring system
 - Results saving to database (production mode)
 - Dev mode fully functional
 - Error handling & logging
@@ -124,16 +184,57 @@
 - **350 verified questions across all 7 UTBK categories**
 - **Comprehensive documentation with SQL format guide**
 - **Validation workflow established**
+- **NEW: Dock navigation system on all pages**
+- **NEW: Time-based scoring (5 points/second)**
+- **NEW: Streak system with 1.5x multiplier**
+- **NEW: Answer review cards in results**
+- **NEW: Advanced leaderboard ranking (score → correct → time)**
 
-### **🎉 Recent Achievements:**
+### **🎉 Recent Achievements (January 3, 2026):**
 
-- ✅ Completed 350 verified questions (250% of original target)
-- ✅ All 7 UTBK 2024+ categories fully populated
-- ✅ Mathematical correctness validated for all questions
-- ✅ Stimulus format standardized (180-250 words for SNBT 2025)
-- ✅ Documentation updated with comprehensive format guide
-- ✅ Validation checklist and common error patterns documented
-- ✅ Database schema documentation corrected
+- ✅ **Dock Navigation System Implemented**
+  - Glass-morphism design with transparent background
+  - Framer Motion animations
+  - Applied to all 8 pages (dashboard, team, leaderboard, profile, game, hasil, diagnostic, register)
+  - Navbar simplified (Profile + Logout only)
+  - Footer padding adjusted for dock
+  
+- ✅ **New Scoring System**
+  - Time bonus: 5 points per second (max 150 bonus)
+  - Base points: 10 per correct answer
+  - Streak multiplier: 1.5x for streak ≥3
+  - Max points per question: 240 points
+
+- ✅ **Streak/Combo System**
+  - Fire icon indicator with dynamic colors
+  - Popup animation for achievements
+  - Max streak tracking in results
+  - Reset on wrong answer
+
+- ✅ **Answer Review Enhancement**
+  - Hide correct answers during game
+  - Full review cards in results page
+  - Time spent per question displayed
+  - Points earned per question shown
+  - Toggle button for review section
+
+- ✅ **Leaderboard Ranking Update**
+  - Priority: Score → Correct Answers → Time
+  - Added `best_time` column
+  - Migration file created: `migration-leaderboard-ranking.sql`
+  - Tiebreaker logic implemented
+
+- ✅ **Game Category Focus**
+  - Now using 'pu' (Penalaran Umum) category only
+  - Category saved in game results
+
+- ✅ **Stimulus Display Enhancement**
+  - Line break fix (\\n rendering)
+  - Pre-wrap whitespace formatting
+
+- ✅ **Database Cleanup**
+  - Sample questions removed from schema
+  - Using real database questions only
 
 ### **⏳ In Progress:**
 
@@ -141,23 +242,20 @@ None - all Phase 1 & 2 features completed! ✅
 
 ### **🎯 Next Priorities:**
 
-1. ~~**Add More Questions** (Ongoing) - HIGH PRIORITY 🔥~~ ✅ COMPLETE (350/350)
+1. **Apply Database Migration** - IMMEDIATE ACTION REQUIRED 🔥
+   
+   - Run `migration-leaderboard-ranking.sql` in Supabase SQL Editor
+   - This updates leaderboard ranking to: Score → Correct → Time
+   - Adds `best_time` column for tracking fastest completion
 
-   - ~~Current: 10 questions~~
-   - ~~Target: 200+ questions with UTBK section classification~~
-   - ✅ **Achievement: 350 verified questions**
-   - ✅ All categories: PU (50), PK (50), PPU (50), PBM (50), LBI (50), LBE (50), PM (50)
-   - ✅ Include `utbk_section` field (penalaran-umum, kuantitatif, etc)
-   - ✅ Include `difficulty_weight` (8=easy, 10=medium, 12=hard)
-   - ✅ All questions verified for mathematical correctness
+2. **Phase 3A: Enhanced Game Mode** - IN PROGRESS
 
-2. **Phase 3A: Enhanced Game Mode** (2-3 hours) - MEDIUM PRIORITY
-
-   - Category filter UI (let users practice specific categories)
-   - Speed bonus system (based on answer time)
-   - Streak bonus system (consecutive correct answers)
-   - Enhanced leaderboard with tiebreaker logic
-   - Real-time bonus display in game UI
+   - ✅ Speed bonus system (5 points/second) - COMPLETE
+   - ✅ Streak bonus system (1.5x multiplier at ≥3) - COMPLETE
+   - ✅ Enhanced leaderboard with tiebreaker logic - COMPLETE
+   - ✅ Real-time bonus display in game UI - COMPLETE
+   - ⏳ Category filter UI (let users choose category)
+   - ⏳ Difficulty selection
 
 3. **Phase 3B: Try-Out Mode** (5-7 hours) - HIGH PRIORITY
 
@@ -171,6 +269,8 @@ None - all Phase 1 & 2 features completed! ✅
 
    - End-to-end testing: Register → Login → Play Both Modes → Results
    - Test Try-Out Mode flow (multi-section, scoring, analytics)
+   - Test new scoring system with various scenarios
+   - Test streak system edge cases
    - Fix any UI/UX issues
    - Test on mobile devices
 

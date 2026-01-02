@@ -136,7 +136,9 @@ CREATE INDEX IF NOT EXISTS idx_questions_stimulus ON questions(stimulus_id) WHER
 -- ============================================
 -- 5. GLOBAL LEADERBOARD (Materialized View)
 -- ============================================
-CREATE MATERIALIZED VIEW IF NOT EXISTS global_leaderboard AS
+DROP MATERIALIZED VIEW IF EXISTS global_leaderboard CASCADE;
+
+CREATE MATERIALIZED VIEW global_leaderboard AS
 SELECT
   p.id,
   p.username,
@@ -148,11 +150,22 @@ SELECT
   COUNT(gr.id) as total_games,
   AVG(gr.score)::INTEGER as avg_score,
   SUM(gr.correct_answers) as total_correct,
-  RANK() OVER (ORDER BY MAX(gr.score) DESC, COUNT(gr.id) DESC) as rank
+  MIN(CASE WHEN gr.score = (SELECT MAX(score) FROM game_results WHERE user_id = p.id) 
+    THEN gr.time_spent ELSE NULL END) as best_time,
+  RANK() OVER (
+    ORDER BY 
+      MAX(gr.score) DESC,                    -- 1. Skor tertinggi (primary)
+      SUM(gr.correct_answers) DESC,          -- 2. Jumlah soal benar (secondary)
+      MIN(CASE WHEN gr.score = (SELECT MAX(score) FROM game_results WHERE user_id = p.id) 
+        THEN gr.time_spent ELSE NULL END) ASC  -- 3. Waktu tercepat (tertiary)
+  ) as rank
 FROM profiles p
 LEFT JOIN game_results gr ON p.id = gr.user_id
 GROUP BY p.id, p.username, p.full_name, p.avatar_url, p.school, p.target_university
-ORDER BY best_score DESC, total_games DESC
+ORDER BY 
+  best_score DESC, 
+  total_correct DESC,
+  best_time ASC
 LIMIT 100;
 
 -- Create unique index on materialized view
@@ -252,162 +265,7 @@ CREATE POLICY "Stimulus viewable by everyone"
 -- ============================================
 -- 9. SEED DATA - SAMPLE QUESTIONS
 -- ============================================
-
--- Clear existing sample questions (optional)
--- DELETE FROM questions WHERE source = 'sample';
-
--- Insert 10 sample questions (5 Matematika, 5 Bahasa Indonesia)
-INSERT INTO questions (category, subcategory, difficulty, question, options, correct_answer, explanation, source, verified) VALUES
-
--- Matematika #1
-('matematika', 'Aljabar', 'easy',
-'Jika 2x + 5 = 13, maka nilai x adalah...',
-'[
-  {"label": "A", "text": "3"},
-  {"label": "B", "text": "4"},
-  {"label": "C", "text": "5"},
-  {"label": "D", "text": "6"},
-  {"label": "E", "text": "7"}
-]'::jsonb,
-'B',
-'2x + 5 = 13, maka 2x = 13 - 5 = 8, sehingga x = 8 / 2 = 4',
-'sample',
-true),
-
--- Matematika #2
-('matematika', 'Geometri', 'medium',
-'Luas lingkaran dengan diameter 14 cm adalah... (π = 22/7)',
-'[
-  {"label": "A", "text": "154 cm²"},
-  {"label": "B", "text": "308 cm²"},
-  {"label": "C", "text": "616 cm²"},
-  {"label": "D", "text": "44 cm²"},
-  {"label": "E", "text": "88 cm²"}
-]'::jsonb,
-'A',
-'Luas = π × r² = 22/7 × 7² = 22/7 × 49 = 154 cm²',
-'sample',
-true),
-
--- Matematika #3
-('matematika', 'Aljabar', 'medium',
-'Hasil dari (x + 3)(x - 3) adalah...',
-'[
-  {"label": "A", "text": "x² - 9"},
-  {"label": "B", "text": "x² + 9"},
-  {"label": "C", "text": "x² - 6"},
-  {"label": "D", "text": "x² + 6"},
-  {"label": "E", "text": "2x"}
-]'::jsonb,
-'A',
-'Menggunakan rumus (a + b)(a - b) = a² - b², maka (x + 3)(x - 3) = x² - 9',
-'sample',
-true),
-
--- Matematika #4
-('matematika', 'Aritmetika', 'easy',
-'Jika rata-rata dari 5 angka adalah 20, maka jumlah kelima angka tersebut adalah...',
-'[
-  {"label": "A", "text": "80"},
-  {"label": "B", "text": "100"},
-  {"label": "C", "text": "120"},
-  {"label": "D", "text": "140"},
-  {"label": "E", "text": "25"}
-]'::jsonb,
-'B',
-'Rata-rata = Jumlah / Banyak data. Maka Jumlah = Rata-rata × Banyak data = 20 × 5 = 100',
-'sample',
-true),
-
--- Matematika #5
-('matematika', 'Aljabar', 'hard',
-'Jika f(x) = 2x² - 3x + 1, maka f(2) adalah...',
-'[
-  {"label": "A", "text": "3"},
-  {"label": "B", "text": "5"},
-  {"label": "C", "text": "7"},
-  {"label": "D", "text": "9"},
-  {"label": "E", "text": "11"}
-]'::jsonb,
-'A',
-'f(2) = 2(2)² - 3(2) + 1 = 2(4) - 6 + 1 = 8 - 6 + 1 = 3',
-'sample',
-true),
-
--- Bahasa Indonesia #1
-('bahasa-indonesia', 'Tata Bahasa', 'easy',
-'Kalimat yang menggunakan kata baku adalah...',
-'[
-  {"label": "A", "text": "Saya tidak tau jawabannya"},
-  {"label": "B", "text": "Saya tidak tahu jawabannya"},
-  {"label": "C", "text": "Aku gak tau jawabannya"},
-  {"label": "D", "text": "Gue nggak tau jawabannya"},
-  {"label": "E", "text": "Saya gak tahu jawabannya"}
-]'::jsonb,
-'B',
-'Kata "tahu" adalah kata baku, bukan "tau". Pilihan B menggunakan bahasa baku yang benar.',
-'sample',
-true),
-
--- Bahasa Indonesia #2
-('bahasa-indonesia', 'Ejaan', 'medium',
-'Penulisan kata yang benar adalah...',
-'[
-  {"label": "A", "text": "mengkaji"},
-  {"label": "B", "text": "meng-kaji"},
-  {"label": "C", "text": "meng kaji"},
-  {"label": "D", "text": "me ngkaji"},
-  {"label": "E", "text": "me-ngkaji"}
-]'::jsonb,
-'A',
-'Awalan "meng-" disambung dengan kata dasar tanpa tanda hubung. Penulisan yang benar adalah "mengkaji".',
-'sample',
-true),
-
--- Bahasa Indonesia #3
-('bahasa-indonesia', 'Tata Bahasa', 'easy',
-'Kalimat yang menggunakan imbuhan yang tepat adalah...',
-'[
-  {"label": "A", "text": "Dia memukuli temannya"},
-  {"label": "B", "text": "Dia memukulin temannya"},
-  {"label": "C", "text": "Dia pukuli temannya"},
-  {"label": "D", "text": "Dia mukulin temannya"},
-  {"label": "E", "text": "Dia mukuli temannya"}
-]'::jsonb,
-'A',
-'Imbuhan yang tepat adalah "me-" + "pukul" + "-i" = "memukuli". Bentuk lain tidak baku.',
-'sample',
-true),
-
--- Bahasa Indonesia #4
-('bahasa-indonesia', 'Pemahaman Bacaan', 'medium',
-'Ide pokok biasanya terletak pada...',
-'[
-  {"label": "A", "text": "Akhir paragraf"},
-  {"label": "B", "text": "Awal atau akhir paragraf"},
-  {"label": "C", "text": "Tengah paragraf"},
-  {"label": "D", "text": "Seluruh paragraf"},
-  {"label": "E", "text": "Judul bacaan"}
-]'::jsonb,
-'B',
-'Ide pokok atau kalimat utama biasanya terletak di awal paragraf (deduktif) atau di akhir paragraf (induktif).',
-'sample',
-true),
-
--- Bahasa Indonesia #5
-('bahasa-indonesia', 'Tata Bahasa', 'hard',
-'Kalimat majemuk bertingkat ditandai dengan...',
-'[
-  {"label": "A", "text": "Konjungsi koordinatif"},
-  {"label": "B", "text": "Konjungsi subordinatif"},
-  {"label": "C", "text": "Konjungsi korelatif"},
-  {"label": "D", "text": "Tidak ada konjungsi"},
-  {"label": "E", "text": "Kata penghubung antar kalimat"}
-]'::jsonb,
-'B',
-'Kalimat majemuk bertingkat menggunakan konjungsi subordinatif seperti "karena", "jika", "meskipun", dll.',
-'sample',
-true);
+-- Sample questions removed - using existing database questions
 
 -- ============================================
 -- VERIFICATION

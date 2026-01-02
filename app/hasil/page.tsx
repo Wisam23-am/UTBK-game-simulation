@@ -13,6 +13,8 @@ type AnsweredQuestion = {
   correctAnswer: string;
   isCorrect: boolean;
   explanation: string | null;
+  timeSpent: number;
+  earnedPoints: number;
 };
 
 export default function ResultPage() {
@@ -31,6 +33,20 @@ export default function ResultPage() {
   
   const totalQuestions = answeredQuestions.length || 5; // Fallback to 5 if no data
   const percentage = (correct / totalQuestions) * 100;
+  
+  // Calculate max streak from answered questions
+  let maxStreak = 0;
+  let currentStreak = 0;
+  answeredQuestions.forEach(q => {
+    if (q.isCorrect) {
+      currentStreak++;
+      if (currentStreak > maxStreak) {
+        maxStreak = currentStreak;
+      }
+    } else {
+      currentStreak = 0;
+    }
+  });
   
   // Tentukan grade berdasarkan skor
   const getGrade = () => {
@@ -100,7 +116,7 @@ export default function ResultPage() {
             </div>
 
             {/* Statistics */}
-            <div className="grid grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-3 gap-4 mb-6">
               {/* Score */}
               <div className="rounded-2xl bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF]/20 p-6 border border-[#3F72AF]/30 text-center">
                 <div className="text-sm text-[#3F72AF] font-semibold mb-2">Skor Total</div>
@@ -123,7 +139,16 @@ export default function ResultPage() {
                 </div>
                 <div className="text-xs text-[#3F72AF] mt-1">menit</div>
               </div>
-            </div>  
+            </div>
+
+            {/* Max Streak Badge */}
+            {maxStreak >= 3 && (
+              <div className="mb-6 rounded-2xl bg-gradient-to-r from-orange-400 to-red-500 p-4 text-center border-2 border-yellow-400 animate-pulse">
+                <p className="text-white font-bold text-lg mb-1">🔥 Max Streak Achievement!</p>
+                <p className="text-yellow-100 text-3xl font-bold">{maxStreak}x Combo</p>
+                <p className="text-yellow-100 text-sm mt-1">Jawaban benar beruntun terpanjang!</p>
+              </div>
+            )}
 
             {/* Performance Bar */}
             <div className="mb-8">
@@ -208,10 +233,22 @@ export default function ResultPage() {
                     }`}
                   >
                     {/* Question Number and Status */}
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-sm font-bold text-gray-700">
-                        Soal #{index + 1}
-                      </span>
+                    <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-gray-700">
+                          Soal #{index + 1}
+                        </span>
+                        {item.isCorrect && (
+                          <>
+                            <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold">
+                              ⏱️ {item.timeSpent}s
+                            </span>
+                            <span className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full font-semibold">
+                              ⭐ +{item.earnedPoints} poin
+                            </span>
+                          </>
+                        )}
+                      </div>
                       <span className={`px-4 py-1 rounded-full text-sm font-bold ${
                         item.isCorrect
                           ? 'bg-green-500 text-white'
