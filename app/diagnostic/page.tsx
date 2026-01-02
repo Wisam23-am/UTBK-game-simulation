@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Dock from '@/components/Dock';
 import { checkDatabaseSetup, getQuestionCount, checkAuth } from '@/lib/game/database-check';
 import { DEV_MODE } from '@/lib/auth/auth-helpers';
 
@@ -44,7 +45,7 @@ export default function DiagnosticPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8 pb-24">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
           {/* Header */}
@@ -182,6 +183,9 @@ export default function DiagnosticPage() {
             </p>
           </div>
         </div>
+      </div>
+      <div className="fixed bottom-0 left-0 right-0 z-50 pb-4">
+        <Dock />
       </div>
     </div>
   );

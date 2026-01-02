@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Dock from '@/components/Dock';
 import { signUpAction } from '@/lib/auth/auth-actions';
 import { DEV_MODE } from '@/lib/auth/auth-helpers';
 
@@ -57,7 +58,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#FFEE91] via-[#F5C857] to-[#E2852E] p-4">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#FFEE91] via-[#F5C857] to-[#E2852E] p-4 pb-24">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute left-1/4 top-1/4 h-96 w-96 animate-pulse rounded-full bg-[#E2852E] opacity-20 blur-3xl"></div>
@@ -203,6 +204,10 @@ export default function RegisterPage() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-50 pb-4">
+        <Dock />
       </div>
     </div>
   );

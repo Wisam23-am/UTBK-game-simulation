@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import LeaderboardCard from '@/components/LeaderboardCard';
+import Dock from '@/components/Dock';
 import { getCurrentUser, getUserProfile } from '@/lib/auth/auth-helpers';
 
 export default function Home() {
@@ -254,6 +255,9 @@ export default function Home() {
         </div>
       </section>
 
+      <div className="fixed bottom-0 left-0 right-0 z-50 pb-4">
+        <Dock />
+      </div>
       <Footer />
     </div>
   );

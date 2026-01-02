@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Dock from '@/components/Dock';
 import { fetchLeaderboard, getUserRank, type LeaderboardEntry } from '@/lib/leaderboard/leaderboard-helpers';
 import { getCurrentUser } from '@/lib/auth/auth-helpers';
 
@@ -322,6 +323,9 @@ export default function LeaderboardPage() {
         )}
       </div>
 
+      <div className="fixed bottom-0 left-0 right-0 z-50 pb-4">
+        <Dock />
+      </div>
       <Footer />
     </div>
   );

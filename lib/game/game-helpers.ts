@@ -12,6 +12,12 @@ export interface Question {
   explanation: string | null;
   source: string;
   verified: boolean;
+  stimulus_id: string | null;
+  stimulus?: {
+    id: string;
+    title: string;
+    content: string;
+  } | null;
 }
 
 export interface GameResult {
@@ -39,7 +45,10 @@ export async function fetchQuestions(
   try {
     let query = supabase
       .from('questions')
-      .select('*')
+      .select(`
+        *,
+        stimulus:question_stimulus(id, title, content)
+      `)
       .eq('verified', true);
 
     if (category) {

@@ -1,0 +1,102 @@
+// Backend API - Team Members Data
+import { NextResponse } from 'next/server';
+
+export interface TeamMember {
+  id: number;
+  name: string;
+  role?: string;
+  major: string;
+  image: string;
+}
+
+// Database/Static data untuk team members
+const teamMembers: TeamMember[] = [
+  {
+    id: 1,
+    name: 'Aqila Wisam Madani M',
+    role: 'Product Owner',
+    major: 'D4 Teknik Informatika 24',
+    image: '/team/Wisam.jpg'
+  },
+  {
+    id: 2,
+    name: 'Zelcy Wiluarta',
+    role: 'UI/UX Designer',
+    major: 'D4 Teknik Komputer 24',
+    image: '/team/zelcy-wiluarta.jpg'
+  },
+  {
+    id: 3,
+    name: 'Bima Adji Kusuma',
+    major: 'D4 Teknik Komputer 24',
+    image: '/team/bima-adji-kusuma.jpg'
+  },
+  {
+    id: 4,
+    name: 'Robby Arsani Fiorentino',
+    major: 'D4 Teknik Komputer 23',
+    image: '/team/robby-arsani-fiorentino.jpg'
+  },
+  {
+    id: 5,
+    name: 'Luthfi Zadeh',
+    major: 'D3 Teknik Informatika 23 PSDKU Lamongan',
+    image: '/team/luthfi-zadeh.jpg'
+  }
+];
+
+// GET endpoint untuk mendapatkan semua team members
+export async function GET() {
+  try {
+    // Simulate database query delay (optional)
+    // await new Promise(resolve => setTimeout(resolve, 100));
+
+    return NextResponse.json({
+      success: true,
+      data: teamMembers,
+      total: teamMembers.length
+    });
+  } catch (error) {
+    console.error('Error fetching team members:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to fetch team members'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// Optional: GET single team member by ID
+export async function POST(request: Request) {
+  try {
+    const { id } = await request.json();
+    
+    const member = teamMembers.find(m => m.id === id);
+    
+    if (!member) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Team member not found'
+        },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: member
+    });
+  } catch (error) {
+    console.error('Error fetching team member:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Failed to fetch team member'
+      },
+      { status: 500 }
+    );
+  }
+}

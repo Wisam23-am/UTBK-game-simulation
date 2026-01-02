@@ -80,9 +80,6 @@ export default function Navbar() {
           
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-6 items-center">
-            <a href="#features" className="text-slate-600 hover:text-blue-600 transition-colors">Fitur</a>
-            <a href="#stats" className="text-slate-600 hover:text-blue-600 transition-colors">Statistik</a>
-            
             {isLoggedIn ? (
               // Profile Button & Logout Button
               <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg">
@@ -144,21 +141,6 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden py-4 space-y-3 border-t border-gray-200 animate-slide-down">
-            <a 
-              href="#features" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
-            >
-              Fitur
-            </a>
-            <a 
-              href="#stats" 
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-4 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
-            >
-              Statistik
-            </a>
-            
             {isLoggedIn ? (
               <>
                 <Link 

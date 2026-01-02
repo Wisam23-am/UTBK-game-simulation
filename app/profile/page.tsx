@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Dock from '@/components/Dock';
 import { getCurrentUser, getUserProfile, updateUserProfile, DEV_MODE } from '@/lib/auth/auth-helpers';
 import { fetchGameHistory, fetchUserStats, formatDate, formatTimeSpent, type GameHistory } from '@/lib/profile/profile-helpers';
 
@@ -356,6 +357,9 @@ export default function ProfilePage() {
         </div>
       </div>
 
+      <div className="fixed bottom-0 left-0 right-0 z-50 pb-4">
+        <Dock />
+      </div>
       <Footer />
     </div>
   );

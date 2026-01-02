@@ -18,6 +18,13 @@ export default function GamePage() {
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
+  const [answeredQuestions, setAnsweredQuestions] = useState<Array<{
+    question: string;
+    userAnswer: string;
+    correctAnswer: string;
+    isCorrect: boolean;
+    explanation: string | null;
+  }>>([]);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -96,6 +103,15 @@ export default function GamePage() {
 
     const isCorrect = selectedAnswer === currentQuestion.correct_answer;
 
+    // Save answered question details
+    setAnsweredQuestions(prev => [...prev, {
+      question: currentQuestion.question,
+      userAnswer: selectedAnswer,
+      correctAnswer: currentQuestion.correct_answer,
+      isCorrect: isCorrect,
+      explanation: currentQuestion.explanation
+    }]);
+
     if (isCorrect) {
       setScore((prev) => prev + 10);
       setCorrectAnswers((prev) => prev + 1);
@@ -155,7 +171,8 @@ export default function GamePage() {
     }
 
     // Redirect to result page
-    router.push(`/hasil?score=${gameScore}&correct=${gameCorrect}&time=${timeSpent}`);
+    const answersData = encodeURIComponent(JSON.stringify(answeredQuestions));
+    router.push(`/hasil?score=${gameScore}&correct=${gameCorrect}&time=${timeSpent}&answers=${answersData}`);
   };
 
   if (isLoading) {
@@ -186,7 +203,7 @@ export default function GamePage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF] px-3 py-4 sm:px-6 md:px-10 lg:px-16">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF] px-3 py-4 sm:px-6 md:px-10 lg:px-16 pb-24">
       {/* Dev Mode Badge */}
       {DEV_MODE && (
         <div className="fixed top-4 right-4 z-50 px-3 py-2 bg-yellow-500/90 text-yellow-900 text-xs font-bold rounded-lg backdrop-blur-sm border border-yellow-600 shadow-lg">
@@ -242,6 +259,19 @@ export default function GamePage() {
                 />
               </div>
             </div>
+
+            {/* Stimulus (jika ada) */}
+            {currentQuestion.stimulus && (
+              <div className="mb-6 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 p-6 border-2 border-amber-200 shadow-lg">
+                <h3 className="text-sm font-bold text-amber-800 mb-3 flex items-center gap-2">
+                  <span>📖</span>
+                  <span>{currentQuestion.stimulus.title}</span>
+                </h3>
+                <div className="text-sm text-amber-900/90 leading-relaxed" style={{ whiteSpace: 'pre-wrap' }}>
+                  {currentQuestion.stimulus.content.replace(/\\n/g, '\n')}
+                </div>
+              </div>
+            )}
 
             {/* Question Text */}
             <div className="mb-8 rounded-2xl bg-gradient-to-r from-[#DBE2EF]/40 to-[#3F72AF]/10 p-6 backdrop-blur-sm border border-[#3F72AF]/30">
@@ -353,24 +383,12 @@ export default function GamePage() {
                   {selectedAnswer === currentQuestion.correct_answer ? '🎉' : '💔'}
                 </p>
                 <p
-                  className={`mb-2 text-2xl font-bold text-center ${
+                  className={`text-2xl font-bold text-center ${
                     selectedAnswer === currentQuestion.correct_answer ? 'text-green-600' : 'text-red-600'
                   }`}
                 >
-                  {selectedAnswer === currentQuestion.correct_answer ? 'Luar Biasa!' : 'Ups, Salah!'}
+                  {selectedAnswer === currentQuestion.correct_answer ? 'Jawaban Benar!' : 'Jawaban Salah!'}
                 </p>
-                {selectedAnswer !== currentQuestion.correct_answer && (
-                  <p className="text-lg text-[#3F72AF] text-center">
-                    Jawaban yang benar:{' '}
-                    <span className="font-bold text-green-600">{currentQuestion.correct_answer}</span>
-                  </p>
-                )}
-                {currentQuestion.explanation && (
-                  <div className="mt-4 p-4 bg-white/50 rounded-xl border border-[#3F72AF]/20">
-                    <p className="text-sm font-semibold text-[#3F72AF] mb-2">💡 Penjelasan:</p>
-                    <p className="text-sm text-[#112D4E]">{currentQuestion.explanation}</p>
-                  </div>
-                )}
               </div>
             )}
           </div>

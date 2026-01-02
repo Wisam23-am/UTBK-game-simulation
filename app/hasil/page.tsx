@@ -1,17 +1,35 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Home, RotateCcw } from 'lucide-react';
 import LeaderboardCard from '@/components/LeaderboardCard';
+import Dock from '@/components/Dock';
+
+type AnsweredQuestion = {
+  question: string;
+  userAnswer: string;
+  correctAnswer: string;
+  isCorrect: boolean;
+  explanation: string | null;
+};
 
 export default function ResultPage() {
   const searchParams = useSearchParams();
   const score = parseInt(searchParams.get('score') || '0');
   const correct = parseInt(searchParams.get('correct') || '0');
   const time = parseInt(searchParams.get('time') || '0');
+  const answersData = searchParams.get('answers');
   
-  const totalQuestions = 5; // Sesuaikan dengan jumlah soal di game
+  const [showReview, setShowReview] = useState(false);
+  
+  // Parse answered questions
+  const answeredQuestions: AnsweredQuestion[] = answersData 
+    ? JSON.parse(decodeURIComponent(answersData))
+    : [];
+  
+  const totalQuestions = answeredQuestions.length || 5; // Fallback to 5 if no data
   const percentage = (correct / totalQuestions) * 100;
   
   // Tentukan grade berdasarkan skor
@@ -28,7 +46,7 @@ export default function ResultPage() {
   const seconds = time % 60;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF] p-4">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF] p-4 pb-28">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute left-1/4 top-1/4 h-96 w-96 animate-pulse rounded-full bg-[#3F72AF] opacity-20 blur-3xl"></div>
@@ -138,7 +156,7 @@ export default function ResultPage() {
             </div>
 
             {/* Action Buttons */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 mb-6">
               <Link href="/" className="block">
                 <button className="w-full py-4 px-6 bg-[#DBE2EF] hover:bg-[#3F72AF]/20 text-[#3F72AF] font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border border-[#3F72AF]/30">
                   <Home size={20} />
@@ -153,6 +171,17 @@ export default function ResultPage() {
               </Link>
             </div>
 
+            {/* Review Answers Button */}
+            {answeredQuestions.length > 0 && (
+              <button
+                onClick={() => setShowReview(!showReview)}
+                className="w-full py-4 px-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
+              >
+                <span>{showReview ? '📕' : '📖'}</span>
+                <span>{showReview ? 'Tutup Review Jawaban' : 'Lihat Review Jawaban'}</span>
+              </button>
+            )}
+
             {/* Bottom Message */}
             <div className="mt-8 pt-6 border-t border-[#3F72AF]/20 text-center">
               <p className="text-xs text-[#3F72AF]/70">
@@ -161,11 +190,100 @@ export default function ResultPage() {
             </div>
           </div>
 
+          {/* Review Answers Section */}
+          {showReview && answeredQuestions.length > 0 && (
+            <div className="mt-6 rounded-3xl bg-[#F9F7F7]/95 p-8 backdrop-blur-xl shadow-2xl border border-[#3F72AF]/30 animate-scale-in">
+              <h2 className="text-2xl font-bold text-[#112D4E] mb-6 text-center">
+                📚 Review Jawaban
+              </h2>
+              
+              <div className="space-y-4">
+                {answeredQuestions.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`rounded-2xl p-6 border-2 transition-all ${
+                      item.isCorrect
+                        ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-300'
+                        : 'bg-gradient-to-br from-red-50 to-pink-50 border-red-300'
+                    }`}
+                  >
+                    {/* Question Number and Status */}
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-sm font-bold text-gray-700">
+                        Soal #{index + 1}
+                      </span>
+                      <span className={`px-4 py-1 rounded-full text-sm font-bold ${
+                        item.isCorrect
+                          ? 'bg-green-500 text-white'
+                          : 'bg-red-500 text-white'
+                      }`}>
+                        {item.isCorrect ? '✓ Benar' : '✗ Salah'}
+                      </span>
+                    </div>
+
+                    {/* Question Text */}
+                    <div className="mb-4 p-4 bg-white/50 rounded-xl border border-gray-200">
+                      <p className="text-gray-800 font-medium leading-relaxed">
+                        {item.question}
+                      </p>
+                    </div>
+
+                    {/* Answers Comparison */}
+                    <div className="grid md:grid-cols-2 gap-4 mb-4">
+                      {/* User Answer */}
+                      <div className={`p-4 rounded-xl border-2 ${
+                        item.isCorrect
+                          ? 'bg-green-100 border-green-400'
+                          : 'bg-red-100 border-red-400'
+                      }`}>
+                        <p className="text-xs font-semibold text-gray-600 mb-2">
+                          Jawaban Anda:
+                        </p>
+                        <p className={`font-bold text-lg ${
+                          item.isCorrect ? 'text-green-700' : 'text-red-700'
+                        }`}>
+                          {item.userAnswer}
+                        </p>
+                      </div>
+
+                      {/* Correct Answer */}
+                      <div className="p-4 rounded-xl border-2 bg-green-100 border-green-400">
+                        <p className="text-xs font-semibold text-gray-600 mb-2">
+                          Jawaban Benar:
+                        </p>
+                        <p className="font-bold text-lg text-green-700">
+                          {item.correctAnswer}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Explanation */}
+                    {item.explanation && (
+                      <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                        <p className="text-xs font-semibold text-blue-700 mb-2 flex items-center gap-2">
+                          <span>💡</span>
+                          <span>Penjelasan:</span>
+                        </p>
+                        <p className="text-sm text-blue-900 leading-relaxed">
+                          {item.explanation}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Leaderboard Section */}
           <div className="mt-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
             <LeaderboardCard compact />
           </div>
         </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-50 pb-4">
+        <Dock />
       </div>
     </div>
   );
