@@ -35,11 +35,7 @@ export default function RegisterPage() {
         return;
       }
 
-      const { user, error: authError } = await signUp(
-        email,
-        password,
-        name
-      );
+      const { user, error: authError } = await signUp(email, password, name);
 
       if (authError) {
         setError(authError);

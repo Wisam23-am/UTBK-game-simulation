@@ -382,14 +382,16 @@ function ResultContent() {
 
 export default function ResultPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
-        <div className="text-center">
-          <div className="animate-spin text-6xl mb-4">⏳</div>
-          <p className="text-slate-600">Memuat hasil...</p>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+          <div className="text-center">
+            <div className="animate-spin text-6xl mb-4">⏳</div>
+            <p className="text-slate-600">Memuat hasil...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <ResultContent />
     </Suspense>
   );
