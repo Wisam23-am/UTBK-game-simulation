@@ -53,11 +53,17 @@ export default function GamePage() {
           setUserId(user.id);
           console.log("🎮 User loaded:", user.id, DEV_MODE ? "(DEV MODE)" : "");
         } else {
+          // Redirect to login if not authenticated and not in dev mode
+          if (!DEV_MODE) {
+            console.warn("⚠️ User not authenticated. Redirecting to login...");
+            router.push("/login");
+            return;
+          }
           console.warn("⚠️ No user found. Results will not be saved.");
         }
 
-        // Fetch mixed questions from ALL categories (60% hard, 40% medium)
-        const { data, error } = await fetchMixedQuestions(15); // 15 mixed questions
+        // Fetch mixed questions from ALL categories (balanced distribution)
+        const { data, error } = await fetchMixedQuestions(); // 15 questions: PU(3) + 6 others(2 each)
 
         if (error) {
           console.error("❌ Error fetching questions:", error);
@@ -207,7 +213,7 @@ export default function GamePage() {
   ) => {
     const gameScore = finalScore ?? score;
     const gameCorrect = finalCorrect ?? correctAnswers;
-    const timeSpent = 300 - timer;
+    const timeSpent = 600 - timer; // 600 seconds (10 minutes) total time
     const answersToSend = finalAnsweredQuestions ?? answeredQuestions;
 
     // Save to Supabase if user is logged in (skip in dev mode)
@@ -221,7 +227,7 @@ export default function GamePage() {
           wrong_answers: questions.length - gameCorrect,
           total_questions: questions.length,
           time_spent: timeSpent,
-          category: "pu", // Penalaran Umum
+          category: "Mixed", // Mixed categories (PU, PBM, PM, PPU, PK, LBI)
           difficulty: "mixed",
         });
 

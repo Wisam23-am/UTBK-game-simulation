@@ -1,41 +1,43 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import Dock from '@/components/Dock';
-import { signUpAction } from '@/lib/auth/auth-actions';
-import { DEV_MODE } from '@/lib/auth/auth-helpers';
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Dock from "@/components/Dock";
+import { signUp } from "@/lib/auth/auth-actions";
+import { DEV_MODE } from "@/lib/auth/auth-helpers";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
+    setError("");
 
     try {
       // In dev mode, skip registration
       if (DEV_MODE) {
-        console.log('🔧 DEV MODE: Skipping registration');
-        router.push('/');
+        console.log("🔧 DEV MODE: Skipping registration");
+        router.push("/");
         return;
       }
 
-      // Generate username from name or email if not provided
-      const finalUsername = username || name.toLowerCase().replace(/\s+/g, '') || email.split('@')[0];
+      // Validate name
+      if (!name.trim()) {
+        setError("Nama lengkap wajib diisi!");
+        setIsLoading(false);
+        return;
+      }
 
-      const { user, error: authError } = await signUpAction(
+      const { user, error: authError } = await signUp(
         email,
         password,
-        finalUsername,
         name
       );
 
@@ -47,12 +49,12 @@ export default function RegisterPage() {
 
       if (user) {
         // Success - redirect to home
-        alert('Pendaftaran berhasil! Silakan login.');
-        router.push('/login');
+        alert("Pendaftaran berhasil! Silakan login.");
+        router.push("/login");
       }
     } catch (err) {
-      console.error('Registration error:', err);
-      setError('Terjadi kesalahan. Silakan coba lagi.');
+      console.error("Registration error:", err);
+      setError("Terjadi kesalahan. Silakan coba lagi.");
       setIsLoading(false);
     }
   };
@@ -62,7 +64,10 @@ export default function RegisterPage() {
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute left-1/4 top-1/4 h-96 w-96 animate-pulse rounded-full bg-[#E2852E] opacity-20 blur-3xl"></div>
-        <div className="absolute right-1/4 bottom-1/4 h-96 w-96 animate-pulse rounded-full bg-[#ABE0F0] opacity-30 blur-3xl" style={{ animationDelay: '1s' }}></div>
+        <div
+          className="absolute right-1/4 bottom-1/4 h-96 w-96 animate-pulse rounded-full bg-[#ABE0F0] opacity-30 blur-3xl"
+          style={{ animationDelay: "1s" }}
+        ></div>
       </div>
 
       {/* Floating Elements */}
@@ -105,7 +110,9 @@ export default function RegisterPage() {
                 <h1 className="mb-3 bg-gradient-to-r from-[#E2852E] to-[#F5C857] bg-clip-text text-4xl font-extrabold text-transparent">
                   Bergabunglah!
                 </h1>
-                <p className="text-[#E2852E] font-medium">Mulai petualangan belajarmu sekarang</p>
+                <p className="text-[#E2852E] font-medium">
+                  Mulai petualangan belajarmu sekarang
+                </p>
               </div>
 
               {/* Error Message */}
@@ -118,7 +125,10 @@ export default function RegisterPage() {
               {/* Form */}
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="group">
-                  <label htmlFor="name" className="mb-2 block text-sm font-semibold text-[#E2852E]">
+                  <label
+                    htmlFor="name"
+                    className="mb-2 block text-sm font-semibold text-[#E2852E]"
+                  >
                     👤 Nama Lengkap
                   </label>
                   <input
@@ -133,7 +143,10 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="group">
-                  <label htmlFor="email" className="mb-2 block text-sm font-semibold text-[#E2852E]">
+                  <label
+                    htmlFor="email"
+                    className="mb-2 block text-sm font-semibold text-[#E2852E]"
+                  >
                     📧 Email
                   </label>
                   <input
@@ -148,7 +161,10 @@ export default function RegisterPage() {
                 </div>
 
                 <div className="group">
-                  <label htmlFor="password" className="mb-2 block text-sm font-semibold text-[#E2852E]">
+                  <label
+                    htmlFor="password"
+                    className="mb-2 block text-sm font-semibold text-[#E2852E]"
+                  >
                     🔒 Password
                   </label>
                   <input
@@ -161,7 +177,9 @@ export default function RegisterPage() {
                     required
                     minLength={6}
                   />
-                  <p className="mt-1 text-xs text-[#E2852E]/70">Minimal 6 karakter</p>
+                  <p className="mt-1 text-xs text-[#E2852E]/70">
+                    Minimal 6 karakter
+                  </p>
                 </div>
 
                 <button
@@ -177,8 +195,12 @@ export default function RegisterPage() {
                       </>
                     ) : (
                       <>
-                        <span className="transition-transform duration-300 group-hover:rotate-12">🎉</span>
-                        <span className="transition-transform duration-300 group-hover:translate-x-1">Daftar Sekarang</span>
+                        <span className="transition-transform duration-300 group-hover:rotate-12">
+                          🎉
+                        </span>
+                        <span className="transition-transform duration-300 group-hover:translate-x-1">
+                          Daftar Sekarang
+                        </span>
                       </>
                     )}
                   </span>
@@ -188,16 +210,24 @@ export default function RegisterPage() {
               {/* Footer Links */}
               <div className="mt-8 text-center">
                 <p className="text-[#E2852E]">
-                  Sudah punya akun?{' '}
-                  <Link href="/login" className="font-bold text-[#E2852E] hover:text-[#F5C857] transition-all duration-300 underline">
+                  Sudah punya akun?{" "}
+                  <Link
+                    href="/login"
+                    className="font-bold text-[#E2852E] hover:text-[#F5C857] transition-all duration-300 underline"
+                  >
                     Masuk sekarang →
                   </Link>
                 </p>
               </div>
 
               <div className="mt-4 text-center">
-                <Link href="/" className="group inline-flex items-center gap-2 text-sm text-[#E2852E]/70 transition-colors hover:text-[#E2852E]">
-                  <span className="transition-transform duration-300 group-hover:-translate-x-1">←</span>
+                <Link
+                  href="/"
+                  className="group inline-flex items-center gap-2 text-sm text-[#E2852E]/70 transition-colors hover:text-[#E2852E]"
+                >
+                  <span className="transition-transform duration-300 group-hover:-translate-x-1">
+                    ←
+                  </span>
                   Kembali ke beranda
                 </Link>
               </div>

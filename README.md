@@ -1,51 +1,88 @@
 # 🎮 UTBK Game Simulation
 
-Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan **Dual Mode System**: **Game Mode** untuk practice cepat dengan leaderboard, dan **Try-Out Mode** untuk simulasi UTBK lengkap dengan scoring realistis.
+Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan **Game Mode** untuk practice cepat dengan leaderboard kompetitif. **Try-Out Mode** coming soon!
 
 ## 🌟 Status Proyek
 
-**Phase 2 Complete ✅** - Full Integration with Real-time Data  
-**Phase 3 Planning ✅** - Dual Mode System Design Complete  
-**Migration Applied ✅** - Leaderboard ranking optimized (Jan 4, 2026)  
-**Current:** Ready for Enhanced Game Mode & Try-Out Mode development
+**Production Ready ✅** - January 4, 2026  
+**Game Mode** - Fully functional with 350 questions  
+**Authentication** - Complete with enhanced user onboarding  
+**Leaderboard** - Optimized with materialized views  
+**Current Status:** Ready for Vercel deployment
 
 ### ✅ Completed Features:
 
-#### Database & Game Core (Phase 1-2)
+#### Database & Game Core
 
-- Database fully integrated with Supabase PostgreSQL
-- Real-time question fetching & caching
-- Game result saving with auto-stats update
-- Materialized view leaderboard (top 100)
-- Dev mode for easy testing & development
-- Comprehensive diagnostic tools
-- Robust error handling & logging
+- ✅ Database fully integrated with Supabase PostgreSQL
+- ✅ 350 verified questions (50 per category × 7 categories)
+- ✅ Real-time question fetching with Fisher-Yates shuffle
+- ✅ Game result saving with auto-stats update
+- ✅ Materialized view leaderboard (optimized with CTE)
+- ✅ Dev mode for testing & development
+- ✅ Robust error handling & logging
 
-#### User Features (Phase 2)
+#### Authentication & User Management
 
-- ✅ User authentication (Supabase Auth with JWT)
+- ✅ Supabase Auth with JWT tokens
+- ✅ Enhanced registration form (full name + school + university)
+- ✅ Auto-profile creation on first login
+- ✅ Session management with reduced warnings
+- ✅ Protected routes (game/study require login)
+- ✅ Dev mode fallback for development
+
+#### Game Features
+
+- ✅ 15 mixed questions (PU: 3, others: 2 each)
+- ✅ 80% hard (12 questions), 20% medium (3 questions)
+- ✅ 10-minute timer with countdown
+- ✅ Life system (3 lives)
+- ✅ Streak bonus (≥3 consecutive correct = 1.5x multiplier)
+- ✅ Speed bonus (5 points per second remaining)
+- ✅ Score formula: 1000 base + 5pts/sec + streak bonus
+- ✅ Question review after game ends
+- ✅ Real-time answer validation
+
+#### User Interface
+
+- ✅ Modern login/register page (single page with toggle)
 - ✅ Dashboard with personalized greeting
+- ✅ Study page (mode selection hub)
+- ✅ Profile page with detailed statistics
+- ✅ Game history with category labels
 - ✅ Real-time leaderboard (global rankings)
-- ✅ Profile page (game history & detailed stats)
-- ✅ Responsive navbar (mobile-first)
-- ✅ LeaderboardCard component (top 5 live)
+- ✅ LeaderboardCard component (top 5)
+- ✅ Responsive navbar with mobile menu
+- ✅ macOS-style Dock navigation
+- ✅ Fully responsive design (mobile-first)
+
+#### Profile & Statistics
+
+- ✅ Total games (real-time calculation)
+- ✅ Best score tracking
+- ✅ Average score calculation
+- ✅ Accuracy percentage
+- ✅ Total correct answers
+- ✅ Time spent statistics
+- ✅ Game history with filters
+- ✅ Editable profile (name, school, university)
+
+#### Leaderboard System
+
+- ✅ Materialized view with CTE optimization
+- ✅ Best game stats per user (not sum)
+- ✅ Ranking by: Score DESC → Correct DESC → Time ASC
+- ✅ Display: Best time + total correct answers
+- ✅ Auto-refresh on new game completion
+- ✅ Top 100 rankings
 
 ### 🚀 Planned Features (Phase 3):
 
-#### 🎮 **Dual Mode System:**
+### 🚀 Planned Features (Future Development):
 
-**1. Game Mode (Enhanced)**
+#### Try-Out Mode (Coming Soon)
 
-- 🎮 Quick practice (10-20 soal, ~20 menit)
-- ⚡ Speed bonus system (faster = bonus points)
-- 🔥 Streak bonus (consecutive correct)
-- 🏆 **Public leaderboard** with tiebreaker
-- ❤️ Life system (3 nyawa)
-- 🎯 Category selection
-
-**2. Try-Out Mode (NEW!)**
-
-- 📝 Full UTBK simulation (95-175 soal)
+- 📝 Full UTBK simulation (95-175 questions)
 - ⏱️ Real section timers (25-35 min/section)
 - 🎯 IRT-based scoring (0-1000 like real UTBK)
 - 📊 **Private analytics** (no leaderboard)
@@ -53,52 +90,50 @@ Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan **Dua
 - 📈 University target comparison
 - 📖 Complete review mode
 
-### 🔥 Next Priorities:
+### 🔥 Future Priorities:
 
-1. **Add 200+ Questions** (HIGH) - TPS sections first
-2. **Try-Out Mode Implementation** (HIGH) - 5-7 hours
-3. **Enhanced Game Mode** (MEDIUM) - Bonus systems, 2-3 hours
-4. **Deploy to Production** - Vercel + testing
+1. **Try-Out Mode Implementation** - Full UTBK simulation
+2. **Add More Questions** - Expand question bank to 500+
+3. **Analytics Dashboard** - Detailed performance tracking
+4. **Mobile App** - Native iOS/Android app
 
 ## 📋 Deskripsi
 
-UTBK Game Simulation adalah aplikasi web komprehensif yang membantu siswa mempersiapkan UTBK dengan **Dual Mode System**:
+UTBK Game Simulation adalah platform latihan UTBK yang menggabungkan gamifikasi dengan pembelajaran efektif:
 
-- **🎮 Game Mode**: Practice cepat & menyenangkan dengan leaderboard kompetitif
-- **📝 Try-Out Mode**: Simulasi UTBK lengkap dengan scoring & analytics realistis
-
-Aplikasi ini menggabungkan gamifikasi untuk motivasi dengan simulasi realistis untuk persiapan maksimal.
+- **🎮 Game Mode**: Practice cepat 15 soal dengan leaderboard kompetitif
+- **📝 Try-Out Mode** (Coming Soon): Simulasi UTBK lengkap dengan scoring realistis
 
 ### ✨ Fitur Utama
 
-#### 🎮 Game Mode Features:
+#### 🎮 Game Mode:
 
 - ⚡ **Quick Practice**: 15 soal campuran, selesai dalam 10 menit
-- 🎲 **Mixed Categories**: Soal dari SEMUA kategori UTBK (PU, PK, PPU, PBM, LBI, LBE, PM)
-- 🎯 **Smart Difficulty**: 60% hard, 40% medium untuk challenge optimal
+- 🎲 **Mixed Categories**: PU (3) + PBM, PM, PPU, PK, LBI (2 each)
+- 🎯 **High Difficulty**: 80% hard (12 soal), 20% medium (3 soal)
 - ❤️ **Life System**: 3 nyawa untuk tantangan ekstra
-- 🏆 **Leaderboard Global**: Kompetisi dengan ribuan siswa
-- 🔥 **Bonus System**: Speed & streak bonuses
+- 🏆 **Global Leaderboard**: Kompetisi real-time dengan ranking
+- 🔥 **Streak Bonus**: 1.5x multiplier untuk 3+ jawaban benar beruntun
+- ⚡ **Speed Bonus**: 5 poin per detik tersisa
+- 📊 **Score Formula**: 1000 base + time bonus + streak multiplier
 
-#### 📝 Try-Out Mode Features:
+#### 👤 User Features:
 
-- 📊 **Full UTBK Simulation**: 95-175 soal (TPS + Skolastik)
-- ⏱️ **Real Timing**: Timer per section (25-35 menit)
-- 🎯 **IRT Scoring**: Scoring 0-1000 seperti UTBK asli
-- 📈 **Detailed Analytics**: Breakdown per section & topik
-- 🔍 **Weakness Identification**: Rekomendasi materi untuk dipelajari
-- 🎓 **University Comparison**: Bandingkan dengan passing grade PTN
-- 📖 **Review Mode**: Lihat semua jawaban & penjelasan
-- 🔒 **Private Results**: Tidak ada leaderboard, fokus ke improvement
+- 🔐 **Secure Authentication**: Supabase Auth dengan JWT
+- 📝 **Enhanced Registration**: Full name, school, target university
+- 📊 **Detailed Profile**: Game stats, history, editable info
+- 🏆 **Leaderboard Rankings**: Best time & correct answers
+- 📈 **Real-time Statistics**: Accuracy, avg score, total games
+- 🎮 **Game History**: Track all games with category labels
+- 🔒 **Protected Routes**: Login required for game/study access
 
 #### ⚙️ General Features:
 
-- 👤 **Authentication**: Login dengan Supabase Auth (aman & cepat)
-- 📊 **Progress Tracking**: Riwayat lengkap semua latihan & try-out
-- 📱 **Responsive Design**: Perfect di HP, tablet, & desktop
-- 💡 **Detailed Explanations**: Penjelasan lengkap setiap soal
+- 📱 **Responsive Design**: Perfect di mobile, tablet, desktop
+- 💡 **Question Explanations**: Pembahasan lengkap setiap soal
+- 🎨 **Modern UI**: Clean design dengan Tailwind CSS
+- 🚀 **Fast Performance**: Next.js 16 dengan Turbopack
 - 🔧 **Dev Mode**: Testing mode untuk development
-- 🔧 **Dev Mode**: Testing mode untuk development tanpa database
 
 ## 🛠️ Teknologi yang Digunakan
 
@@ -307,47 +342,147 @@ Set `NEXT_PUBLIC_DEV_MODE=true` for:
 
 See [supabase-schema.sql](supabase-schema.sql) for details.
 
-## 🚀 Instalasi dan Menjalankan Aplikasi
+## 🚀 Deployment ke Vercel
 
-### Prasyarat
+### Prerequisites
 
-- Node.js 20.x atau lebih tinggi
-- npm, yarn, pnpm, atau bun
+- Akun GitHub dengan repository project ini
+- Akun Vercel (gratis)
+- Supabase project dengan database sudah setup
 
-### Langkah-langkah Instalasi
+### Steps:
 
-1. **Clone repository**
-
+1. **Push ke GitHub**
    ```bash
-   git clone <repository-url>
-   cd UTBK-game-simulation
+   git add .
+   git commit -m "Ready for production"
+   git push origin main
    ```
 
-2. **Install dependencies**
+2. **Import ke Vercel**
+   - Buka [vercel.com](https://vercel.com)
+   - Click "Add New Project"
+   - Import repository dari GitHub
+   - Framework preset akan otomatis detect Next.js
 
-   ```bash
-   npm install
-   # atau
-   yarn install
-   # atau
-   pnpm install
+3. **Setup Environment Variables**
+   
+   Di Vercel dashboard, tambahkan:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   NEXT_PUBLIC_DEV_MODE=false
    ```
 
-3. **Jalankan development server**
+4. **Deploy**
+   - Click "Deploy"
+   - Tunggu build selesai (2-3 menit)
+   - Domain otomatis: `your-project.vercel.app`
 
-   ```bash
-   npm run dev
-   # atau
-   yarn dev
-   # atau
-   pnpm dev
-   # atau
-   bun dev
-   ```
+5. **Verify Production**
+   - Test login/register
+   - Play game dan check leaderboard
+   - Verify data tersimpan di Supabase
 
-4. **Akses aplikasi**
+### Post-Deployment
 
-   Buka browser dan akses [http://localhost:3000](http://localhost:3000)
+- ✅ Custom domain (opsional)
+- ✅ Setup analytics (Vercel Analytics)
+- ✅ Monitor performance
+- ✅ Check error logs di Vercel dashboard
+
+## 🧪 Testing
+
+### Local Development
+```bash
+npm run dev
+# Visit http://localhost:3000
+```
+
+### Production Build Test
+```bash
+npm run build
+npm run start
+# Visit http://localhost:3000
+```
+
+### Diagnostic Check
+Visit `/diagnostic` untuk verify:
+- Database connection
+- Question count (should be 350)
+- Authentication
+- Table structure
+
+## 📝 Important Notes
+
+### Environment Variables
+- `NEXT_PUBLIC_DEV_MODE=false` untuk production
+- `NEXT_PUBLIC_DEV_MODE=true` untuk development (skip auth)
+- Supabase credentials wajib diisi untuk production
+
+### Database Requirements
+- 350 questions minimum (50 per category)
+- Materialized view `global_leaderboard` harus di-create
+- RLS policies harus aktif untuk security
+- Triggers untuk auto-update stats harus ada
+
+### Authentication Flow
+- Registration: Full name → Auto-generate username
+- School & target university collected at registration
+- Profile auto-created on first login
+- Protected routes: `/game`, `/study` require login
+
+### Game Mechanics
+- 15 mixed questions (PU: 3, others: 2 each)
+- 80% hard, 20% medium difficulty
+- 10-minute timer (600 seconds)
+- 3 lives system
+- Score: 1000 base + 5pts/sec + streak bonus (1.5x for ≥3 correct)
+
+### Leaderboard System
+- Materialized view with CTE optimization
+- Shows best game per user (not sum)
+- Ranking: Score DESC → Correct DESC → Time ASC
+- Auto-refreshes on new game completion
+
+## 🔧 Troubleshooting
+
+**Auth session missing warning:**
+- Normal behavior untuk non-logged users
+- Warning sudah diminimalisir dengan session check
+- Tidak mempengaruhi functionality
+
+**Questions not loading:**
+- Check database connection di `/diagnostic`
+- Verify 350 questions exists
+- Check Supabase RLS policies
+
+**Stats not updating:**
+- Verify database triggers aktif
+- Check `fix-leaderboard-view.sql` sudah dijalankan
+- Materialized view mungkin perlu refresh manual
+
+**More issues?** Check [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
+
+## 📚 Additional Documentation
+
+- **Setup Guide**: [DATABASE_SETUP.md](DATABASE_SETUP.md) - Complete database setup
+- **Troubleshooting**: [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - Common issues
+- **Progress**: [PROGRESS.md](PROGRESS.md) - Development timeline
+- **Schema**: [supabase-schema.sql](supabase-schema.sql) - Full database schema
+- **Leaderboard Fix**: [fix-leaderboard-view.sql](fix-leaderboard-view.sql) - View optimization
+
+## 👥 Team
+
+Developed with ❤️ by Team UTBK Game Simulation
+
+## 📄 License
+
+This project is for educational purposes.
+
+---
+
+**Status:** ✅ Production Ready | **Last Updated:** January 4, 2026
 
 ### Build untuk Production
 

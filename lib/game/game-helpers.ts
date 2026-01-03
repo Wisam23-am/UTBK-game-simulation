@@ -81,76 +81,122 @@ export async function fetchQuestions(
 
 /**
  * Fetch mixed questions from ALL categories for Game Mode
- * Distribution: 60% hard, 40% medium
- * Categories: pu, pk, ppu, pbm, lbi, lbe, pm (all UTBK categories)
+ * Distribution: 
+ * - PU: 3 questions (special category)
+ * - Other 6 categories: 2 questions each
+ * - Total: 15 questions covering all 7 UTBK categories
+ * - Difficulty: 80% hard (12 questions), 20% medium (3 questions) - randomly distributed
  * 
- * @param totalQuestions - Total number of questions (default: 15)
+ * Categories: pu, pk, ppu, pbm, lbi, lbe, pm
  */
-export async function fetchMixedQuestions(
-  totalQuestions: number = 15
-): Promise<{ data: Question[] | null; error: any }> {
+export async function fetchMixedQuestions(): Promise<{ data: Question[] | null; error: any }> {
   try {
-    // Calculate distribution
-    const hardCount = Math.ceil(totalQuestions * 0.6); // 60% hard
-    const mediumCount = totalQuestions - hardCount; // 40% medium
+    // Define category distribution
+    const categoryDistribution = [
+      { category: 'pu', count: 3 },   // Penalaran Umum
+      { category: 'pk', count: 2 },   // Pengetahuan Kuantitatif
+      { category: 'ppu', count: 2 },  // Pengetahuan & Pemahaman Umum
+      { category: 'pbm', count: 2 },  // Pemahaman Bacaan & Menulis
+      { category: 'lbi', count: 2 },  // Literasi Bahasa Indonesia
+      { category: 'lbe', count: 2 },  // Literasi Bahasa Inggris
+      { category: 'pm', count: 2 },   // Penalaran Matematika
+    ];
 
-    console.log('🎮 Fetching mixed questions:', {
-      total: totalQuestions,
-      hard: hardCount,
-      medium: mediumCount,
-      categories: 'ALL (pu, pk, ppu, pbm, lbi, lbe, pm)'
+    console.log('🎮 Fetching balanced questions:', {
+      total: 15,
+      distribution: categoryDistribution.map(c => `${c.category}: ${c.count}`).join(', '),
+      difficulty: '80% hard (12), 20% medium (3) - randomly distributed'
     });
 
-    // Fetch hard questions from all categories
-    const { data: hardQuestions, error: hardError } = await supabase
-      .from('questions')
-      .select(`
-        *,
-        stimulus:question_stimulus(id, title, content)
-      `)
-      .eq('verified', true)
-      .eq('difficulty', 'hard')
-      .limit(hardCount * 2); // Fetch extra for randomization
+    // Fetch all questions per category
+    const questionsByCategory: Record<string, { hard: Question[], medium: Question[] }> = {};
 
-    if (hardError) {
-      console.error('❌ Error fetching hard questions:', hardError);
-      return { data: null, error: hardError };
+    for (const { category } of categoryDistribution) {
+      // Fetch hard questions for this category (all available for better randomization)
+      const { data: hardQuestions, error: hardError } = await supabase
+        .from('questions')
+        .select(`
+          *,
+          stimulus:question_stimulus(id, title, content)
+        `)
+        .eq('verified', true)
+        .eq('category', category)
+        .eq('difficulty', 'hard');
+
+      // Fetch medium questions for this category (all available for better randomization)
+      const { data: mediumQuestions, error: mediumError } = await supabase
+        .from('questions')
+        .select(`
+          *,
+          stimulus:question_stimulus(id, title, content)
+        `)
+        .eq('verified', true)
+        .eq('category', category)
+        .eq('difficulty', 'medium');
+
+      if (hardError || mediumError) {
+        console.error(`❌ Error fetching ${category} questions:`, hardError || mediumError);
+        continue;
+      }
+
+      questionsByCategory[category] = {
+        hard: hardQuestions || [],
+        medium: mediumQuestions || []
+      };
     }
 
-    // Fetch medium questions from all categories
-    const { data: mediumQuestions, error: mediumError } = await supabase
-      .from('questions')
-      .select(`
-        *,
-        stimulus:question_stimulus(id, title, content)
-      `)
-      .eq('verified', true)
-      .eq('difficulty', 'medium')
-      .limit(mediumCount * 2); // Fetch extra for randomization
+    // Fisher-Yates shuffle
+    const shuffleArray = <T,>(array: T[]): T[] => {
+      const shuffled = [...array];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    };
 
-    if (mediumError) {
-      console.error('❌ Error fetching medium questions:', mediumError);
-      return { data: null, error: mediumError };
+    // Build pool of all available questions with category info
+    const allHardQuestions: Array<Question & { category: string }> = [];
+    const allMediumQuestions: Array<Question & { category: string }> = [];
+
+    for (const { category, count } of categoryDistribution) {
+      const catQuestions = questionsByCategory[category];
+      if (!catQuestions) continue;
+
+      // Shuffle and take needed count from each category
+      const shuffledHard = shuffleArray(catQuestions.hard).slice(0, count);
+      const shuffledMedium = shuffleArray(catQuestions.medium).slice(0, count);
+
+      allHardQuestions.push(...shuffledHard.map(q => ({ ...q, category })));
+      allMediumQuestions.push(...shuffledMedium.map(q => ({ ...q, category })));
     }
 
-    // Randomize and select exact counts
-    const selectedHard = (hardQuestions || [])
-      .sort(() => Math.random() - 0.5)
-      .slice(0, hardCount);
+    // Shuffle pools
+    const shuffledHardPool = shuffleArray(allHardQuestions);
+    const shuffledMediumPool = shuffleArray(allMediumQuestions);
 
-    const selectedMedium = (mediumQuestions || [])
-      .sort(() => Math.random() - 0.5)
-      .slice(0, mediumCount);
+    // Select 12 hard (80%) and 3 medium (20%)
+    const selectedQuestions: Question[] = [
+      ...shuffledHardPool.slice(0, 12),
+      ...shuffledMediumPool.slice(0, 3)
+    ];
 
-    // Combine and shuffle all questions
-    const mixedQuestions = [...selectedHard, ...selectedMedium]
-      .sort(() => Math.random() - 0.5);
+    // Final shuffle to mix difficulties
+    const mixedQuestions = shuffleArray(selectedQuestions);
 
-    console.log('✅ Mixed questions loaded:', {
+    // Log final distribution
+    const categoryCount: Record<string, number> = {};
+    mixedQuestions.forEach(q => {
+      categoryCount[q.category] = (categoryCount[q.category] || 0) + 1;
+    });
+
+    console.log('✅ Final mixed questions:', {
       total: mixedQuestions.length,
-      hard: selectedHard.length,
-      medium: selectedMedium.length,
-      categories: [...new Set(mixedQuestions.map(q => q.category))]
+      byCategory: categoryCount,
+      difficulty: {
+        hard: mixedQuestions.filter(q => q.difficulty === 'hard').length,
+        medium: mixedQuestions.filter(q => q.difficulty === 'medium').length,
+      }
     });
 
     return { data: mixedQuestions, error: null };

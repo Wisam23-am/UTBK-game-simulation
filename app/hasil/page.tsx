@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useSearchParams } from 'next/navigation';
-import { useState } from 'react';
-import Link from 'next/link';
-import { ArrowRight, Home, RotateCcw } from 'lucide-react';
-import LeaderboardCard from '@/components/LeaderboardCard';
-import Dock from '@/components/Dock';
+import { useSearchParams, useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
+import { ArrowRight, Home, RotateCcw } from "lucide-react";
+import LeaderboardCard from "@/components/LeaderboardCard";
+import Dock from "@/components/Dock";
 
 type AnsweredQuestion = {
   question: string;
@@ -17,27 +17,45 @@ type AnsweredQuestion = {
   earnedPoints: number;
 };
 
-export default function ResultPage() {
+function ResultContent() {
   const searchParams = useSearchParams();
-  const score = parseInt(searchParams.get('score') || '0');
-  const correct = parseInt(searchParams.get('correct') || '0');
-  const time = parseInt(searchParams.get('time') || '0');
-  const answersData = searchParams.get('answers');
-  
+  const router = useRouter();
+  const score = parseInt(searchParams.get("score") || "0");
+  const correct = parseInt(searchParams.get("correct") || "0");
+  const time = parseInt(searchParams.get("time") || "0");
+  const answersData = searchParams.get("answers");
+
   const [showReview, setShowReview] = useState(false);
-  
+
   // Parse answered questions
-  const answeredQuestions: AnsweredQuestion[] = answersData 
+  const answeredQuestions: AnsweredQuestion[] = answersData
     ? JSON.parse(decodeURIComponent(answersData))
     : [];
-  
-  const totalQuestions = answeredQuestions.length || 5; // Fallback to 5 if no data
+
+  const totalQuestions = 15; // Fixed: always 15 questions in current game format
   const percentage = (correct / totalQuestions) * 100;
-  
+
+  // Replace history to redirect back to study page instead of game
+  useEffect(() => {
+    // Replace the current history entry to include study page in the back stack
+    window.history.pushState(null, "", window.location.href);
+
+    const handlePopState = (e: PopStateEvent) => {
+      e.preventDefault();
+      router.replace("/study");
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [router]);
+
   // Calculate max streak from answered questions
   let maxStreak = 0;
   let currentStreak = 0;
-  answeredQuestions.forEach(q => {
+  answeredQuestions.forEach((q) => {
     if (q.isCorrect) {
       currentStreak++;
       if (currentStreak > maxStreak) {
@@ -47,14 +65,17 @@ export default function ResultPage() {
       currentStreak = 0;
     }
   });
-  
-  // Tentukan grade berdasarkan skor
+
+  // Tentukan grade berdasarkan jumlah benar (15 soal total)
   const getGrade = () => {
-    if (percentage >= 90) return { grade: 'A+', label: 'Sempurna!', color: '#3F72AF' };
-    if (percentage >= 80) return { grade: 'A', label: 'Luar Biasa!', color: '#3F72AF' };
-    if (percentage >= 70) return { grade: 'B', label: 'Bagus!', color: '#3F72AF' };
-    if (percentage >= 60) return { grade: 'C', label: 'Cukup', color: '#3F72AF' };
-    return { grade: 'D', label: 'Astagfirullah', color: '#112D4E' };
+    if (correct >= 14)
+      return { grade: "A+", label: "Sempurna!", color: "#3F72AF" }; // 93%+
+    if (correct >= 13)
+      return { grade: "A", label: "Luar Biasa!", color: "#3F72AF" }; // 87%+
+    if (correct >= 11) return { grade: "B", label: "Bagus!", color: "#3F72AF" }; // 73%+
+    if (correct >= 9) return { grade: "C", label: "Cukup", color: "#3F72AF" }; // 60%+
+    if (correct >= 7) return { grade: "D", label: "Kurang", color: "#112D4E" }; // 47%+
+    return { grade: "E", label: "Astagfirullah", color: "#112D4E" }; // <47%
   };
 
   const gradeInfo = getGrade();
@@ -119,23 +140,33 @@ export default function ResultPage() {
             <div className="grid grid-cols-3 gap-4 mb-6">
               {/* Score */}
               <div className="rounded-2xl bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF]/20 p-6 border border-[#3F72AF]/30 text-center">
-                <div className="text-sm text-[#3F72AF] font-semibold mb-2">Skor Total</div>
+                <div className="text-sm text-[#3F72AF] font-semibold mb-2">
+                  Skor Total
+                </div>
                 <div className="text-4xl font-bold text-[#112D4E]">{score}</div>
                 <div className="text-xs text-[#3F72AF] mt-1">poin</div>
               </div>
 
               {/* Correct Answers */}
               <div className="rounded-2xl bg-gradient-to-br from-[#3F72AF]/20 to-[#DBE2EF] p-6 border border-[#3F72AF]/30 text-center">
-                <div className="text-sm text-[#3F72AF] font-semibold mb-2">Jawaban Benar</div>
-                <div className="text-4xl font-bold text-[#112D4E]">{correct}</div>
+                <div className="text-sm text-[#3F72AF] font-semibold mb-2">
+                  Jawaban Benar
+                </div>
+                <div className="text-4xl font-bold text-[#112D4E]">
+                  {correct}
+                </div>
                 <div className="text-xs text-[#3F72AF] mt-1">soal</div>
               </div>
 
               {/* Time */}
               <div className="rounded-2xl bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF]/20 p-6 border border-[#3F72AF]/30 text-center">
-                <div className="text-sm text-[#3F72AF] font-semibold mb-2">Waktu</div>
+                <div className="text-sm text-[#3F72AF] font-semibold mb-2">
+                  Waktu
+                </div>
                 <div className="text-4xl font-bold text-[#112D4E]">
-                  {minutes > 0 ? `${minutes}:${seconds.toString().padStart(2, '0')}` : `${seconds}s`}
+                  {minutes > 0
+                    ? `${minutes}:${seconds.toString().padStart(2, "0")}`
+                    : `${seconds}s`}
                 </div>
                 <div className="text-xs text-[#3F72AF] mt-1">menit</div>
               </div>
@@ -144,17 +175,27 @@ export default function ResultPage() {
             {/* Max Streak Badge */}
             {maxStreak >= 3 && (
               <div className="mb-6 rounded-2xl bg-gradient-to-r from-orange-400 to-red-500 p-4 text-center border-2 border-yellow-400 animate-pulse">
-                <p className="text-white font-bold text-lg mb-1">🔥 Max Streak Achievement!</p>
-                <p className="text-yellow-100 text-3xl font-bold">{maxStreak}x Combo</p>
-                <p className="text-yellow-100 text-sm mt-1">Jawaban benar beruntun terpanjang!</p>
+                <p className="text-white font-bold text-lg mb-1">
+                  🔥 Max Streak Achievement!
+                </p>
+                <p className="text-yellow-100 text-3xl font-bold">
+                  {maxStreak}x Combo
+                </p>
+                <p className="text-yellow-100 text-sm mt-1">
+                  Jawaban benar beruntun terpanjang!
+                </p>
               </div>
             )}
 
             {/* Performance Bar */}
             <div className="mb-8">
               <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-semibold text-[#112D4E]">Performa Anda</span>
-                <span className="text-sm font-bold text-[#3F72AF]">{percentage.toFixed(1)}%</span>
+                <span className="text-sm font-semibold text-[#112D4E]">
+                  Performa Anda
+                </span>
+                <span className="text-sm font-bold text-[#3F72AF]">
+                  {percentage.toFixed(1)}%
+                </span>
               </div>
               <div className="w-full h-4 bg-[#DBE2EF] rounded-full overflow-hidden border border-[#3F72AF]/30">
                 <div
@@ -168,15 +209,17 @@ export default function ResultPage() {
             <div className="rounded-2xl bg-gradient-to-r from-[#3F72AF]/10 to-[#DBE2EF]/30 p-6 border border-[#3F72AF]/30 mb-8 text-center">
               <p className="text-[#112D4E] font-semibold mb-2">💡 Feedback</p>
               <p className="text-[#3F72AF] text-sm leading-relaxed">
-                {percentage >= 90
-                  ? 'Luar biasa! Anda sudah menguasai materi dengan sangat baik. Terus pertahankan performa ini!'
-                  : percentage >= 80
-                  ? 'Sangat bagus! Anda memahami sebagian besar materi. Pelajari kembali soal yang salah.'
-                  : percentage >= 70
-                  ? 'Hasil ini adalah bukti nyata bahwa Anda hanya melakukan syarat sah untuk bertahan hidup, bukan untuk berkembang. Anda berada di garis tipis antara "berusaha" dan "sekadar hadir".'
-                  : percentage >= 60
-                  ? 'Al-Quran berulang kali bertanya, Afala Taqilun? (Apakah kamu tidak menggunakan akalmu?). Namun, Anda sepertinya telah mencapai tingkat \'spiritualitas\' yang sangat tinggi, di mana Anda merasa tidak lagi memiliki nalar untuk memahami dunia.'
-                  : 'Al-Qur\'an berulang kali bertanya, Afala Taqilun? (Apakah kamu tidak menggunakan akalmu?). Namun, Anda sepertinya telah mencapai tingkat \'spiritualitas\' yang sangat tinggi, di mana Anda merasa tidak lagi memiliki nalar untuk memahami dunia.'}
+                {correct >= 14
+                  ? "Luar biasa! Anda sudah menguasai materi dengan sangat baik. Terus pertahankan performa ini!"
+                  : correct >= 13
+                  ? "Sangat bagus! Anda memahami sebagian besar materi. Pelajari kembali soal yang salah."
+                  : correct >= 11
+                  ? "Bagus! Anda sudah cukup memahami materi. Tingkatkan lagi dengan latihan lebih banyak."
+                  : correct >= 9
+                  ? "Cukup baik. Masih ada ruang untuk berkembang. Fokus pada materi yang masih lemah."
+                  : correct >= 7
+                  ? "Hasil ini menunjukkan Anda perlu lebih banyak latihan. Jangan menyerah, terus belajar!"
+                  : "Al-Qur'an berulang kali bertanya, Afala Taqilun? (Apakah kamu tidak menggunakan akalmu?). Tingkatkan usaha belajarmu, masa depanmu bergantung padanya!"}
               </p>
             </div>
 
@@ -188,7 +231,7 @@ export default function ResultPage() {
                   <span>Ke Beranda</span>
                 </button>
               </Link>
-              <Link href="/game" className="block">
+              <Link href="/study" className="block">
                 <button className="w-full py-4 px-6 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] hover:from-[#112D4E] hover:to-[#3F72AF] text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-[#3F72AF]/50">
                   <RotateCcw size={20} />
                   <span>Coba Lagi</span>
@@ -202,8 +245,10 @@ export default function ResultPage() {
                 onClick={() => setShowReview(!showReview)}
                 className="w-full py-4 px-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
               >
-                <span>{showReview ? '📕' : '📖'}</span>
-                <span>{showReview ? 'Tutup Review Jawaban' : 'Lihat Review Jawaban'}</span>
+                <span>{showReview ? "📕" : "📖"}</span>
+                <span>
+                  {showReview ? "Tutup Review Jawaban" : "Lihat Review Jawaban"}
+                </span>
               </button>
             )}
 
@@ -221,15 +266,15 @@ export default function ResultPage() {
               <h2 className="text-2xl font-bold text-[#112D4E] mb-6 text-center">
                 📚 Review Jawaban
               </h2>
-              
+
               <div className="space-y-4">
                 {answeredQuestions.map((item, index) => (
                   <div
                     key={index}
                     className={`rounded-2xl p-6 border-2 transition-all ${
                       item.isCorrect
-                        ? 'bg-gradient-to-br from-green-50 to-emerald-50 border-green-300'
-                        : 'bg-gradient-to-br from-red-50 to-pink-50 border-red-300'
+                        ? "bg-gradient-to-br from-green-50 to-emerald-50 border-green-300"
+                        : "bg-gradient-to-br from-red-50 to-pink-50 border-red-300"
                     }`}
                   >
                     {/* Question Number and Status */}
@@ -249,12 +294,14 @@ export default function ResultPage() {
                           </>
                         )}
                       </div>
-                      <span className={`px-4 py-1 rounded-full text-sm font-bold ${
-                        item.isCorrect
-                          ? 'bg-green-500 text-white'
-                          : 'bg-red-500 text-white'
-                      }`}>
-                        {item.isCorrect ? '✓ Benar' : '✗ Salah'}
+                      <span
+                        className={`px-4 py-1 rounded-full text-sm font-bold ${
+                          item.isCorrect
+                            ? "bg-green-500 text-white"
+                            : "bg-red-500 text-white"
+                        }`}
+                      >
+                        {item.isCorrect ? "✓ Benar" : "✗ Salah"}
                       </span>
                     </div>
 
@@ -268,17 +315,21 @@ export default function ResultPage() {
                     {/* Answers Comparison */}
                     <div className="grid md:grid-cols-2 gap-4 mb-4">
                       {/* User Answer */}
-                      <div className={`p-4 rounded-xl border-2 ${
-                        item.isCorrect
-                          ? 'bg-green-100 border-green-400'
-                          : 'bg-red-100 border-red-400'
-                      }`}>
+                      <div
+                        className={`p-4 rounded-xl border-2 ${
+                          item.isCorrect
+                            ? "bg-green-100 border-green-400"
+                            : "bg-red-100 border-red-400"
+                        }`}
+                      >
                         <p className="text-xs font-semibold text-gray-600 mb-2">
                           Jawaban Anda:
                         </p>
-                        <p className={`font-bold text-lg ${
-                          item.isCorrect ? 'text-green-700' : 'text-red-700'
-                        }`}>
+                        <p
+                          className={`font-bold text-lg ${
+                            item.isCorrect ? "text-green-700" : "text-red-700"
+                          }`}
+                        >
                           {item.userAnswer}
                         </p>
                       </div>
@@ -313,7 +364,10 @@ export default function ResultPage() {
           )}
 
           {/* Leaderboard Section */}
-          <div className="mt-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+          <div
+            className="mt-6 animate-slide-up"
+            style={{ animationDelay: "0.3s" }}
+          >
             <LeaderboardCard compact />
           </div>
         </div>
@@ -323,5 +377,20 @@ export default function ResultPage() {
         <Dock />
       </div>
     </div>
+  );
+}
+
+export default function ResultPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+        <div className="text-center">
+          <div className="animate-spin text-6xl mb-4">⏳</div>
+          <p className="text-slate-600">Memuat hasil...</p>
+        </div>
+      </div>
+    }>
+      <ResultContent />
+    </Suspense>
   );
 }

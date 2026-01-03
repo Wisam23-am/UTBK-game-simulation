@@ -46,7 +46,8 @@
 
 - ✅ **Mixed Questions System:**
   - 15 soal campuran dari SEMUA kategori (pu, pk, ppu, pbm, lbi, lbe, pm)
-  - Distribusi: 60% hard, 40% medium
+  - Distribusi kategori: PU (3 soal), others (2 soal each)
+  - Distribusi difficulty: 80% hard (12 soal), 20% medium (3 soal)
   - Waktu: 10 menit (600 detik)
   - Random shuffle untuk setiap game session
 - ✅ **Base Points System:**

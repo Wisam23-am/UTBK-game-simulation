@@ -42,6 +42,24 @@ const teamMembers: TeamMember[] = [
     name: 'Luthfi Zadeh',
     major: 'D3 Teknik Informatika 23 PSDKU Lamongan',
     image: '/team/luthfi-zadeh.jpg'
+  },
+  {
+    id: 6,
+    name: 'Evan',
+    major: 'D3 Teknik Informatika 25 PSDKU Lamongan',
+    image: '/team/evan.jpg'
+  },
+  {
+    id: 7,
+    name: 'Nadia',
+    major: 'D3 Teknik Informatika 25 PSDKU Lamongan',
+    image: '/team/nadia.jpg'
+  },
+  {
+    id: 8,
+    name: 'Attini',
+    major: 'D4 Teknik Telekomunikasi 25',
+    image: '/team/attini.jpg'
   }
 ];
 

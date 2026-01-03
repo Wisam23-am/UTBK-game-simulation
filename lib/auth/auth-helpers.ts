@@ -24,6 +24,15 @@ export async function getCurrentUser() {
   }
 
   try {
+    // Check if session exists first to reduce warnings
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (!session) {
+      return { user: null, error: null };
+    }
+
     const {
       data: { user },
       error,
@@ -51,7 +60,7 @@ export async function isAuthenticated() {
   return !!user;
 }
 
-// Get user profile from database
+// Get user profile from database (auto-create if not exists)
 export async function getUserProfile(userId?: string) {
   if (DEV_MODE && !userId) {
     return { profile: DEV_USER, error: null };
@@ -64,9 +73,39 @@ export async function getUserProfile(userId?: string) {
     .single();
 
   if (error) {
-    // If profile not found, it's not an error - just return null
+    // If profile not found, create it automatically
     if (error.code === 'PGRST116') {
-      console.log('⚠️ Profile not found for user:', userId);
+      console.log('⚠️ Profile not found for user:', userId, '- Creating new profile...');
+      
+      // Get user data from auth
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        // Create new profile
+        const { data: newProfile, error: createError } = await supabase
+          .from('profiles')
+          .insert([{
+            id: user.id,
+            username: user.email?.split('@')[0] || 'user',
+            full_name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
+            avatar_url: user.user_metadata?.avatar_url || '',
+            school: '',
+            target_university: '',
+            total_games: 0,
+            best_score: 0,
+          }])
+          .select()
+          .single();
+        
+        if (createError) {
+          console.error('❌ Error creating profile:', createError);
+          return { profile: null, error: createError };
+        }
+        
+        console.log('✅ Profile created successfully:', newProfile);
+        return { profile: newProfile, error: null };
+      }
+      
       return { profile: null, error: null };
     }
     
