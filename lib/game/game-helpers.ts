@@ -80,6 +80,87 @@ export async function fetchQuestions(
 }
 
 /**
+ * Fetch mixed questions from ALL categories for Game Mode
+ * Distribution: 60% hard, 40% medium
+ * Categories: pu, pk, ppu, pbm, lbi, lbe, pm (all UTBK categories)
+ * 
+ * @param totalQuestions - Total number of questions (default: 15)
+ */
+export async function fetchMixedQuestions(
+  totalQuestions: number = 15
+): Promise<{ data: Question[] | null; error: any }> {
+  try {
+    // Calculate distribution
+    const hardCount = Math.ceil(totalQuestions * 0.6); // 60% hard
+    const mediumCount = totalQuestions - hardCount; // 40% medium
+
+    console.log('🎮 Fetching mixed questions:', {
+      total: totalQuestions,
+      hard: hardCount,
+      medium: mediumCount,
+      categories: 'ALL (pu, pk, ppu, pbm, lbi, lbe, pm)'
+    });
+
+    // Fetch hard questions from all categories
+    const { data: hardQuestions, error: hardError } = await supabase
+      .from('questions')
+      .select(`
+        *,
+        stimulus:question_stimulus(id, title, content)
+      `)
+      .eq('verified', true)
+      .eq('difficulty', 'hard')
+      .limit(hardCount * 2); // Fetch extra for randomization
+
+    if (hardError) {
+      console.error('❌ Error fetching hard questions:', hardError);
+      return { data: null, error: hardError };
+    }
+
+    // Fetch medium questions from all categories
+    const { data: mediumQuestions, error: mediumError } = await supabase
+      .from('questions')
+      .select(`
+        *,
+        stimulus:question_stimulus(id, title, content)
+      `)
+      .eq('verified', true)
+      .eq('difficulty', 'medium')
+      .limit(mediumCount * 2); // Fetch extra for randomization
+
+    if (mediumError) {
+      console.error('❌ Error fetching medium questions:', mediumError);
+      return { data: null, error: mediumError };
+    }
+
+    // Randomize and select exact counts
+    const selectedHard = (hardQuestions || [])
+      .sort(() => Math.random() - 0.5)
+      .slice(0, hardCount);
+
+    const selectedMedium = (mediumQuestions || [])
+      .sort(() => Math.random() - 0.5)
+      .slice(0, mediumCount);
+
+    // Combine and shuffle all questions
+    const mixedQuestions = [...selectedHard, ...selectedMedium]
+      .sort(() => Math.random() - 0.5);
+
+    console.log('✅ Mixed questions loaded:', {
+      total: mixedQuestions.length,
+      hard: selectedHard.length,
+      medium: selectedMedium.length,
+      categories: [...new Set(mixedQuestions.map(q => q.category))]
+    });
+
+    return { data: mixedQuestions, error: null };
+  } catch (error) {
+    console.error('❌ Fetch mixed questions error:', error);
+    return { data: null, error };
+  }
+}
+
+/**
  * Save game result to Supabase
  * Automatically updates profile stats via trigger
  */

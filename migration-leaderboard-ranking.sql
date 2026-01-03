@@ -1,8 +1,9 @@
 -- ============================================
--- MIGRATION: Update Leaderboard Ranking System
+-- MIGRATION: Update Leaderboard Ranking System v2
 -- ============================================
 -- This migration updates the global_leaderboard materialized view
--- to rank by: 1) Score (highest), 2) Correct answers (most), 3) Time (fastest)
+-- Ranking: 1) Score (highest), 2) Correct answers in THAT game (most), 3) Time (fastest)
+-- Display: Rank, Name, Score, Time only
 -- 
 -- Run this in Supabase SQL Editor to apply the changes
 
@@ -11,33 +12,39 @@ DROP MATERIALIZED VIEW IF EXISTS global_leaderboard CASCADE;
 
 -- Recreate with new ranking logic
 CREATE MATERIALIZED VIEW global_leaderboard AS
+WITH best_games AS (
+  SELECT DISTINCT ON (user_id)
+    user_id,
+    score,
+    correct_answers,
+    time_spent,
+    created_at
+  FROM game_results
+  ORDER BY user_id, score DESC, correct_answers DESC, time_spent ASC
+)
 SELECT
   p.id,
   p.username,
   p.full_name,
   p.avatar_url,
-  p.school,
-  p.target_university,
-  MAX(gr.score) as best_score,
+  bg.score as best_score,
+  bg.correct_answers as best_game_correct,
+  bg.time_spent as best_time,
   COUNT(gr.id) as total_games,
-  AVG(gr.score)::INTEGER as avg_score,
-  SUM(gr.correct_answers) as total_correct,
-  MIN(CASE WHEN gr.score = (SELECT MAX(score) FROM game_results WHERE user_id = p.id) 
-    THEN gr.time_spent ELSE NULL END) as best_time,
   RANK() OVER (
     ORDER BY 
-      MAX(gr.score) DESC,                    -- 1. Skor tertinggi (primary)
-      SUM(gr.correct_answers) DESC,          -- 2. Jumlah soal benar (secondary)
-      MIN(CASE WHEN gr.score = (SELECT MAX(score) FROM game_results WHERE user_id = p.id) 
-        THEN gr.time_spent ELSE NULL END) ASC  -- 3. Waktu tercepat (tertiary)
+      bg.score DESC,              -- 1. Skor tertinggi (primary)
+      bg.correct_answers DESC,    -- 2. Jumlah benar di game itu (secondary)
+      bg.time_spent ASC           -- 3. Waktu tercepat (tertiary)
   ) as rank
 FROM profiles p
+INNER JOIN best_games bg ON p.id = bg.user_id
 LEFT JOIN game_results gr ON p.id = gr.user_id
-GROUP BY p.id, p.username, p.full_name, p.avatar_url, p.school, p.target_university
+GROUP BY p.id, p.username, p.full_name, p.avatar_url, bg.score, bg.correct_answers, bg.time_spent
 ORDER BY 
-  best_score DESC, 
-  total_correct DESC,
-  best_time ASC
+  bg.score DESC, 
+  bg.correct_answers DESC,
+  bg.time_spent ASC
 LIMIT 100;
 
 -- Recreate unique index
@@ -71,8 +78,16 @@ REFRESH MATERIALIZED VIEW CONCURRENTLY global_leaderboard;
 --   rank,
 --   username,
 --   best_score,
---   total_correct,
+--   best_game_correct,
 --   best_time
 -- FROM global_leaderboard
 -- ORDER BY rank
 -- LIMIT 20;
+--
+-- Expected columns in leaderboard:
+-- - rank: Player ranking (1, 2, 3, ...)
+-- - username: Player name
+-- - best_score: Highest score achieved
+-- - best_game_correct: Correct answers in that best game
+-- - best_time: Time spent in that best game (seconds)
+-- - total_games: Total games played (for reference, not displayed in UI)

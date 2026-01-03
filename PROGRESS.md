@@ -1,6 +1,6 @@
 # 📋 Progress & Roadmap - UTBK Game Simulation
 
-**Last Updated:** January 3, 2026
+**Last Updated:** January 4, 2026
 
 ## ✅ Yang Sudah Selesai
 
@@ -44,8 +44,13 @@
 
 #### 3. **Game Mechanics - NEW SCORING SYSTEM** ✅
 
+- ✅ **Mixed Questions System:**
+  - 15 soal campuran dari SEMUA kategori (pu, pk, ppu, pbm, lbi, lbe, pm)
+  - Distribusi: 60% hard, 40% medium
+  - Waktu: 10 menit (600 detik)
+  - Random shuffle untuk setiap game session
 - ✅ **Base Points System:**
-  - 10 base points per correct answer
+  - 1000 base points per correct answer
   - Time bonus: 5 points per second (max 30 seconds = 150 bonus)
   - Faster answers = higher score
 - ✅ **Streak/Combo System:**
@@ -56,8 +61,8 @@
   - Reset on wrong answer
 - ✅ **Scoring Formula:**
   ```
-  Points = (Base 10 + Time Bonus) × Streak Multiplier
-  Max per question: (10 + 150) × 1.5 = 240 points
+  Points = (Base 1000 + Time Bonus) × Streak Multiplier
+  Max per question: (1000 + 150) × 1.5 = 1,725 points
   ```
 - ✅ **Answer Review System:**
   - No correct answer shown during game
@@ -103,13 +108,13 @@
   - question_image_url support
   - stimulus_id foreign key for shared passages
 - ✅ **350 verified questions (250% achievement):**
-  - PU: 50 questions (250% of 20 target) - **ACTIVE IN GAME**
-  - PK: 50 questions (167% of 30 target)
-  - PPU: 50 questions (250% of 20 target)
-  - PBM: 50 questions (250% of 20 target)
-  - LBI: 50 questions (333% of 15 target)
-  - LBE: 50 questions (333% of 15 target)
-  - PM: 50 questions (250% of 20 target)
+  - PU: 50 questions (250% of 20 target) - **USED IN MIXED GAME**
+  - PK: 50 questions (167% of 30 target) - **USED IN MIXED GAME**
+  - PPU: 50 questions (250% of 20 target) - **USED IN MIXED GAME**
+  - PBM: 50 questions (250% of 20 target) - **USED IN MIXED GAME**
+  - LBI: 50 questions (333% of 15 target) - **USED IN MIXED GAME**
+  - LBE: 50 questions (333% of 15 target) - **USED IN MIXED GAME**
+  - PM: 50 questions (250% of 20 target) - **USED IN MIXED GAME**
 - ✅ **Sample questions removed** (using real database questions)
 
 #### 3. **Game Integration** ✅ COMPLETE
@@ -119,9 +124,11 @@
   - Save game results to database
   - Get user game history
   - Update question usage stats
-  - **Category filter support** (now using 'pu' category only)
+  - **NEW: fetchMixedQuestions() for mixed category game**
 - ✅ Updated `app/game/page.tsx`:
-  - Fetch real questions from database
+  - Fetch 15 mixed questions (60% hard, 40% medium)
+  - Questions from ALL categories (pu, pk, ppu, pbm, lbi, lbe, pm)
+  - 10 minutes timer (600 seconds)
   - Save results automatically
   - Loading & error states
   - Display question explanations
@@ -138,7 +145,7 @@
   - **NEW: Time spent and points display per question**
   - **NEW: Explanation included in review cards**
 - ✅ Auto-update profile stats via database trigger
-- ✅ **Game now uses category 'pu' (Penalaran Umum) only**
+- ✅ **Game uses mixed questions from ALL categories (January 4, 2026)**
 
 #### 4. **Developer Tools** ✅ COMPLETE
 
@@ -237,28 +244,30 @@
   - Sample questions removed from schema
   - Using real database questions only
 
+- ✅ **Leaderboard Ranking Migration (January 4, 2026)**
+  - Applied `migration-leaderboard-ranking.sql`
+  - Updated ranking logic: Score → Correct → Time
+  - Added `best_time` column to track fastest completion
+  - Improved tiebreaker system
+
 ### **⏳ In Progress:**
 
 None - all Phase 1 & 2 features completed! ✅
 
 ### **🎯 Next Priorities:**
 
-1. **Apply Database Migration** - IMMEDIATE ACTION REQUIRED 🔥
-   
-   - Run `migration-leaderboard-ranking.sql` in Supabase SQL Editor
-   - This updates leaderboard ranking to: Score → Correct → Time
-   - Adds `best_time` column for tracking fastest completion
-
-2. **Phase 3A: Enhanced Game Mode** - IN PROGRESS
+1. **Phase 3A: Enhanced Game Mode** - COMPLETE ✅
 
    - ✅ Speed bonus system (5 points/second) - COMPLETE
    - ✅ Streak bonus system (1.5x multiplier at ≥3) - COMPLETE
    - ✅ Enhanced leaderboard with tiebreaker logic - COMPLETE
    - ✅ Real-time bonus display in game UI - COMPLETE
-   - ⏳ Category filter UI (let users choose category)
-   - ⏳ Difficulty selection
+   - ✅ Mixed questions from all categories - COMPLETE
+   - ✅ Smart difficulty distribution (60% hard, 40% medium) - COMPLETE
+   - ❌ Category filter - NOT NEEDED (reserved for Try-Out Mode)
+   - ❌ Difficulty selection - NOT NEEDED (auto-optimized)
 
-3. **Phase 3B: Try-Out Mode** (5-7 hours) - HIGH PRIORITY
+2. **Phase 3B: Try-Out Mode** (5-7 hours) - HIGH PRIORITY
 
    - Full UTBK simulation (105 questions total)
    - IRT-based scoring using difficulty_weight (0-1000 per section)
@@ -266,7 +275,7 @@ None - all Phase 1 & 2 features completed! ✅
    - Private results with detailed analytics
    - Review mode for all answers
 
-4. **Testing & Bug Fixes** (30 min)
+2. **Testing & Bug Fixes** (30 min)
 
    - End-to-end testing: Register → Login → Play Both Modes → Results
    - Test Try-Out Mode flow (multi-section, scoring, analytics)
@@ -275,7 +284,7 @@ None - all Phase 1 & 2 features completed! ✅
    - Fix any UI/UX issues
    - Test on mobile devices
 
-5. **Deploy to Production** (1 hour)
+3. **Deploy to Production** (1 hour)
    - Deploy to Vercel
    - Configure environment variables
    - Test production build

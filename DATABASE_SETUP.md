@@ -319,6 +319,16 @@ CREATE POLICY "Users can update own tryout sessions"
 
 ---
 
+**Last Updated:** January 4, 2026
+
+### ✅ Database Migration Applied (January 4, 2026)
+
+- ✅ Leaderboard ranking updated: Score → Correct → Time
+- ✅ Added `best_time` column to global_leaderboard
+- ✅ Improved tiebreaker logic for fair rankings
+
+---
+
 ## 📊 UTBK 2024+ Category Structure & Format Soal
 
 ### **Status Kategori (COMPLETE):**

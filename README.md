@@ -6,7 +6,8 @@ Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan **Dua
 
 **Phase 2 Complete ✅** - Full Integration with Real-time Data  
 **Phase 3 Planning ✅** - Dual Mode System Design Complete  
-**Current:** Production-ready base, needs questions & new modes
+**Migration Applied ✅** - Leaderboard ranking optimized (Jan 4, 2026)  
+**Current:** Ready for Enhanced Game Mode & Try-Out Mode development
 
 ### ✅ Completed Features:
 
@@ -72,11 +73,12 @@ Aplikasi ini menggabungkan gamifikasi untuk motivasi dengan simulasi realistis u
 
 #### 🎮 Game Mode Features:
 
-- ⚡ **Quick Practice**: 10-20 soal, selesai dalam 20 menit
+- ⚡ **Quick Practice**: 15 soal campuran, selesai dalam 10 menit
+- 🎲 **Mixed Categories**: Soal dari SEMUA kategori UTBK (PU, PK, PPU, PBM, LBI, LBE, PM)
+- 🎯 **Smart Difficulty**: 60% hard, 40% medium untuk challenge optimal
 - ❤️ **Life System**: 3 nyawa untuk tantangan ekstra
 - 🏆 **Leaderboard Global**: Kompetisi dengan ribuan siswa
 - 🔥 **Bonus System**: Speed & streak bonuses
-- 🎯 **Category Selection**: Pilih topik yang ingin dipelajari
 
 #### 📝 Try-Out Mode Features:
 

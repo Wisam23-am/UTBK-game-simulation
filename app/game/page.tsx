@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import LifeIndicator from "@/components/LifeIndicator";
 import FireIcon from "@/components/FireIcon";
 import {
-  fetchQuestions,
+  fetchMixedQuestions,
   saveGameResult,
   type Question,
 } from "@/lib/game/game-helpers";
@@ -19,7 +19,7 @@ export default function GamePage() {
   const [isAnswered, setIsAnswered] = useState(false);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3);
-  const [timer, setTimer] = useState(300); // 5 minutes
+  const [timer, setTimer] = useState(600); // 10 minutes for 15 mixed questions
   const [correctAnswers, setCorrectAnswers] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
@@ -56,8 +56,8 @@ export default function GamePage() {
           console.warn("⚠️ No user found. Results will not be saved.");
         }
 
-        // Fetch questions from Supabase - kategori PU (Penalaran Umum)
-        const { data, error } = await fetchQuestions(10, "pu"); // Get 10 questions with category 'pu'
+        // Fetch mixed questions from ALL categories (60% hard, 40% medium)
+        const { data, error } = await fetchMixedQuestions(15); // 15 mixed questions
 
         if (error) {
           console.error("❌ Error fetching questions:", error);
@@ -68,13 +68,17 @@ export default function GamePage() {
 
         if (!data || data.length === 0) {
           alert(
-            "Belum ada soal kategori PU tersedia. Silakan jalankan database setup terlebih dahulu."
+            "Belum ada soal tersedia. Silakan jalankan database setup terlebih dahulu."
           );
           router.push("/");
           return;
         }
 
-        console.log("✅ Loaded", data.length, "questions (kategori: PU)");
+        console.log(
+          "✅ Loaded",
+          data.length,
+          "mixed questions (60% hard, 40% medium)"
+        );
         setQuestions(data);
         setQuestionStartTime(Date.now());
         setIsLoading(false);
@@ -129,7 +133,7 @@ export default function GamePage() {
 
     if (isCorrect) {
       // Base points for correct answer
-      const basePoints = 10;
+      const basePoints = 1000;
 
       // Time bonus: 5 points per second (faster = more points)
       // Max 30 seconds for full bonus (150 points), after that no time bonus
