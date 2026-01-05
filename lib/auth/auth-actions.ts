@@ -66,6 +66,14 @@ export async function signUpAction(
   }
 
   // 2. Create profile
+  console.log('Creating profile with data:', { 
+    userId: authData.user.id, 
+    username, 
+    fullName, 
+    school: school || '', 
+    targetUniversity: targetUniversity || '' 
+  });
+
   const { error: profileError } = await supabase.from('profiles').insert({
     id: authData.user.id,
     username,
@@ -77,8 +85,15 @@ export async function signUpAction(
 
   if (profileError) {
     console.error('Profile creation error:', profileError);
-    // User created but profile failed - they can update later
+    // Even if profile creation fails, return success since auth user is created
+    // User can update profile later
+    return { 
+      user: authData.user, 
+      error: 'Akun dibuat tapi gagal menyimpan data profil. Silakan update profil Anda di halaman profil.'
+    };
   }
+
+  console.log('Profile created successfully');
 
   return { user: authData.user, error: null };
 }
