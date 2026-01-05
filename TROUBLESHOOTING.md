@@ -260,6 +260,78 @@ npm run dev
 
 ---
 
+## Deployment Issues (Vercel)
+
+### Build fails with "Your project's URL and API key are required"
+
+**Error Message:**
+```
+Error: @supabase/ssr: Your project's URL and API key are required to create a Supabase client!
+Error occurred prerendering page "/diagnostic"
+```
+
+**Cause:** Environment variables not set in Vercel.
+
+**Solution:**
+
+1. **Add Environment Variables in Vercel:**
+   - Go to Vercel Dashboard → Your Project
+   - Click **Settings** → **Environment Variables**
+   - Add these variables:
+     ```
+     NEXT_PUBLIC_SUPABASE_URL = https://your-project.supabase.co
+     NEXT_PUBLIC_SUPABASE_ANON_KEY = your-anon-key
+     NEXT_PUBLIC_DEV_MODE = false
+     ```
+   - Get credentials from: Supabase Dashboard → Settings → API
+   - Set for: Production, Preview, and Development
+   - Click **Save**
+
+2. **Redeploy:**
+   ```bash
+   git commit --allow-empty -m "trigger redeploy"
+   git push origin main
+   ```
+
+3. **Verify:** Check deployment logs in Vercel - build should succeed
+
+**Important:** Never commit `.env.local` to Git! Use Vercel's environment variables feature.
+
+---
+
+### Vercel deployment succeeds but app doesn't work
+
+**Symptoms:**
+- Build succeeds but app shows errors
+- Login/register not working
+- Database operations fail
+
+**Cause:** Production environment variables might be wrong or missing.
+
+**Solution:**
+
+1. **Verify Environment Variables:**
+   - Vercel Dashboard → Settings → Environment Variables
+   - Make sure `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` are correct
+   - Make sure `NEXT_PUBLIC_DEV_MODE = false` (not "true")
+
+2. **Test Production Build Locally:**
+   ```bash
+   npm run build
+   npm run start
+   # Visit http://localhost:3000
+   ```
+
+3. **Check Vercel Logs:**
+   - Vercel Dashboard → Deployments → Click latest deployment
+   - Check "Functions" tab for runtime errors
+
+4. **Update Supabase URLs:**
+   - Supabase Dashboard → Authentication → URL Configuration
+   - Add your Vercel URL: `https://your-project.vercel.app/**`
+
+---
+
 ## Phase 2 Issues (Leaderboard, Profile, Auth)
 
 ### Dashboard still shows "Guest" after login
