@@ -1,13 +1,16 @@
-# 🎮 UTBK Game Simulation
+# 🎮 QuizQuest - SNBT Game Platform
 
-Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan **Game Mode** untuk practice cepat dengan leaderboard kompetitif. **Try-Out Mode** coming soon!
+Platform latihan SNBT (Seleksi Nasional Berbasis Tes) yang inovatif dengan **Game Mode** untuk practice cepat dengan leaderboard kompetitif. **Try-Out Mode** coming soon!
+
+**Brand**: QuizQuest - Misi kami adalah menciptakan revolusi belajar SNBT untuk generasi juara Indonesia! 🎯✨
 
 ## 🌟 Status Proyek
 
-**Production Ready ✅** - January 4, 2026  
+**Production Ready ✅** - January 7, 2026  
 **Game Mode** - Fully functional with 350 questions  
 **Authentication** - Complete with enhanced user onboarding  
-**Leaderboard** - Optimized with materialized views  
+**Leaderboard** - Advanced filtering (Global, Sekolah-mu, Kampus-mu)  
+**Feedback System** - Private feedback with admin-only access  
 **Current Status:** Ready for Vercel deployment
 
 ### ✅ Completed Features:
@@ -53,11 +56,14 @@ Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan **Gam
 - ✅ Study page (mode selection hub)
 - ✅ Profile page with detailed statistics
 - ✅ Game history with category labels
-- ✅ Real-time leaderboard (global rankings)
+- ✅ Real-time leaderboard with filtering tabs
 - ✅ LeaderboardCard component (top 5)
+- ✅ Feedback page with 3 categories
+- ✅ Team page with animated design
 - ✅ Responsive navbar with mobile menu
-- ✅ macOS-style Dock navigation
+- ✅ macOS-style Dock navigation (6 items + Feedback)
 - ✅ Fully responsive design (mobile-first)
+- ✅ Consistent theme colors (#F9F7F7, #DBE2EF, #3F72AF, #112D4E)
 
 #### Profile & Statistics
 
@@ -69,15 +75,32 @@ Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan **Gam
 - ✅ Time spent statistics
 - ✅ Game history with filters
 - ✅ Editable profile (name, school, university)
+- ✅ School autocomplete (SMAN 1 Paciran only)
+- ✅ University search with PDDikti API (4400+ universities)
+- ✅ Debounced search for better performance
 
 #### Leaderboard System
 
-- ✅ Materialized view with CTE optimization
+- ✅ Real-time VIEW optimization (always fresh data)
 - ✅ Best game stats per user (not sum)
 - ✅ Ranking by: Score DESC → Correct DESC → Time ASC
 - ✅ Display: Best time + total correct answers
-- ✅ Auto-refresh on new game completion
-- ✅ Top 100 rankings
+- ✅ Smart rank calculation (top 50 + user rank)
+- ✅ **Advanced Filtering**: Global, Sekolah-mu, Kampus-mu
+- ✅ Exclude non-players automatically
+
+#### Feedback System
+
+- ✅ Private feedback submission (admin-only access)
+- ✅ Three categories: Bug, Soal, Komentar
+- ✅ Screenshot upload (max 300KB, private storage)
+- ✅ Bug reporting with detailed description
+- ✅ Question issue reporting with question ID
+- ✅ Feature requests via comment field
+- ✅ User comment field for additional suggestions
+- ✅ Integrated in Dock navigation (💬 icon)
+- ✅ Database schema with RLS policies
+- ✅ Privacy-focused UI with clear notices
 
 ### 🚀 Planned Features (Phase 3):
 
@@ -102,10 +125,12 @@ Platform latihan UTBK (Ujian Tulis Berbasis Komputer) yang inovatif dengan **Gam
 
 ## 📋 Deskripsi
 
-UTBK Game Simulation adalah platform latihan UTBK yang menggabungkan gamifikasi dengan pembelajaran efektif:
+**QuizQuest** adalah platform latihan SNBT yang menggabungkan gamifikasi dengan pembelajaran efektif:
 
 - **🎮 Game Mode**: Practice cepat 15 soal dengan leaderboard kompetitif
-- **📝 Try-Out Mode** (Coming Soon): Simulasi UTBK lengkap dengan scoring realistis
+- **📝 Try-Out Mode** (Coming Soon): Simulasi SNBT lengkap dengan scoring realistis
+- **💬 Feedback System**: Laporan bug, soal bermasalah, dan request fitur
+- **🏆 Advanced Leaderboard**: Filter berdasarkan Global, Sekolah-mu, Kampus-mu
 
 ### ✨ Fitur Utama
 
@@ -125,9 +150,12 @@ UTBK Game Simulation adalah platform latihan UTBK yang menggabungkan gamifikasi 
 - 🔐 **Secure Authentication**: Supabase Auth dengan JWT
 - 📝 **Enhanced Registration**: Full name, school, target university
 - 📊 **Detailed Profile**: Game stats, history, editable info
-- 🏆 **Leaderboard Rankings**: Best time & correct answers
+- � **School Selection**: Autocomplete dengan SMAN 1 Paciran
+- 🎓 **University Search**: 4400+ universitas via PDDikti API
+- 🏆 **Advanced Leaderboard**: Global, Sekolah-mu, Kampus-mu filters
 - 📈 **Real-time Statistics**: Accuracy, avg score, total games
 - 🎮 **Game History**: Track all games with category labels
+- 💬 **Private Feedback**: Bug reports, soal issues, feature requests
 - 🔒 **Protected Routes**: Login required for game/study access
 
 #### ⚙️ General Features:
@@ -187,7 +215,11 @@ UTBK-game-simulation/
 │   │   └── page.tsx
 │   ├── leaderboard/         # Halaman leaderboard
 │   │   └── page.tsx
-│   └── diagnostic/          # Halaman diagnostik ✅ NEW
+│   ├── feedback/            # Halaman feedback ✅ NEW
+│   │   └── page.tsx
+│   ├── team/                # Halaman team
+│   │   └── page.tsx
+│   └── diagnostic/          # Halaman diagnostik
 │       └── page.tsx
 ├── components/              # Reusable components
 │   ├── Navbar.tsx          # Navigation bar
@@ -217,10 +249,9 @@ UTBK-game-simulation/
 │   ├── logo.png            # App logo
 │   ├── fire-animation.webp # Animated fire for streak indicator
 │   └── team/               # Team member assets
-├── supabase-schema.sql     # Complete database schema ✅ NEW
-├── DATABASE_SETUP.md       # Setup instructions ✅ NEW
-├── TROUBLESHOOTING.md      # Common issues guide ✅ NEW
-├── PROGRESS.md             # Development progress ✅ UPDATED
+├── supabase-schema.sql     # Complete database schema ✅
+├── feedback-schema.sql     # Feedback system schema ✅ NEW
+├── DATABASE_SETUP.md       # Setup instructions ✅
 ├── package.json            # Dependencies
 ├── tsconfig.json           # TypeScript config
 ├── next.config.ts          # Next.js config

@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signUp } from "@/lib/auth/auth-actions";
+import { universities, searchUniversities } from "@/lib/data/universities";
+import { schools } from "@/lib/data/schools";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -20,6 +22,9 @@ const RegisterPage = () => {
     targetUniversity: "",
     confirmPassword: "",
   });
+  const [universityOptions, setUniversityOptions] =
+    useState<string[]>(universities);
+  const [universitySearch, setUniversitySearch] = useState("");
   const [passwordStrength, setPasswordStrength] = useState<{
     isValid: boolean;
     hasMinLength: boolean;
@@ -33,6 +38,20 @@ const RegisterPage = () => {
     hasNumber: false,
     hasSpecialChar: false,
   });
+
+  // Handle university search/filter with debounce
+  useEffect(() => {
+    const delaySearch = setTimeout(async () => {
+      if (universitySearch.length >= 2) {
+        const filtered = await searchUniversities(universitySearch);
+        setUniversityOptions(filtered);
+      } else {
+        setUniversityOptions(universities.slice(0, 100)); // Show top 100
+      }
+    }, 300); // Debounce 300ms
+
+    return () => clearTimeout(delaySearch);
+  }, [universitySearch]);
 
   // Validate password strength
   const validatePassword = (pwd: string) => {
@@ -125,46 +144,55 @@ const RegisterPage = () => {
     if (name === "password") {
       validatePassword(value);
     }
+    // Update university search when university field changes
+    if (name === "targetUniversity") {
+      setUniversitySearch(value);
+    }
     // Clear error when user starts typing
     if (error) setError(null);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center p-4 font-sans text-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]/20 flex flex-col justify-center items-center p-4 font-sans relative overflow-hidden">
+      {/* Animated Background Decorations */}
+      <div className="absolute top-20 right-10 w-72 h-72 bg-[#3F72AF]/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+      <div className="absolute bottom-20 left-10 w-72 h-72 bg-[#112D4E]/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+      <div className="absolute top-1/2 left-1/2 w-72 h-72 bg-[#DBE2EF]/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+
       {/* Container Utama */}
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+      <div className="relative w-full max-w-md bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] rounded-3xl shadow-2xl overflow-hidden border-2 border-[#3F72AF]/40">
         {/* Header/Logo Section */}
-        <div className="pt-10 pb-6 flex flex-col items-center">
-          <div className="relative w-28 h-28 rounded-2xl flex items-center justify-center mb-4 shadow-lg overflow-hidden group cursor-pointer bg-white border-2 border-gray-200 hover:border-blue-400 transition-all">
+        <div className="bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF] pt-10 pb-6 flex flex-col items-center">
+          <div className="relative w-28 h-28 rounded-2xl flex items-center justify-center mb-4 shadow-xl overflow-hidden bg-white border-4 border-[#F9F7F7]/50">
             <img
               src="/logo.png"
-              alt="Default Logo"
+              alt="QuizQuest Logo"
               className="w-full h-full object-contain p-2"
             />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
-            Buat Akun Baru
+          <h1 className="text-2xl font-bold text-white tracking-tight drop-shadow-lg">
+            Bergabung dengan QuizQuest
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Lengkapi data diri untuk berjuang bersama
+          <p className="text-[#DBE2EF] text-sm mt-1">
+            Mulai perjalanan menuju kampus impian
           </p>
         </div>
 
         {/* Form Section */}
-        <form onSubmit={handleSubmit} className="px-8 pb-10 space-y-5">
+        <form onSubmit={handleSubmit} className="px-8 pb-10 space-y-5 pt-6">
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-600 animate-shake">
+            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-3 text-sm text-red-600 animate-shake">
               ⚠️ {error}
             </div>
           )}
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-700 ml-1">
+            <label className="text-sm font-semibold text-[#112D4E] ml-1">
               Nama Lengkap
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#3F72AF]/60 group-focus-within:text-[#3F72AF] transition-colors">
                 <User size={18} />
               </div>
               <input
@@ -172,7 +200,7 @@ const RegisterPage = () => {
                 name="fullName"
                 required
                 placeholder="Masukkan nama lengkap"
-                className="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                className="block w-full pl-10 pr-3 py-3 bg-white border-2 border-[#3F72AF]/30 rounded-xl focus:ring-4 focus:ring-[#3F72AF]/20 focus:border-[#3F72AF] outline-none transition-all text-sm text-[#112D4E]"
                 onChange={handleInputChange}
                 value={formData.fullName}
               />
@@ -180,11 +208,11 @@ const RegisterPage = () => {
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-700 ml-1">
+            <label className="text-sm font-semibold text-[#112D4E] ml-1">
               Email
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#3F72AF]/60 group-focus-within:text-[#3F72AF] transition-colors">
                 <Mail size={18} />
               </div>
               <input
@@ -192,7 +220,7 @@ const RegisterPage = () => {
                 name="email"
                 required
                 placeholder="email@contoh.com"
-                className="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                className="block w-full pl-10 pr-3 py-3 bg-white border-2 border-[#3F72AF]/30 rounded-xl focus:ring-4 focus:ring-[#3F72AF]/20 focus:border-[#3F72AF] outline-none transition-all text-sm text-[#112D4E]"
                 onChange={handleInputChange}
                 value={formData.email}
               />
@@ -200,11 +228,11 @@ const RegisterPage = () => {
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-700 ml-1">
+            <label className="text-sm font-semibold text-[#112D4E] ml-1">
               Kata Sandi
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#3F72AF]/60 group-focus-within:text-[#3F72AF] transition-colors">
                 <Lock size={18} />
               </div>
               <input
@@ -212,21 +240,21 @@ const RegisterPage = () => {
                 name="password"
                 required
                 placeholder="••••••••"
-                className="block w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                className="block w-full pl-10 pr-12 py-3 bg-white border-2 border-[#3F72AF]/30 rounded-xl focus:ring-4 focus:ring-[#3F72AF]/20 focus:border-[#3F72AF] outline-none transition-all text-sm text-[#112D4E]"
                 onChange={handleInputChange}
                 value={formData.password}
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#3F72AF]/60 hover:text-[#3F72AF]"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
             {/* Password Strength Indicator */}
-            <div className="mt-3 space-y-2 rounded-lg bg-gray-50 p-4 text-xs border border-gray-200">
-              <p className="font-bold text-gray-700 mb-3 text-sm">
+            <div className="mt-3 space-y-2 rounded-lg bg-white border-2 border-[#3F72AF]/20 p-4 text-xs">
+              <p className="font-bold text-[#112D4E] mb-3 text-sm">
                 Persyaratan Password:
               </p>
               <div className="space-y-2">
@@ -282,7 +310,7 @@ const RegisterPage = () => {
                 </div>
               </div>
               {passwordStrength.isValid && (
-                <div className="mt-3 flex items-center gap-2 rounded-lg bg-green-100 px-3 py-2 text-green-700 border border-green-300">
+                <div className="mt-3 flex items-center gap-2 rounded-lg bg-green-100 px-3 py-2 text-green-700 border-2 border-green-300">
                   <span>🎉</span>
                   <span className="font-bold">Password kuat dan aman!</span>
                 </div>
@@ -291,11 +319,11 @@ const RegisterPage = () => {
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-700 ml-1">
+            <label className="text-sm font-semibold text-[#112D4E] ml-1">
               Konfirmasi Kata Sandi
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#3F72AF]/60 group-focus-within:text-[#3F72AF] transition-colors">
                 <Lock size={18} />
               </div>
               <input
@@ -303,13 +331,13 @@ const RegisterPage = () => {
                 name="confirmPassword"
                 required
                 placeholder="Ulangi kata sandi"
-                className="block w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                className="block w-full pl-10 pr-12 py-3 bg-white border-2 border-[#3F72AF]/30 rounded-xl focus:ring-4 focus:ring-[#3F72AF]/20 focus:border-[#3F72AF] outline-none transition-all text-sm text-[#112D4E]"
                 onChange={handleInputChange}
                 value={formData.confirmPassword}
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#3F72AF]/60 hover:text-[#3F72AF]"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -318,40 +346,52 @@ const RegisterPage = () => {
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-700 ml-1">
+            <label className="text-sm font-semibold text-[#112D4E] ml-1">
               Asal Sekolah
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#3F72AF]/60 group-focus-within:text-[#3F72AF] transition-colors">
                 <span className="text-lg">🏫</span>
               </div>
               <input
                 type="text"
                 name="school"
-                placeholder="Nama sekolah (opsional)"
-                className="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                list="schools-datalist"
+                placeholder="Ketik nama sekolah (opsional)"
+                className="block w-full pl-10 pr-3 py-3 bg-white border-2 border-[#3F72AF]/30 rounded-xl focus:ring-4 focus:ring-[#3F72AF]/20 focus:border-[#3F72AF] outline-none transition-all text-sm text-[#112D4E]"
                 onChange={handleInputChange}
                 value={formData.school}
               />
+              <datalist id="schools-datalist">
+                {schools.map((school) => (
+                  <option key={school} value={school} />
+                ))}
+              </datalist>
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-700 ml-1">
+            <label className="text-sm font-semibold text-[#112D4E] ml-1">
               Kampus Impian
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#3F72AF]/60 group-focus-within:text-[#3F72AF] transition-colors">
                 <span className="text-lg">🏛️</span>
               </div>
               <input
                 type="text"
                 name="targetUniversity"
-                placeholder="Universitas tujuan (opsional)"
-                className="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                list="universities-datalist"
+                placeholder="🎓 Ketik untuk mencari dari 4400+ perguruan tinggi di Indonesia"
+                className="block w-full pl-10 pr-3 py-3 bg-white border-2 border-[#3F72AF]/30 rounded-xl focus:ring-4 focus:ring-[#3F72AF]/20 focus:border-[#3F72AF] outline-none transition-all text-sm text-[#112D4E]"
                 onChange={handleInputChange}
                 value={formData.targetUniversity}
               />
+              <datalist id="universities-datalist">
+                {universityOptions.map((uni) => (
+                  <option key={uni} value={uni} />
+                ))}
+              </datalist>
             </div>
           </div>
 
@@ -359,7 +399,7 @@ const RegisterPage = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-100 flex items-center justify-center space-x-2 transition-all transform active:scale-[0.98] ${
+            className={`w-full py-3.5 px-4 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] hover:from-[#112D4E] hover:to-[#3F72AF] text-white font-bold rounded-xl shadow-2xl shadow-[#3F72AF]/30 flex items-center justify-center space-x-2 transition-all transform hover:scale-105 active:scale-[0.98] ${
               isLoading ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >
@@ -375,11 +415,11 @@ const RegisterPage = () => {
 
           {/* Link to Login */}
           <div className="text-center mt-6">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#112D4E]/70">
               Sudah memiliki akun?
               <Link
                 href="/login"
-                className="ml-1 font-bold text-blue-600 hover:underline transition-all"
+                className="ml-1 font-bold text-[#3F72AF] hover:text-[#112D4E] transition-all"
               >
                 Masuk
               </Link>
@@ -390,7 +430,7 @@ const RegisterPage = () => {
 
       {/* Footer Filosofis */}
       <footer className="mt-8 text-center max-w-sm px-4">
-        <p className="text-xs text-gray-400 leading-relaxed italic">
+        <p className="text-xs text-[#112D4E]/60 leading-relaxed italic">
           "Barang siapa yang menempuh jalan untuk mencari ilmu, maka Allah akan
           mudahkan baginya jalan menuju surga." (HR. Muslim)
         </p>

@@ -68,33 +68,38 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-gradient-to-r from-[#F9F7F7] via-[#DBE2EF]/80 to-[#F9F7F7] backdrop-blur-md shadow-lg border-b-2 border-[#3F72AF]/30 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform group-hover:scale-110">
               <img
                 src="/logo.png"
                 alt="Logo"
                 className="w-8 h-8 object-contain"
               />
             </div>
-            <span className="text-xl font-bold text-slate-800">
-              PENS X SMAPA
-            </span>
+            <div className="flex flex-col">
+              <span className="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#3F72AF] to-[#112D4E]">
+                QuizQuest
+              </span>
+              <span className="text-[8px] text-[#3F72AF]/70 font-semibold -mt-1">
+                SNBT Game Platform
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-6 items-center">
             {isLoggedIn ? (
               // Profile Button & Logout Button
-              <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg">
+              <div className="flex items-center gap-3 px-4 py-2 rounded-xl bg-gradient-to-r from-[#3F72AF] to-[#112D4E] hover:from-[#112D4E] hover:to-[#3F72AF] transition-all duration-300 shadow-lg shadow-[#3F72AF]/40 border-2 border-[#112D4E]/20">
                 {/* Profile Button */}
                 <Link href="/profile" className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] flex items-center justify-center text-[#3F72AF] font-bold text-sm border-2 border-[#3F72AF]/30">
                     {getInitials(userName)}
                   </div>
-                  <span className="text-white font-semibold">{userName}</span>
+                  <span className="text-white font-bold">{userName}</span>
                 </Link>
 
                 {/* Logout Button */}
@@ -122,7 +127,7 @@ export default function Navbar() {
               // Tombol Login (tampil jika belum login)
               <Link
                 href="/login"
-                className="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg"
+                className="px-6 py-2 rounded-xl bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white font-bold hover:from-[#112D4E] hover:to-[#3F72AF] transition-all duration-300 shadow-lg shadow-[#3F72AF]/40 border-2 border-[#112D4E]/20"
               >
                 Login
               </Link>
@@ -132,7 +137,7 @@ export default function Navbar() {
           {/* Mobile Menu Button (Burger Icon) */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden flex items-center justify-center w-10 h-10 text-slate-700 hover:text-blue-600 transition-colors"
+            className="md:hidden flex items-center justify-center w-10 h-10 text-[#112D4E] hover:text-[#3F72AF] transition-colors"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? (
@@ -169,22 +174,22 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-3 border-t border-gray-200 animate-slide-down">
+          <div className="md:hidden py-4 space-y-3 border-t-2 border-[#3F72AF]/30 animate-slide-down bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF]/50">
             {isLoggedIn ? (
               <>
                 <Link
                   href="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all"
+                  className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-lg hover:from-[#112D4E] hover:to-[#3F72AF] transition-all shadow-lg"
                 >
-                  <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] flex items-center justify-center text-[#3F72AF] font-bold text-sm border-2 border-[#3F72AF]/30">
                     {getInitials(userName)}
                   </div>
-                  <span className="font-semibold">{userName}</span>
+                  <span className="font-bold">{userName}</span>
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-3 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all"
+                  className="w-full flex items-center gap-3 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-lg"
                 >
                   <svg
                     className="w-5 h-5"
@@ -199,14 +204,14 @@ export default function Navbar() {
                       d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                     />
                   </svg>
-                  <span className="font-semibold">Logout</span>
+                  <span className="font-bold">Logout</span>
                 </button>
               </>
             ) : (
               <Link
                 href="/login"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all"
+                className="block px-4 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white text-center font-bold rounded-lg hover:from-[#112D4E] hover:to-[#3F72AF] transition-all shadow-lg"
               >
                 Login
               </Link>

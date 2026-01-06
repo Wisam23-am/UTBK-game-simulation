@@ -55,41 +55,46 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center p-4 font-sans text-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]/20 flex flex-col justify-center items-center p-4 font-sans relative overflow-hidden">
+      {/* Animated Background Decorations */}
+      <div className="absolute top-20 left-10 w-72 h-72 bg-[#3F72AF]/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+      <div className="absolute top-40 right-10 w-72 h-72 bg-[#112D4E]/30 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+      <div className="absolute -bottom-8 left-1/3 w-72 h-72 bg-[#DBE2EF]/40 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-4000"></div>
+
       {/* Container Utama */}
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+      <div className="relative w-full max-w-md bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] rounded-3xl shadow-2xl overflow-hidden border-2 border-[#3F72AF]/40">
         {/* Header/Logo Section */}
-        <div className="pt-10 pb-6 flex flex-col items-center">
-          <div className="relative w-28 h-28 rounded-2xl flex items-center justify-center mb-4 shadow-lg overflow-hidden group cursor-pointer bg-white border-2 border-gray-200 hover:border-blue-400 transition-all">
+        <div className="bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF] pt-10 pb-6 flex flex-col items-center">
+          <div className="relative w-28 h-28 rounded-2xl flex items-center justify-center mb-4 shadow-xl overflow-hidden bg-white border-4 border-[#F9F7F7]/50">
             <img
               src="/logo.png"
-              alt="Default Logo"
+              alt="QuizQuest Logo"
               className="w-full h-full object-contain p-2"
             />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
-            Selamat Datang
+          <h1 className="text-2xl font-bold text-white tracking-tight drop-shadow-lg">
+            Selamat Datang di QuizQuest
           </h1>
-          <p className="text-gray-500 text-sm mt-1">
-            Masuk untuk memulai simulasi UTBK
+          <p className="text-[#DBE2EF] text-sm mt-1">
+            Masuk untuk memulai simulasi SNBT
           </p>
         </div>
 
         {/* Form Section */}
-        <form onSubmit={handleSubmit} className="px-8 pb-10 space-y-5">
+        <form onSubmit={handleSubmit} className="px-8 pb-10 space-y-5 pt-6">
           {/* Error Message */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-600 animate-shake">
+            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-3 text-sm text-red-600 animate-shake">
               ⚠️ {error}
             </div>
           )}
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-gray-700 ml-1">
+            <label className="text-sm font-semibold text-[#112D4E] ml-1">
               Email
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#3F72AF]/60 group-focus-within:text-[#3F72AF] transition-colors">
                 <Mail size={18} />
               </div>
               <input
@@ -97,7 +102,7 @@ const App = () => {
                 name="email"
                 required
                 placeholder="email@contoh.com"
-                className="block w-full pl-10 pr-3 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                className="block w-full pl-10 pr-3 py-3 bg-white border-2 border-[#3F72AF]/30 rounded-xl focus:ring-4 focus:ring-[#3F72AF]/20 focus:border-[#3F72AF] outline-none transition-all text-sm text-[#112D4E]"
                 onChange={handleInputChange}
                 value={formData.email}
               />
@@ -106,18 +111,18 @@ const App = () => {
 
           <div className="space-y-1">
             <div className="flex justify-between items-center ml-1">
-              <label className="text-sm font-semibold text-gray-700">
+              <label className="text-sm font-semibold text-[#112D4E]">
                 Kata Sandi
               </label>
               <button
                 type="button"
-                className="text-xs font-medium text-blue-600 hover:text-blue-700"
+                className="text-xs font-medium text-[#3F72AF] hover:text-[#112D4E]"
               >
                 Lupa Kata Sandi?
               </button>
             </div>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#3F72AF]/60 group-focus-within:text-[#3F72AF] transition-colors">
                 <Lock size={18} />
               </div>
               <input
@@ -125,13 +130,13 @@ const App = () => {
                 name="password"
                 required
                 placeholder="••••••••"
-                className="block w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm"
+                className="block w-full pl-10 pr-12 py-3 bg-white border-2 border-[#3F72AF]/30 rounded-xl focus:ring-4 focus:ring-[#3F72AF]/20 focus:border-[#3F72AF] outline-none transition-all text-sm text-[#112D4E]"
                 onChange={handleInputChange}
                 value={formData.password}
               />
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#3F72AF]/60 hover:text-[#3F72AF]"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -143,7 +148,7 @@ const App = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-100 flex items-center justify-center space-x-2 transition-all transform active:scale-[0.98] ${
+            className={`w-full py-3.5 px-4 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] hover:from-[#112D4E] hover:to-[#3F72AF] text-white font-bold rounded-xl shadow-2xl flex items-center justify-center space-x-2 transition-all transform active:scale-[0.98] hover:scale-105 ${
               isLoading ? "opacity-70 cursor-not-allowed" : ""
             }`}
           >
@@ -159,13 +164,13 @@ const App = () => {
 
           {/* Link to Register */}
           <div className="text-center mt-6">
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[#112D4E]/70">
               Belum punya akun?
               <Link
                 href="/register"
-                className="ml-1 font-bold text-blue-600 hover:underline transition-all"
+                className="ml-1 font-bold text-[#3F72AF] hover:text-[#112D4E] hover:underline transition-all"
               >
-                Daftar
+                Daftar Sekarang
               </Link>
             </p>
           </div>
@@ -173,8 +178,8 @@ const App = () => {
       </div>
 
       {/* Footer Filosofis */}
-      <footer className="mt-8 text-center max-w-sm px-4">
-        <p className="text-xs text-gray-400 leading-relaxed italic">
+      <footer className="relative mt-8 text-center max-w-sm px-4">
+        <p className="text-xs text-[#112D4E]/60 leading-relaxed italic">
           "Barang siapa yang menempuh jalan untuk mencari ilmu, maka Allah akan
           mudahkan baginya jalan menuju surga." (HR. Muslim)
         </p>

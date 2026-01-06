@@ -53,13 +53,13 @@ export default function TeamPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]/20 relative overflow-hidden">
       <Navbar />
 
       {/* Animated Background Decorations */}
-      <div className="absolute top-20 left-0 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-      <div className="absolute top-40 right-0 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-      <div className="absolute -bottom-8 left-20 w-96 h-96 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+      <div className="absolute top-20 left-0 w-96 h-96 bg-[#3F72AF]/30 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+      <div className="absolute top-40 right-0 w-96 h-96 bg-[#112D4E]/40 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+      <div className="absolute -bottom-8 left-20 w-96 h-96 bg-[#3F72AF]/40 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
 
       {/* Geometric Pattern Overlay */}
       <div
@@ -76,46 +76,46 @@ export default function TeamPage() {
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mb-12">
               {/* Left: Text Content */}
               <div className="flex-1 text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm text-blue-700 px-6 py-3 rounded-full text-sm font-semibold mb-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 animate-fade-in">
-                  <span className="text-2xl animate-bounce">👥</span>
-                  <span>Meet Our Amazing Team</span>
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#DBE2EF] to-[#F9F7F7] backdrop-blur-sm text-[#112D4E] px-6 py-3 rounded-full text-sm font-bold mb-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-fade-in border-2 border-[#3F72AF]/40">
+                  <span className="text-2xl animate-bounce">🌟</span>
+                  <span>Kenalan dengan Tim Keren Kami</span>
                 </div>
 
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 animate-slide-down">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-                    Our Creative
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF]">
+                    Dibalik QuizQuest Ada
                   </span>
                   <br />
-                  <span className="text-slate-800">Team</span>
+                  <span className="text-[#112D4E]">Tim Solid Kami 🚀</span>
                 </h1>
 
-                <p className="text-gray-700 text-lg lg:text-xl max-w-2xl mx-auto lg:mx-0 animate-fade-in-delay leading-relaxed">
-                  Tim passionate yang berkomitmen membangun platform edukasi
-                  terbaik untuk siswa Indonesia
+                <p className="text-[#112D4E]/80 text-lg lg:text-xl max-w-2xl mx-auto lg:mx-0 animate-fade-in-delay leading-relaxed font-semibold">
+                  Sekumpulan manusia passionate yang berdedikasi menciptakan
+                  revolusi belajar SNBT untuk generasi juara Indonesia! 🎯✨
                 </p>
 
                 {/* Stats */}
                 <div className="flex flex-wrap gap-6 justify-center lg:justify-start mt-8">
-                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-lg">
-                    <div className="text-3xl font-bold text-blue-600">
+                  <div className="bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] backdrop-blur-sm rounded-2xl px-6 py-4 shadow-xl border-2 border-[#3F72AF]/30">
+                    <div className="text-3xl font-bold text-[#3F72AF]">
                       {teamMembers.length || "6"}
                     </div>
-                    <div className="text-sm text-gray-600 font-medium">
-                      Team Members
+                    <div className="text-sm text-[#112D4E] font-bold">
+                      Kreator Keren
                     </div>
                   </div>
-                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-lg">
-                    <div className="text-3xl font-bold text-indigo-600">
+                  <div className="bg-gradient-to-br from-[#DBE2EF] to-[#F9F7F7] backdrop-blur-sm rounded-2xl px-6 py-4 shadow-xl border-2 border-[#3F72AF]/30">
+                    <div className="text-3xl font-bold text-[#112D4E]">
                       100%
                     </div>
-                    <div className="text-sm text-gray-600 font-medium">
-                      Dedication
+                    <div className="text-sm text-[#112D4E] font-bold">
+                      Pure Energy
                     </div>
                   </div>
-                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl px-6 py-4 shadow-lg">
-                    <div className="text-3xl font-bold text-purple-600">∞</div>
-                    <div className="text-sm text-gray-600 font-medium">
-                      Innovation
+                  <div className="bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] backdrop-blur-sm rounded-2xl px-6 py-4 shadow-xl border-2 border-[#3F72AF]/30">
+                    <div className="text-3xl font-bold text-[#3F72AF]">∞</div>
+                    <div className="text-sm text-[#112D4E] font-bold">
+                      Ide Brilian
                     </div>
                   </div>
                 </div>
@@ -125,14 +125,14 @@ export default function TeamPage() {
               <div className="flex-1 relative animate-float">
                 <div className="relative w-full max-w-md mx-auto">
                   {/* Decorative elements */}
-                  <div className="absolute -top-4 -left-4 w-24 h-24 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+                  <div className="absolute -top-4 -left-4 w-24 h-24 bg-[#3F72AF]/40 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
                   <div
-                    className="absolute -bottom-4 -right-4 w-32 h-32 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"
+                    className="absolute -bottom-4 -right-4 w-32 h-32 bg-[#112D4E]/50 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"
                     style={{ animationDelay: "1s" }}
                   ></div>
 
                   {/* Main illustration */}
-                  <div className="relative z-10 bg-white rounded-3xl p-8 shadow-2xl">
+                  <div className="relative z-10 bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] rounded-3xl p-8 shadow-2xl border-2 border-[#3F72AF]/40">
                     <img
                       src="/logo.png"
                       alt="Team Logo"
@@ -142,14 +142,18 @@ export default function TeamPage() {
                   </div>
 
                   {/* Floating badges */}
-                  <div className="absolute -top-8 -right-8 bg-gradient-to-br from-blue-500 to-indigo-600 text-white px-4 py-2 rounded-full shadow-lg transform rotate-12 animate-bounce z-20">
-                    <span className="font-bold">✨ Creative</span>
+                  <div className="absolute -top-8 -right-8 bg-gradient-to-br from-[#3F72AF] to-[#112D4E] text-white px-4 py-2 rounded-full shadow-xl transform rotate-12 animate-bounce z-20 border-2 border-[#F9F7F7]/50">
+                    <span className="font-bold drop-shadow-md">
+                      ✨ Super Kreatif
+                    </span>
                   </div>
                   <div
-                    className="absolute -bottom-4 -left-8 bg-gradient-to-br from-purple-500 to-pink-600 text-white px-4 py-2 rounded-full shadow-lg transform -rotate-12 animate-bounce z-20"
+                    className="absolute -bottom-4 -left-8 bg-gradient-to-br from-[#112D4E] to-[#3F72AF] text-white px-4 py-2 rounded-full shadow-xl transform -rotate-12 animate-bounce z-20 border-2 border-[#F9F7F7]/50"
                     style={{ animationDelay: "0.5s" }}
                   >
-                    <span className="font-bold">🚀 Innovative</span>
+                    <span className="font-bold drop-shadow-md">
+                      🔥 Full Passion
+                    </span>
                   </div>
                 </div>
               </div>
@@ -157,9 +161,9 @@ export default function TeamPage() {
 
             {/* Decorative line */}
             <div className="flex items-center justify-center gap-2">
-              <div className="h-1 w-12 bg-gradient-to-r from-transparent to-blue-500 rounded-full"></div>
-              <div className="h-1.5 w-20 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-full"></div>
-              <div className="h-1 w-12 bg-gradient-to-r from-purple-500 to-transparent rounded-full"></div>
+              <div className="h-1 w-12 bg-gradient-to-r from-transparent to-[#3F72AF] rounded-full"></div>
+              <div className="h-1.5 w-20 bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF] rounded-full"></div>
+              <div className="h-1 w-12 bg-gradient-to-r from-[#3F72AF] to-transparent rounded-full"></div>
             </div>
           </div>
 
@@ -167,11 +171,11 @@ export default function TeamPage() {
           {loading && (
             <div className="flex flex-col items-center justify-center py-20">
               <div className="relative">
-                <div className="animate-spin rounded-full h-20 w-20 border-4 border-blue-200"></div>
-                <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-blue-600 absolute top-0 left-0"></div>
+                <div className="animate-spin rounded-full h-20 w-20 border-4 border-[#DBE2EF]"></div>
+                <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-[#3F72AF] absolute top-0 left-0"></div>
               </div>
-              <p className="text-gray-700 text-lg mt-6 animate-pulse">
-                Loading amazing people...
+              <p className="text-[#112D4E] text-lg mt-6 animate-pulse font-semibold">
+                Memuat orang-orang hebat... ✨
               </p>
             </div>
           )}
@@ -179,16 +183,16 @@ export default function TeamPage() {
           {/* Error State */}
           {error && (
             <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-8 text-center max-w-2xl mx-auto">
-              <div className="text-5xl mb-4">😞</div>
+              <div className="text-5xl mb-4">�</div>
               <h3 className="text-2xl font-bold text-red-800 mb-2">
-                Oops! Something went wrong
+                Waduh! Ada Kendala Teknis Nih
               </h3>
               <p className="text-red-600 mb-4">{error}</p>
               <button
                 onClick={() => window.location.reload()}
                 className="px-6 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors"
               >
-                Try Again
+                Coba Lagi Yuk!
               </button>
             </div>
           )}
@@ -211,11 +215,11 @@ export default function TeamPage() {
           {/* Empty State */}
           {!loading && !error && teamMembers.length === 0 && (
             <div className="text-center py-20">
-              <div className="text-6xl mb-4">👥</div>
+              <div className="text-6xl mb-4">🎭</div>
               <h3 className="text-2xl font-bold text-gray-800 mb-2">
-                No team members yet
+                Tim Lagi Ngumpul Nih
               </h3>
-              <p className="text-gray-600">Check back soon!</p>
+              <p className="text-gray-600">Sabar ya, bentar lagi muncul! 🚀</p>
             </div>
           )}
         </div>

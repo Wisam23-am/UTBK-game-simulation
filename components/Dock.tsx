@@ -88,7 +88,7 @@ function DockItem({
       onFocus={() => isHovered.set(1)}
       onBlur={() => isHovered.set(0)}
       onClick={onClick}
-      className={`relative inline-flex items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200 border-2 shadow-lg ${className}`}
+      className={`relative inline-flex items-center justify-center rounded-full bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] border-[#3F72AF]/40 border-2 shadow-lg ${className}`}
       tabIndex={0}
       role="button"
       aria-haspopup="true"
@@ -130,7 +130,7 @@ function DockLabel({ children, className = "", isHovered }: DockLabelProps) {
           animate={{ opacity: 1, y: -10 }}
           exit={{ opacity: 0, y: 0 }}
           transition={{ duration: 0.2 }}
-          className={`${className} absolute -top-6 left-1/2 w-fit whitespace-pre rounded-md border border-blue-300 bg-white/90 backdrop-blur-sm px-2 py-0.5 text-xs text-blue-900 font-medium shadow-lg`}
+          className={`${className} absolute -top-6 left-1/2 w-fit whitespace-pre rounded-md border border-[#3F72AF]/40 bg-gradient-to-r from-[#F9F7F7] to-[#DBE2EF] backdrop-blur-sm px-2 py-0.5 text-xs text-[#112D4E] font-medium shadow-lg`}
           role="tooltip"
           style={{ x: "-50%" }}
         >
@@ -266,6 +266,25 @@ export default function Dock({
       label: "Profile",
       onClick: () => router.push("/profile"),
     },
+    {
+      icon: (
+        <svg
+          className="w-5 h-5 text-[#3F72AF]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+          />
+        </svg>
+      ),
+      label: "Feedback",
+      onClick: () => router.push("/feedback"),
+    },
   ];
 
   const dockItems = items && items.length > 0 ? items : defaultItems;
@@ -291,7 +310,7 @@ export default function Dock({
           isHovered.set(0);
           mouseX.set(Infinity);
         }}
-        className={`${className} absolute bottom-2 left-1/2 transform -translate-x-1/2 flex items-end w-fit gap-4 rounded-2xl bg-white/80 backdrop-blur-md border-2 border-blue-200 shadow-2xl pb-2 px-4`}
+        className={`${className} absolute bottom-2 left-1/2 transform -translate-x-1/2 flex items-end w-fit gap-4 rounded-2xl bg-gradient-to-br from-[#F9F7F7]/95 via-[#DBE2EF]/90 to-[#F9F7F7]/95 backdrop-blur-md border-2 border-[#3F72AF]/40 shadow-2xl pb-2 px-4`}
         style={{ height: panelHeight }}
         role="toolbar"
         aria-label="Application dock"

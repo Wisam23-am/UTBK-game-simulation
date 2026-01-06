@@ -19,6 +19,8 @@ import {
   formatTimeSpent,
   type GameHistory,
 } from "@/lib/profile/profile-helpers";
+import { universities, searchUniversities } from "@/lib/data/universities";
+import { schools } from "@/lib/data/schools";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -26,6 +28,9 @@ export default function ProfilePage() {
   const [userId, setUserId] = useState("");
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [universityOptions, setUniversityOptions] =
+    useState<string[]>(universities);
+  const [universitySearch, setUniversitySearch] = useState("");
   const [userStats, setUserStats] = useState({
     total_games: 0,
     best_score: 0,
@@ -60,7 +65,7 @@ export default function ProfilePage() {
 
       const userData = user || {
         id: "dev-user-00000000-0000-0000-0000-000000000001",
-        email: "dev@utbk-game.com",
+        email: "dev@snbt-game.com",
       };
       const { profile, error: profileError } = await getUserProfile(
         userData.id
@@ -103,6 +108,20 @@ export default function ProfilePage() {
       setIsLoading(false);
     }
   };
+
+  // Handle university search/filter
+  useEffect(() => {
+    const delaySearch = setTimeout(async () => {
+      if (universitySearch.length >= 2) {
+        const filtered = await searchUniversities(universitySearch);
+        setUniversityOptions(filtered);
+      } else {
+        setUniversityOptions(universities.slice(0, 100)); // Show top 100
+      }
+    }, 300); // Debounce 300ms
+
+    return () => clearTimeout(delaySearch);
+  }, [universitySearch]);
 
   const handleSaveProfile = async () => {
     if (!editedName.trim()) return;
@@ -159,46 +178,46 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]/20 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin text-6xl mb-4">⏳</div>
-          <p className="text-slate-600">Memuat profil...</p>
+          <p className="text-[#112D4E] font-semibold">Memuat profil...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]/20">
       <Navbar />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
         {/* Header */}
         <div className="text-center mb-8 sm:mb-12 animate-slide-up">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 sm:mb-4">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#112D4E] mb-3 sm:mb-4">
             Profil{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3F72AF] to-[#112D4E]">
               Pengguna
             </span>
           </h1>
-          <p className="text-base sm:text-lg text-slate-600">
+          <p className="text-base sm:text-lg text-[#3F72AF] font-semibold">
             Kelola informasi akun Anda
           </p>
         </div>
 
         {/* Profile Card */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-gray-200 overflow-hidden animate-scale-in">
+        <div className="bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] rounded-3xl shadow-2xl border-2 border-[#3F72AF]/40 overflow-hidden animate-scale-in">
           {/* Header dengan Avatar */}
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 sm:p-8 text-center">
+          <div className="bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF] p-6 sm:p-8 text-center">
             <div className="inline-block">
-              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-4xl sm:text-5xl shadow-xl">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] flex items-center justify-center text-[#3F72AF] font-bold text-4xl sm:text-5xl shadow-xl border-4 border-[#F9F7F7]/50">
                 {getInitials(userName)}
               </div>
             </div>
-            <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-white">
+            <h2 className="mt-4 text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">
               {userName}
             </h2>
-            <p className="mt-2 text-sm sm:text-base text-blue-100 break-all px-4">
+            <p className="mt-2 text-sm sm:text-base text-[#DBE2EF] break-all px-4">
               {userEmail}
             </p>
           </div>
@@ -216,7 +235,7 @@ export default function ProfilePage() {
                   value={editedName}
                   onChange={(e) => setEditedName(e.target.value)}
                   placeholder="Masukkan nama lengkap"
-                  className="w-full px-4 py-3 border-2 border-blue-300 rounded-xl focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-600/20 transition-all"
+                  className="w-full px-4 py-3 border-2 border-[#3F72AF]/40 rounded-xl focus:border-[#3F72AF] focus:outline-none focus:ring-4 focus:ring-[#3F72AF]/20 transition-all"
                 />
               ) : (
                 <div className="w-full px-4 py-3 bg-gray-50 rounded-xl text-slate-800 font-medium">
@@ -244,13 +263,24 @@ export default function ProfilePage() {
                 Sekolah
               </label>
               {isEditing ? (
-                <input
-                  type="text"
-                  value={editedSchool}
-                  onChange={(e) => setEditedSchool(e.target.value)}
-                  placeholder="Nama sekolah"
-                  className="w-full px-4 py-3 border-2 border-blue-300 rounded-xl focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-600/20 transition-all"
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    list="schools-list"
+                    value={editedSchool}
+                    onChange={(e) => setEditedSchool(e.target.value)}
+                    placeholder="Ketik atau pilih nama sekolah"
+                    className="w-full px-4 py-3 border-2 border-[#3F72AF]/40 rounded-xl focus:border-[#3F72AF] focus:outline-none focus:ring-4 focus:ring-[#3F72AF]/20 transition-all"
+                  />
+                  <datalist id="schools-list">
+                    {schools.map((school, index) => (
+                      <option key={index} value={school} />
+                    ))}
+                  </datalist>
+                  <div className="mt-1 text-xs text-[#3F72AF]">
+                    💡 Ketik untuk mencari atau pilih dari daftar
+                  </div>
+                </div>
               ) : (
                 <div className="w-full px-4 py-3 bg-gray-50 rounded-xl text-slate-800 font-medium">
                   {userStats.school || "Belum diisi"}
@@ -264,13 +294,28 @@ export default function ProfilePage() {
                 Target Universitas
               </label>
               {isEditing ? (
-                <input
-                  type="text"
-                  value={editedUniversity}
-                  onChange={(e) => setEditedUniversity(e.target.value)}
-                  placeholder="Target universitas"
-                  className="w-full px-4 py-3 border-2 border-blue-300 rounded-xl focus:border-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-600/20 transition-all"
-                />
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={editedUniversity}
+                    onChange={(e) => {
+                      setEditedUniversity(e.target.value);
+                      setUniversitySearch(e.target.value);
+                    }}
+                    list="university-options"
+                    placeholder="Ketik nama universitas..."
+                    className="w-full px-4 py-3 border-2 border-[#3F72AF]/40 rounded-xl focus:border-[#3F72AF] focus:outline-none focus:ring-4 focus:ring-[#3F72AF]/20 transition-all"
+                  />
+                  <datalist id="university-options">
+                    {universityOptions.map((university, index) => (
+                      <option key={index} value={university} />
+                    ))}
+                  </datalist>
+                  <div className="mt-1 text-xs text-[#3F72AF]">
+                    🎓 Ketik untuk mencari dari 4400+ perguruan tinggi di
+                    Indonesia
+                  </div>
+                </div>
               ) : (
                 <div className="w-full px-4 py-3 bg-gray-50 rounded-xl text-slate-800 font-medium">
                   {userStats.target_university || "Belum diisi"}
@@ -280,29 +325,29 @@ export default function ProfilePage() {
 
             {/* Statistik */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-8">
-              <div className="bg-gradient-to-br from-blue-50 to-white p-4 rounded-xl border border-blue-100 text-center">
-                <div className="text-3xl font-bold text-blue-600">
+              <div className="bg-gradient-to-br from-[#DBE2EF] to-[#F9F7F7] p-4 rounded-xl border border-[#3F72AF]/30 text-center hover:shadow-lg transition-all">
+                <div className="text-3xl font-bold text-[#3F72AF]">
                   {detailedStats.totalGames || 0}
                 </div>
-                <div className="text-sm text-slate-600 mt-1">Latihan</div>
+                <div className="text-sm text-[#112D4E] mt-1">Latihan</div>
               </div>
-              <div className="bg-gradient-to-br from-indigo-50 to-white p-4 rounded-xl border border-indigo-100 text-center">
-                <div className="text-3xl font-bold text-indigo-600">
+              <div className="bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] p-4 rounded-xl border border-[#3F72AF]/30 text-center hover:shadow-lg transition-all">
+                <div className="text-3xl font-bold text-[#112D4E]">
                   {userStats.best_score}
                 </div>
-                <div className="text-sm text-slate-600 mt-1">Skor Terbaik</div>
+                <div className="text-sm text-[#112D4E] mt-1">Skor Terbaik</div>
               </div>
-              <div className="bg-gradient-to-br from-purple-50 to-white p-4 rounded-xl border border-purple-100 text-center">
-                <div className="text-3xl font-bold text-purple-600">
+              <div className="bg-gradient-to-br from-[#DBE2EF] to-[#F9F7F7] p-4 rounded-xl border border-[#3F72AF]/30 text-center hover:shadow-lg transition-all">
+                <div className="text-3xl font-bold text-[#3F72AF]">
                   {detailedStats.avgScore}
                 </div>
-                <div className="text-sm text-slate-600 mt-1">Rata-rata</div>
+                <div className="text-sm text-[#112D4E] mt-1">Rata-rata</div>
               </div>
-              <div className="bg-gradient-to-br from-pink-50 to-white p-4 rounded-xl border border-pink-100 text-center">
-                <div className="text-3xl font-bold text-pink-600">
+              <div className="bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] p-4 rounded-xl border border-[#3F72AF]/30 text-center hover:shadow-lg transition-all">
+                <div className="text-3xl font-bold text-[#112D4E]">
                   {detailedStats.accuracy}%
                 </div>
-                <div className="text-sm text-slate-600 mt-1">Akurasi</div>
+                <div className="text-sm text-[#112D4E] mt-1">Akurasi</div>
               </div>
             </div>
 
@@ -316,16 +361,18 @@ export default function ProfilePage() {
                   {gameHistory.map((game, index) => (
                     <div
                       key={game.id}
-                      className="bg-gradient-to-r from-gray-50 to-white p-4 rounded-xl border border-gray-200 hover:shadow-md transition-all"
+                      className="bg-gradient-to-r from-[#F9F7F7] to-[#DBE2EF] p-4 rounded-xl border border-[#3F72AF]/30 hover:shadow-lg hover:border-[#3F72AF]/50 transition-all"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="text-2xl font-bold text-blue-600">
+                            <span className="text-2xl font-bold text-[#3F72AF]">
                               {game.score}
                             </span>
-                            <span className="text-sm text-gray-500">poin</span>
-                            <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold">
+                            <span className="text-sm text-[#112D4E]/70">
+                              poin
+                            </span>
+                            <span className="ml-2 px-2 py-1 bg-[#3F72AF]/20 text-[#112D4E] rounded-lg text-xs font-semibold">
                               {getCategoryLabel(game.category)}
                             </span>
                           </div>
@@ -359,7 +406,7 @@ export default function ProfilePage() {
                 <>
                   <button
                     onClick={handleSaveProfile}
-                    className="flex-1 px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm sm:text-base font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
+                    className="flex-1 px-4 sm:px-6 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-xl text-sm sm:text-base font-semibold hover:from-[#112D4E] hover:to-[#3F72AF] transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
                   >
                     💾 Simpan Perubahan
                   </button>
@@ -370,7 +417,7 @@ export default function ProfilePage() {
                       setEditedUniversity(userStats.target_university);
                       setIsEditing(false);
                     }}
-                    className="flex-1 px-4 sm:px-6 py-3 bg-gray-200 text-slate-700 rounded-xl text-sm sm:text-base font-semibold hover:bg-gray-300 transition-all duration-300 hover:scale-105 active:scale-95"
+                    className="flex-1 px-4 sm:px-6 py-3 bg-[#DBE2EF] text-[#112D4E] rounded-xl text-sm sm:text-base font-semibold hover:bg-[#DBE2EF]/80 transition-all duration-300 hover:scale-105 active:scale-95"
                   >
                     ❌ Batal
                   </button>
@@ -378,7 +425,7 @@ export default function ProfilePage() {
               ) : (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex-1 px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm sm:text-base font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
+                  className="flex-1 px-4 sm:px-6 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-xl text-sm sm:text-base font-semibold hover:from-[#112D4E] hover:to-[#3F72AF] transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
                 >
                   ✏️ Edit Profil
                 </button>
@@ -388,12 +435,12 @@ export default function ProfilePage() {
             {/* Quick Links */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-6">
               <Link href="/study">
-                <button className="w-full px-4 sm:px-6 py-3 bg-white border-2 border-blue-600 text-blue-600 rounded-xl text-sm sm:text-base font-semibold hover:bg-blue-50 transition-all duration-300 hover:scale-105 active:scale-95">
+                <button className="w-full px-4 sm:px-6 py-3 bg-[#F9F7F7] border-2 border-[#3F72AF] text-[#3F72AF] rounded-xl text-sm sm:text-base font-semibold hover:bg-[#DBE2EF] transition-all duration-300 hover:scale-105 active:scale-95">
                   🎮 Mulai Latihan
                 </button>
               </Link>
               <Link href="/leaderboard">
-                <button className="w-full px-4 sm:px-6 py-3 bg-white border-2 border-indigo-600 text-indigo-600 rounded-xl text-sm sm:text-base font-semibold hover:bg-indigo-50 transition-all duration-300 hover:scale-105 active:scale-95">
+                <button className="w-full px-4 sm:px-6 py-3 bg-[#F9F7F7] border-2 border-[#112D4E] text-[#112D4E] rounded-xl text-sm sm:text-base font-semibold hover:bg-[#DBE2EF] transition-all duration-300 hover:scale-105 active:scale-95">
                   🏆 Leaderboard
                 </button>
               </Link>
@@ -404,7 +451,7 @@ export default function ProfilePage() {
         {/* Back Button */}
         <div className="mt-6 sm:mt-8">
           <Link href="/">
-            <button className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 sm:px-6 py-3 bg-blue-600 text-white rounded-xl text-sm sm:text-base font-semibold hover:bg-blue-700 transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95">
+            <button className="flex items-center justify-center gap-2 w-full sm:w-auto px-4 sm:px-6 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-xl text-sm sm:text-base font-semibold hover:from-[#112D4E] hover:to-[#3F72AF] transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95">
               <svg
                 className="w-5 h-5"
                 fill="none"

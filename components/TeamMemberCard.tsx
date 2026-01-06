@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { useState } from "react";
+import Image from "next/image";
 
 interface TeamMember {
   id: number;
@@ -17,32 +17,32 @@ interface TeamMemberCardProps {
 }
 
 const gradients = [
-  'from-blue-500 to-indigo-600',
-  'from-indigo-500 to-purple-600',
-  'from-purple-500 to-pink-600',
-  'from-pink-500 to-rose-600',
+  "from-[#3F72AF] to-[#112D4E]",
+  "from-[#112D4E] to-[#3F72AF]",
+  "from-[#3F72AF] via-[#112D4E] to-[#3F72AF]",
+  "from-[#DBE2EF] to-[#3F72AF]",
 ];
 
 const accentColors = [
-  'text-blue-600',
-  'text-indigo-600',
-  'text-purple-600',
-  'text-pink-600',
+  "text-[#3F72AF]",
+  "text-[#112D4E]",
+  "text-[#3F72AF]",
+  "text-[#112D4E]",
 ];
 
 export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
   const [imageError, setImageError] = useState(false);
-  
+
   const gradientClass = gradients[index % gradients.length];
   const accentColor = accentColors[index % accentColors.length];
 
   return (
-    <div 
-      className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-4 text-center relative overflow-visible transform hover:-translate-y-2 group"
-    >
+    <div className="bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-4 text-center relative overflow-visible transform hover:-translate-y-2 group border-2 border-[#3F72AF]/20 hover:border-[#3F72AF]/60">
       {/* Gradient glow effect on hover (outside card) */}
-      <div className={`absolute -inset-1 bg-gradient-to-br ${gradientClass} rounded-2xl opacity-0 group-hover:opacity-75 blur-lg transition-opacity duration-500 -z-10`}></div>
-      
+      <div
+        className={`absolute -inset-1 bg-gradient-to-br ${gradientClass} rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-opacity duration-500 -z-10`}
+      ></div>
+
       {/* Foto 4x6 (aspect ratio 2:3) */}
       <div className="relative w-full aspect-[2/3] rounded-xl overflow-hidden mb-4 shadow-md group-hover:shadow-xl transition-shadow duration-300">
         {!imageError ? (
@@ -59,9 +59,15 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
           </>
         ) : (
           // Fallback: Avatar with initials
-          <div className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${gradientClass} relative`}>
+          <div
+            className={`w-full h-full flex items-center justify-center bg-gradient-to-br ${gradientClass} relative`}
+          >
             <div className="text-6xl font-bold text-white animate-pulse">
-              {member.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+              {member.name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase()}
             </div>
             {/* Animated circles */}
             <div className="absolute inset-0 flex items-center justify-center">
@@ -74,40 +80,44 @@ export default function TeamMemberCard({ member, index }: TeamMemberCardProps) {
       {/* Content with slide-up animation on hover */}
       <div className="relative z-10">
         {/* Nama */}
-        <h3 className={`text-lg font-bold text-gray-900 group-hover:${accentColor} transition-colors duration-300 mb-1`}>
+        <h3
+          className={`text-lg font-bold text-[#112D4E] group-hover:${accentColor} transition-colors duration-300 mb-1`}
+        >
           {member.name}
         </h3>
 
         {/* Role badge dengan gradient */}
         {member.role && (
           <div className="inline-block mb-2">
-            <span className={`text-xs font-semibold text-white bg-gradient-to-r ${gradientClass} px-3 py-1.5 rounded-full shadow-md group-hover:shadow-lg transition-shadow duration-300`}>
+            <span
+              className={`text-xs font-semibold text-white bg-gradient-to-r ${gradientClass} px-3 py-1.5 rounded-full shadow-md group-hover:shadow-lg transition-shadow duration-300`}
+            >
               {member.role}
             </span>
           </div>
         )}
 
         {/* Jurusan with icon */}
-        <div className="flex flex-col items-center justify-center gap-1 text-gray-600 group-hover:text-gray-800 transition-colors duration-300">
-          {member.major.includes('PSDKU') ? (
+        <div className="flex flex-col items-center justify-center gap-1 text-[#3F72AF] group-hover:text-[#112D4E] transition-colors duration-300">
+          {member.major.includes("PSDKU") ? (
             <>
               <p className="text-sm font-medium">
-                {member.major.split('PSDKU')[0].trim()}
+                {member.major.split("PSDKU")[0].trim()}
               </p>
-              <p className="text-xs font-medium text-gray-500">
-                PSDKU{member.major.split('PSDKU')[1]}
+              <p className="text-xs font-medium text-[#3F72AF]/70">
+                PSDKU{member.major.split("PSDKU")[1]}
               </p>
             </>
           ) : (
-            <p className="text-sm font-medium">
-              {member.major}
-            </p>
+            <p className="text-sm font-medium">{member.major}</p>
           )}
         </div>
       </div>
 
       {/* Bottom accent line */}
-      <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${gradientClass} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-b-2xl`}></div>
+      <div
+        className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${gradientClass} transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 rounded-b-2xl`}
+      ></div>
     </div>
   );
 }

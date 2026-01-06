@@ -260,10 +260,10 @@ export default function GamePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-2xl font-bold text-white">Memuat soal...</p>
+          <div className="w-16 h-16 border-4 border-[#F9F7F7] border-t-[#112D4E] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-2xl font-bold text-[#112D4E]">Memuat soal...</p>
         </div>
       </div>
     );
@@ -271,14 +271,14 @@ export default function GamePage() {
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF]">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]">
         <div className="text-center">
-          <p className="text-2xl font-bold text-white">
+          <p className="text-2xl font-bold text-[#112D4E]">
             Tidak ada soal tersedia
           </p>
           <button
             onClick={() => router.push("/")}
-            className="mt-4 px-6 py-3 bg-white text-[#3F72AF] font-bold rounded-xl hover:scale-105 transition-all"
+            className="mt-4 px-6 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white font-bold rounded-xl hover:scale-105 transition-all shadow-lg"
           >
             Kembali ke Beranda
           </button>
@@ -288,7 +288,13 @@ export default function GamePage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF] px-3 py-4 sm:px-6 md:px-10 lg:px-16 pb-24">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]/30 px-3 py-4 sm:px-6 md:px-10 lg:px-16 pb-24">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute left-1/4 top-1/4 h-96 w-96 animate-pulse rounded-full bg-[#3F72AF]/20 opacity-30 blur-3xl"></div>
+        <div className="absolute right-1/4 bottom-1/4 h-96 w-96 animate-pulse rounded-full bg-[#112D4E]/20 opacity-40 blur-3xl [animation-delay:1s]"></div>
+      </div>
+
       {/* Dev Mode Badge */}
       {DEV_MODE && (
         <div className="fixed top-4 right-4 z-50 px-3 py-2 bg-yellow-500/90 text-yellow-900 text-xs font-bold rounded-lg backdrop-blur-sm border border-yellow-600 shadow-lg">
@@ -298,12 +304,14 @@ export default function GamePage() {
 
       {/* Top Bar */}
       <div className="relative z-10 mx-auto mb-6 max-w-5xl ">
-        <div className="rounded-2xl bg-[#F9F7F7]/90 p-5 backdrop-blur-xl border border-[#3F72AF]/30 shadow-2xl shadow-[#3F72AF]/20">
+        <div className="rounded-2xl bg-gradient-to-br from-[#F9F7F7]/95 to-[#DBE2EF]/90 p-5 backdrop-blur-xl border-2 border-[#3F72AF]/40 shadow-2xl shadow-[#3F72AF]/30">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="group flex items-center gap-3 rounded-xl bg-gradient-to-r from-[#DBE2EF]/40 to-[#3F72AF]/20 px-5 py-3 transition-all hover:scale-105 border border-[#3F72AF]/50">
+            <div className="group flex items-center gap-3 rounded-xl bg-gradient-to-r from-[#DBE2EF]/60 to-[#3F72AF]/30 px-5 py-3 transition-all hover:scale-105 border-2 border-[#3F72AF]/60 shadow-md">
               <span className="text-3xl animate-pulse">⏱️</span>
               <div>
-                <div className="text-xs text-[#3F72AF]">Waktu Tersisa</div>
+                <div className="text-xs text-[#3F72AF] font-bold">
+                  Waktu Tersisa
+                </div>
                 <span
                   className={`text-2xl font-bold ${
                     timer < 60 ? "text-red-500 animate-pulse" : "text-[#112D4E]"
@@ -313,12 +321,12 @@ export default function GamePage() {
                 </span>
               </div>
             </div>
-            <div className="group flex items-center gap-3 rounded-xl bg-gradient-to-r from-[#3F72AF]/20 to-[#DBE2EF]/40 px-5 py-3 transition-all hover:scale-105 border border-[#3F72AF]/50">
+            <div className="group flex items-center gap-3 rounded-xl bg-gradient-to-r from-[#3F72AF]/30 to-[#DBE2EF]/60 px-5 py-3 transition-all hover:scale-105 border-2 border-[#3F72AF]/60 shadow-md">
               <span className="text-3xl transition-transform group-hover:rotate-12">
                 ⭐
               </span>
               <div>
-                <div className="text-xs text-[#3F72AF]">Skor</div>
+                <div className="text-xs text-[#3F72AF] font-bold">Skor</div>
                 <span className="text-2xl font-bold text-[#112D4E]">
                   {score}
                 </span>
@@ -326,10 +334,10 @@ export default function GamePage() {
             </div>
             {/* Streak Indicator */}
             <div
-              className={`flex items-center gap-3 rounded-xl px-5 py-3 transition-all border ${
+              className={`flex items-center gap-3 rounded-xl px-5 py-3 transition-all border-2 shadow-md ${
                 streak >= 3
-                  ? "bg-gradient-to-r from-orange-400 to-red-500 border-orange-600 animate-pulse"
-                  : "bg-gradient-to-r from-[#3F72AF]/20 to-[#DBE2EF]/40 border-[#3F72AF]/50"
+                  ? "bg-gradient-to-r from-orange-400 via-red-500 to-orange-400 border-orange-600 animate-pulse shadow-orange-500/50"
+                  : "bg-gradient-to-r from-[#3F72AF]/30 to-[#DBE2EF]/60 border-[#3F72AF]/60"
               }`}
             >
               <div className="relative">
@@ -337,7 +345,7 @@ export default function GamePage() {
               </div>
               <div>
                 <div
-                  className={`text-xs ${
+                  className={`text-xs font-bold ${
                     streak >= 3 ? "text-white" : "text-[#3F72AF]"
                   }`}
                 >
@@ -352,7 +360,7 @@ export default function GamePage() {
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#3F72AF]/20 to-[#DBE2EF]/40 px-5 py-3 border border-[#3F72AF]/50">
+            <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#3F72AF]/30 to-[#DBE2EF]/60 px-5 py-3 border-2 border-[#3F72AF]/60 shadow-md">
               <LifeIndicator lives={lives} />
             </div>
           </div>
@@ -362,13 +370,17 @@ export default function GamePage() {
       {/* Streak Animation */}
       {showStreakAnimation && (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 animate-scale-in">
-          <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white px-12 py-8 rounded-3xl shadow-2xl border-4 border-yellow-400">
+          <div className="bg-gradient-to-r from-orange-500 via-red-600 to-orange-500 text-white px-12 py-8 rounded-3xl shadow-2xl border-4 border-yellow-400 animate-gradient-x">
             <div className="flex items-center justify-center mb-4">
               <FireIcon active={true} size="xl" />
             </div>
-            <p className="text-5xl font-bold text-center mb-2">STREAK!</p>
-            <p className="text-3xl font-bold text-center">{streak}x Combo!</p>
-            <p className="text-lg text-center mt-2 text-yellow-100">
+            <p className="text-5xl font-bold text-center mb-2 drop-shadow-lg">
+              STREAK!
+            </p>
+            <p className="text-3xl font-bold text-center drop-shadow-lg">
+              {streak}x Combo!
+            </p>
+            <p className="text-lg text-center mt-2 text-yellow-100 drop-shadow-md">
               Bonus Multiplier 1.5x!
             </p>
           </div>
@@ -377,21 +389,21 @@ export default function GamePage() {
 
       {/* Question Card */}
       <div className="relative z-10 mx-auto max-w-5xl">
-        <div className="rounded-3xl bg-[#F9F7F7]/20 p-1 backdrop-blur-xl border border-[#3F72AF]/30 shadow-2xl shadow-[#3F72AF]/20">
-          <div className="rounded-3xl bg-[#F9F7F7]/95 p-4 sm:p-6 md:p-8">
+        <div className="rounded-3xl bg-gradient-to-br from-[#F9F7F7]/30 to-[#DBE2EF]/30 p-1 backdrop-blur-xl border-2 border-[#3F72AF]/40 shadow-2xl shadow-[#3F72AF]/30">
+          <div className="rounded-3xl bg-gradient-to-br from-[#F9F7F7]/98 to-[#DBE2EF]/95 p-4 sm:p-6 md:p-8">
             {/* Question Number & Progress */}
             <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-3">
-                <span className="rounded-full bg-gradient-to-r from-[#3F72AF] to-[#112D4E] px-5 py-2 text-sm font-bold text-white shadow-lg">
+                <span className="rounded-full bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF] px-5 py-2 text-sm font-bold text-white shadow-lg border-2 border-[#F9F7F7]/50 animate-gradient-x">
                   🎯 Soal {currentQuestionIndex + 1} dari {questions.length}
                 </span>
-                <span className="text-xs px-3 py-1 bg-[#DBE2EF] text-[#3F72AF] font-semibold rounded-full">
+                <span className="text-xs px-3 py-1 bg-gradient-to-r from-[#DBE2EF] to-[#F9F7F7] text-[#112D4E] font-bold rounded-full border border-[#3F72AF]/30 shadow-md">
                   {currentQuestion.category}
                 </span>
               </div>
-              <div className="flex-1 sm:ml-6 h-3 overflow-hidden rounded-full bg-[#DBE2EF] border border-[#3F72AF]/30">
+              <div className="flex-1 sm:ml-6 h-3 overflow-hidden rounded-full bg-gradient-to-r from-[#DBE2EF] to-[#F9F7F7] border-2 border-[#3F72AF]/40 shadow-inner">
                 <div
-                  className="h-full bg-gradient-to-r from-[#3F72AF] to-[#112D4E] transition-all duration-500 shadow-lg shadow-[#3F72AF]/50"
+                  className="h-full bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF] transition-all duration-500 shadow-lg shadow-[#3F72AF]/60 animate-gradient-x"
                   style={{
                     width: `${
                       ((currentQuestionIndex + 1) / questions.length) * 100
@@ -403,7 +415,7 @@ export default function GamePage() {
 
             {/* Stimulus (jika ada) */}
             {currentQuestion.stimulus && (
-              <div className="mb-6 rounded-2xl bg-gradient-to-br from-amber-50 to-orange-50 p-6 border-2 border-amber-200 shadow-lg">
+              <div className="mb-6 rounded-2xl bg-gradient-to-br from-amber-50/90 via-orange-50/80 to-amber-50/90 p-6 border-2 border-amber-300/60 shadow-xl">
                 <h3 className="text-sm font-bold text-amber-800 mb-3 flex items-center gap-2">
                   <span>📖</span>
                   <span>{currentQuestion.stimulus.title}</span>
@@ -418,7 +430,7 @@ export default function GamePage() {
             )}
 
             {/* Question Text */}
-            <div className="mb-8 rounded-2xl bg-gradient-to-r from-[#DBE2EF]/40 to-[#3F72AF]/10 p-6 backdrop-blur-sm border border-[#3F72AF]/30">
+            <div className="mb-8 rounded-2xl bg-gradient-to-r from-[#DBE2EF]/60 via-[#F9F7F7]/40 to-[#3F72AF]/20 p-6 backdrop-blur-sm border-2 border-[#3F72AF]/40 shadow-lg">
               <h2 className="text-2xl font-bold text-[#112D4E] md:text-3xl">
                 {currentQuestion.question}
               </h2>
@@ -504,10 +516,10 @@ export default function GamePage() {
               <button
                 onClick={handleSubmitAnswer}
                 disabled={!selectedAnswer}
-                className={`group relative w-full overflow-hidden rounded-2xl px-8 py-5 text-xl font-bold transition-all duration-300 ${
+                className={`group relative w-full overflow-hidden rounded-2xl px-8 py-5 text-xl font-bold transition-all duration-300 border-2 ${
                   selectedAnswer
-                    ? "bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-2xl shadow-[#3F72AF]/50 hover:scale-105 active:scale-95"
-                    : "bg-[#DBE2EF] text-[#3F72AF]/50 cursor-not-allowed"
+                    ? "bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-2xl shadow-[#3F72AF]/60 hover:scale-105 active:scale-95 border-[#112D4E]/30"
+                    : "bg-[#DBE2EF] text-[#3F72AF]/50 cursor-not-allowed border-[#3F72AF]/20"
                 }`}
               >
                 <span className="relative z-10 flex items-center justify-center gap-3">

@@ -109,23 +109,25 @@ function ResultContent() {
       <div className="relative z-10 flex min-h-screen items-center justify-center">
         <div className="w-full max-w-2xl mx-auto">
           {/* Main Result Card */}
-          <div className="rounded-3xl bg-[#F9F7F7]/95 p-8 backdrop-blur-xl shadow-2xl border border-[#3F72AF]/30 animate-scale-in">
+          <div className="rounded-3xl bg-gradient-to-br from-[#F9F7F7]/98 to-[#DBE2EF]/95 p-8 backdrop-blur-xl shadow-2xl border-2 border-[#3F72AF]/40 animate-scale-in">
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-[#112D4E] mb-2">
+              <h1 className="text-4xl font-bold text-[#112D4E] mb-2 drop-shadow-sm">
                 {gradeInfo.label}
               </h1>
-              <p className="text-[#3F72AF] text-lg">Hasil Simulasi UTBK Anda</p>
+              <p className="text-[#3F72AF] text-lg font-semibold">
+                Hasil Simulasi SNBT Anda
+              </p>
             </div>
 
             {/* Grade Circle */}
             <div className="flex justify-center mb-8">
               <div className="relative w-48 h-48">
                 {/* Outer circle background */}
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF] flex items-center justify-center animate-pulse">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#3F72AF] via-[#112D4E] to-[#3F72AF] flex items-center justify-center animate-pulse shadow-xl shadow-[#3F72AF]/50 border-2 border-[#F9F7F7]/50">
                   {/* Inner circle */}
-                  <div className="w-40 h-40 rounded-full bg-[#F9F7F7] flex flex-col items-center justify-center shadow-xl">
-                    <div className="text-6xl font-bold text-[#3F72AF] mb-2">
+                  <div className="w-40 h-40 rounded-full bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] flex flex-col items-center justify-center shadow-xl border-2 border-[#3F72AF]/30">
+                    <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#3F72AF] to-[#112D4E] mb-2">
                       {gradeInfo.grade}
                     </div>
                     <div className="text-sm text-[#112D4E] font-semibold">
@@ -139,28 +141,32 @@ function ResultContent() {
             {/* Statistics */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
               {/* Score */}
-              <div className="rounded-2xl bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF]/20 p-6 border border-[#3F72AF]/30 text-center">
-                <div className="text-sm text-[#3F72AF] font-semibold mb-2">
+              <div className="rounded-2xl bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF]/30 p-6 border-2 border-[#3F72AF]/40 text-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <div className="text-sm text-[#3F72AF] font-bold mb-2">
                   Skor Total
                 </div>
                 <div className="text-4xl font-bold text-[#112D4E]">{score}</div>
-                <div className="text-xs text-[#3F72AF] mt-1">poin</div>
+                <div className="text-xs text-[#3F72AF] mt-1 font-semibold">
+                  poin
+                </div>
               </div>
 
               {/* Correct Answers */}
-              <div className="rounded-2xl bg-gradient-to-br from-[#3F72AF]/20 to-[#DBE2EF] p-6 border border-[#3F72AF]/30 text-center">
-                <div className="text-sm text-[#3F72AF] font-semibold mb-2">
+              <div className="rounded-2xl bg-gradient-to-br from-[#3F72AF]/30 to-[#DBE2EF] p-6 border-2 border-[#3F72AF]/40 text-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <div className="text-sm text-[#3F72AF] font-bold mb-2">
                   Jawaban Benar
                 </div>
                 <div className="text-4xl font-bold text-[#112D4E]">
                   {correct}
                 </div>
-                <div className="text-xs text-[#3F72AF] mt-1">soal</div>
+                <div className="text-xs text-[#3F72AF] mt-1 font-semibold">
+                  soal
+                </div>
               </div>
 
               {/* Time */}
-              <div className="rounded-2xl bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF]/20 p-6 border border-[#3F72AF]/30 text-center">
-                <div className="text-sm text-[#3F72AF] font-semibold mb-2">
+              <div className="rounded-2xl bg-gradient-to-br from-[#DBE2EF] to-[#3F72AF]/30 p-6 border-2 border-[#3F72AF]/40 text-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
+                <div className="text-sm text-[#3F72AF] font-bold mb-2">
                   Waktu
                 </div>
                 <div className="text-4xl font-bold text-[#112D4E]">
@@ -168,20 +174,22 @@ function ResultContent() {
                     ? `${minutes}:${seconds.toString().padStart(2, "0")}`
                     : `${seconds}s`}
                 </div>
-                <div className="text-xs text-[#3F72AF] mt-1">menit</div>
+                <div className="text-xs text-[#3F72AF] mt-1 font-semibold">
+                  menit
+                </div>
               </div>
             </div>
 
             {/* Max Streak Badge */}
             {maxStreak >= 3 && (
-              <div className="mb-6 rounded-2xl bg-gradient-to-r from-orange-400 to-red-500 p-4 text-center border-2 border-yellow-400 animate-pulse">
-                <p className="text-white font-bold text-lg mb-1">
+              <div className="mb-6 rounded-2xl bg-gradient-to-r from-orange-400 via-red-500 to-orange-400 p-5 text-center border-2 border-yellow-400 animate-pulse shadow-lg shadow-orange-500/50">
+                <p className="text-white font-bold text-lg mb-1 drop-shadow-md">
                   🔥 Max Streak Achievement!
                 </p>
-                <p className="text-yellow-100 text-3xl font-bold">
+                <p className="text-yellow-100 text-3xl font-bold drop-shadow-md">
                   {maxStreak}x Combo
                 </p>
-                <p className="text-yellow-100 text-sm mt-1">
+                <p className="text-yellow-100 text-sm mt-1 drop-shadow-sm">
                   Jawaban benar beruntun terpanjang!
                 </p>
               </div>
@@ -190,25 +198,25 @@ function ResultContent() {
             {/* Performance Bar */}
             <div className="mb-8">
               <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-semibold text-[#112D4E]">
+                <span className="text-sm font-bold text-[#112D4E]">
                   Performa Anda
                 </span>
                 <span className="text-sm font-bold text-[#3F72AF]">
                   {percentage.toFixed(1)}%
                 </span>
               </div>
-              <div className="w-full h-4 bg-[#DBE2EF] rounded-full overflow-hidden border border-[#3F72AF]/30">
+              <div className="w-full h-4 bg-gradient-to-r from-[#DBE2EF] to-[#F9F7F7] rounded-full overflow-hidden border-2 border-[#3F72AF]/40 shadow-inner">
                 <div
-                  className="h-full bg-gradient-to-r from-[#3F72AF] to-[#112D4E] transition-all duration-1000 rounded-full"
+                  className="h-full bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF] transition-all duration-1000 rounded-full shadow-lg animate-gradient-x"
                   style={{ width: `${percentage}%` }}
                 ></div>
               </div>
             </div>
 
             {/* Feedback Message */}
-            <div className="rounded-2xl bg-gradient-to-r from-[#3F72AF]/10 to-[#DBE2EF]/30 p-6 border border-[#3F72AF]/30 mb-8 text-center">
-              <p className="text-[#112D4E] font-semibold mb-2">💡 Feedback</p>
-              <p className="text-[#3F72AF] text-sm leading-relaxed">
+            <div className="rounded-2xl bg-gradient-to-r from-[#DBE2EF]/60 to-[#3F72AF]/20 p-6 border-2 border-[#3F72AF]/40 mb-8 text-center shadow-lg">
+              <p className="text-[#112D4E] font-bold mb-2">💡 Feedback</p>
+              <p className="text-[#112D4E]/80 text-sm leading-relaxed font-medium">
                 {correct >= 14
                   ? "Luar biasa! Anda sudah menguasai materi dengan sangat baik. Terus pertahankan performa ini!"
                   : correct >= 13
@@ -226,13 +234,13 @@ function ResultContent() {
             {/* Action Buttons */}
             <div className="grid grid-cols-2 gap-4 mb-6">
               <Link href="/" className="block">
-                <button className="w-full py-4 px-6 bg-[#DBE2EF] hover:bg-[#3F72AF]/20 text-[#3F72AF] font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border border-[#3F72AF]/30">
+                <button className="w-full py-4 px-6 bg-gradient-to-r from-[#DBE2EF] to-[#F9F7F7] hover:from-[#3F72AF]/30 hover:to-[#DBE2EF] text-[#112D4E] font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border-2 border-[#3F72AF]/40 shadow-lg hover:shadow-xl hover:scale-105">
                   <Home size={20} />
                   <span>Ke Beranda</span>
                 </button>
               </Link>
               <Link href="/study" className="block">
-                <button className="w-full py-4 px-6 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] hover:from-[#112D4E] hover:to-[#3F72AF] text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-[#3F72AF]/50">
+                <button className="w-full py-4 px-6 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] hover:from-[#112D4E] hover:to-[#3F72AF] text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-xl shadow-[#3F72AF]/60 hover:scale-105 border-2 border-[#112D4E]/30">
                   <RotateCcw size={20} />
                   <span>Coba Lagi</span>
                 </button>
@@ -243,7 +251,7 @@ function ResultContent() {
             {answeredQuestions.length > 0 && (
               <button
                 onClick={() => setShowReview(!showReview)}
-                className="w-full py-4 px-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
+                className="w-full py-4 px-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-xl border-2 border-yellow-400/50 hover:scale-105"
               >
                 <span>{showReview ? "📕" : "📖"}</span>
                 <span>
@@ -255,7 +263,7 @@ function ResultContent() {
             {/* Bottom Message */}
             <div className="mt-8 pt-6 border-t border-[#3F72AF]/20 text-center">
               <p className="text-xs text-[#3F72AF]/70">
-                ✨ Setiap latihan membawamu lebih dekat ke kesuksesan UTBK
+                ✨ Setiap latihan membawamu lebih dekat ke kesuksesan SNBT
               </p>
             </div>
           </div>

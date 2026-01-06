@@ -14,7 +14,7 @@ const teamMembers: TeamMember[] = [
   {
     id: 1,
     name: 'Aqila Wisam Madani M',
-    role: 'Product Owner',
+    role: 'Developer',
     major: 'D4 Teknik Informatika 24',
     image: '/team/Wisam.jpg'
   },
@@ -40,19 +40,19 @@ const teamMembers: TeamMember[] = [
   {
     id: 5,
     name: 'Luthfi Zadeh',
-    major: 'D3 Teknik Informatika 23 PSDKU Lamongan',
+    major: 'D3 Teknik Informatika 23',
     image: '/team/luthfi-zadeh.jpg'
   },
   {
     id: 6,
     name: 'Evan',
-    major: 'D3 Teknik Informatika 25 PSDKU Lamongan',
-    image: '/team/evan.jpg'
+    major: 'D3 Teknik Informatika 25',
+    image: '/team/Evan-foto.png'
   },
   {
     id: 7,
     name: 'Nadia',
-    major: 'D3 Teknik Informatika 25 PSDKU Lamongan',
+    major: 'D3 Teknik Informatika 25',
     image: '/team/nadia.jpg'
   },
   {

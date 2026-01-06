@@ -7,12 +7,15 @@ import Footer from "@/components/Footer";
 import Dock from "@/components/Dock";
 import {
   fetchLeaderboard,
+  fetchLeaderboardBySchool,
+  fetchLeaderboardByUniversity,
   getUserRank,
   type LeaderboardEntry,
 } from "@/lib/leaderboard/leaderboard-helpers";
-import { getCurrentUser } from "@/lib/auth/auth-helpers";
+import { getCurrentUser, getUserProfile } from "@/lib/auth/auth-helpers";
 
 interface DisplayEntry {
+  id: string;
   rank: number;
   name: string;
   score: number;
@@ -25,21 +28,54 @@ interface DisplayEntry {
 export default function LeaderboardPage() {
   const [leaderboardData, setLeaderboardData] = useState<DisplayEntry[]>([]);
   const [currentUserRank, setCurrentUserRank] = useState<number | null>(null);
-  const [filter, setFilter] = useState<"all" | "weekly" | "monthly">("all");
+  const [filter, setFilter] = useState<"global" | "school" | "university">(
+    "global"
+  );
+  const [userSchool, setUserSchool] = useState<string>("");
+  const [userUniversity, setUserUniversity] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadLeaderboard();
-  }, []);
+  }, [filter]);
 
   async function loadLeaderboard() {
     try {
       setIsLoading(true);
       setError(null);
 
-      // Fetch leaderboard from Supabase
-      const { data, error: fetchError } = await fetchLeaderboard(100);
+      // Refresh materialized view first to ensure fresh data
+      const supabase = (await import("@/lib/supabase/client")).createClient();
+      await supabase.rpc("refresh_global_leaderboard");
+
+      // Get current user info for school/university filters and rank
+      const { user } = await getCurrentUser();
+      if (user) {
+        const { profile } = await getUserProfile(user.id);
+        if (profile) {
+          setUserSchool(profile.school || "");
+          setUserUniversity(profile.target_university || "");
+        }
+      }
+
+      // Fetch leaderboard based on filter
+      let data: LeaderboardEntry[] | null = null;
+      let fetchError = null;
+
+      if (filter === "school" && userSchool) {
+        const result = await fetchLeaderboardBySchool(userSchool, 50);
+        data = result.data;
+        fetchError = result.error;
+      } else if (filter === "university" && userUniversity) {
+        const result = await fetchLeaderboardByUniversity(userUniversity, 50);
+        data = result.data;
+        fetchError = result.error;
+      } else {
+        const result = await fetchLeaderboard(50);
+        data = result.data;
+        fetchError = result.error;
+      }
 
       if (fetchError || !data) {
         console.error("❌ Error loading leaderboard:", fetchError);
@@ -49,7 +85,8 @@ export default function LeaderboardPage() {
       }
 
       // Transform data to display format
-      const displayData: DisplayEntry[] = data.map((entry) => ({
+      const displayData: DisplayEntry[] = data.map((entry, idx) => ({
+        id: entry.id || `user-${idx}`,
         rank: entry.rank,
         name: entry.full_name || entry.username,
         score: entry.best_score,
@@ -68,9 +105,9 @@ export default function LeaderboardPage() {
 
       setLeaderboardData(displayData);
       console.log("✅ Leaderboard loaded:", displayData.length, "entries");
+      console.log("📊 First entry ID check:", displayData[0]?.id);
 
-      // Check current user's rank
-      const { user } = await getCurrentUser();
+      // Check current user's rank (reuse user variable from above)
       if (user) {
         const { rank } = await getUserRank(user.id);
         setCurrentUserRank(rank);
@@ -113,9 +150,16 @@ export default function LeaderboardPage() {
               Leaderboard
             </span>
           </h1>
-          <p className="text-base sm:text-lg text-[#3F72AF]">
+          <p className="text-base sm:text-lg text-[#3F72AF] mb-4">
             Lihat peringkat dan tantang diri Anda!
           </p>
+          <button
+            onClick={loadLeaderboard}
+            disabled={isLoading}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#DBE2EF] text-[#3F72AF] rounded-lg text-sm font-semibold hover:bg-[#3F72AF] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            🔄 {isLoading ? "Memuat..." : "Refresh Data"}
+          </button>
         </div>
 
         {/* Loading State */}
@@ -145,14 +189,32 @@ export default function LeaderboardPage() {
         {!isLoading && !error && leaderboardData.length === 0 && (
           <div className="bg-white rounded-xl p-8 text-center shadow-lg">
             <p className="text-xl text-gray-600 mb-4">
-              Belum ada data leaderboard.
+              {filter === "school" && !userSchool
+                ? "Anda belum mengatur sekolah di profil"
+                : filter === "university" && !userUniversity
+                ? "Anda belum mengatur kampus tujuan di profil"
+                : "Belum ada data leaderboard."}
             </p>
-            <p className="text-gray-500 mb-6">Jadilah yang pertama bermain!</p>
-            <Link href="/game">
-              <button className="px-6 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-xl font-semibold hover:scale-105 transition-all">
-                🎮 Mulai Bermain
-              </button>
-            </Link>
+            <p className="text-gray-500 mb-6">
+              {filter === "school" && !userSchool
+                ? "Lengkapi profil Anda terlebih dahulu"
+                : filter === "university" && !userUniversity
+                ? "Lengkapi profil Anda terlebih dahulu"
+                : "Jadilah yang pertama bermain!"}
+            </p>
+            {!userSchool || !userUniversity ? (
+              <Link href="/profile">
+                <button className="px-6 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-xl font-semibold hover:scale-105 transition-all">
+                  👤 Lengkapi Profil
+                </button>
+              </Link>
+            ) : (
+              <Link href="/game">
+                <button className="px-6 py-3 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-xl font-semibold hover:scale-105 transition-all">
+                  🎮 Mulai Bermain
+                </button>
+              </Link>
+            )}
           </div>
         )}
 
@@ -162,36 +224,58 @@ export default function LeaderboardPage() {
             {/* Filter Tabs */}
             <div className="flex justify-center gap-2 sm:gap-4 mb-8 animate-scale-in">
               <button
-                onClick={() => setFilter("all")}
+                onClick={() => setFilter("global")}
                 className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${
-                  filter === "all"
+                  filter === "global"
                     ? "bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-lg scale-105"
                     : "bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF]"
                 }`}
               >
-                🌟 Semua Waktu
+                🌍 Global
               </button>
               <button
-                onClick={() => setFilter("weekly")}
+                onClick={() => setFilter("school")}
+                disabled={!userSchool}
                 className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${
-                  filter === "weekly"
+                  filter === "school"
                     ? "bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-lg scale-105"
-                    : "bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF]"
+                    : "bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF] disabled:opacity-50 disabled:cursor-not-allowed"
                 }`}
               >
-                📅 Mingguan
+                🏫 Sekolah-mu
               </button>
               <button
-                onClick={() => setFilter("monthly")}
+                onClick={() => setFilter("university")}
+                disabled={!userUniversity}
                 className={`px-4 sm:px-6 py-2 sm:py-3 rounded-xl text-sm sm:text-base font-semibold transition-all duration-300 ${
-                  filter === "monthly"
+                  filter === "university"
                     ? "bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white shadow-lg scale-105"
-                    : "bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF]"
+                    : "bg-white text-[#3F72AF] border-2 border-[#3F72AF] hover:bg-[#DBE2EF] disabled:opacity-50 disabled:cursor-not-allowed"
                 }`}
               >
-                📆 Bulanan
+                🎓 Kampus-mu
               </button>
             </div>
+
+            {/* Filter Info */}
+            {filter !== "global" && (
+              <div className="text-center mb-6 p-4 bg-[#DBE2EF]/50 rounded-xl">
+                <p className="text-sm text-[#112D4E] font-medium">
+                  {filter === "school" && userSchool && (
+                    <>
+                      Menampilkan leaderboard untuk:{" "}
+                      <span className="font-bold">{userSchool}</span>
+                    </>
+                  )}
+                  {filter === "university" && userUniversity && (
+                    <>
+                      Menampilkan leaderboard untuk:{" "}
+                      <span className="font-bold">{userUniversity}</span>
+                    </>
+                  )}
+                </p>
+              </div>
+            )}
 
             {/* Top 3 Podium */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
@@ -322,7 +406,7 @@ export default function LeaderboardPage() {
                   <tbody className="divide-y divide-gray-200">
                     {leaderboardData.map((entry, index) => (
                       <tr
-                        key={entry.rank}
+                        key={`${entry.id}-${index}`}
                         className={`hover:bg-[#DBE2EF]/30 transition-all duration-200 ${
                           currentUserRank === entry.rank
                             ? "bg-blue-50 border-l-4 border-[#3F72AF]"

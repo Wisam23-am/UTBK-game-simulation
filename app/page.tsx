@@ -51,15 +51,15 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]/20">
       <Navbar />
 
       {/* Hero Section */}
       <section className="relative pt-20 pb-32 px-4 overflow-hidden">
         {/* Decorative Elements */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#3F72AF]/30 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-pulse"></div>
         <div
-          className="absolute bottom-20 right-10 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"
+          className="absolute bottom-20 right-10 w-72 h-72 bg-[#112D4E]/40 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"
           style={{ animationDelay: "1s" }}
         ></div>
 
@@ -67,39 +67,39 @@ export default function Home() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="text-left animate-slide-up">
-              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-6">
-                <span className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
-                Platform Latihan UTBK #1 di Indonesia
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#DBE2EF] to-[#3F72AF]/20 text-[#112D4E] px-5 py-2.5 rounded-full text-sm font-bold mb-6 border border-[#3F72AF]/30 shadow-lg">
+                <span className="w-2 h-2 bg-[#3F72AF] rounded-full animate-pulse"></span>
+                QuizQuest - Platform SNBT Game #1
               </div>
 
               {/* Greeting for logged in users */}
               {isLoggedIn && userName && (
-                <div className="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl">
-                  <p className="text-lg text-green-800">
+                <div className="mb-6 p-5 bg-gradient-to-r from-[#DBE2EF] to-[#F9F7F7] border-2 border-[#3F72AF]/40 rounded-2xl shadow-lg">
+                  <p className="text-lg text-[#112D4E]">
                     👋 Selamat datang kembali,{" "}
-                    <span className="font-bold">{userName}</span>!
+                    <span className="font-bold bg-gradient-to-r from-[#3F72AF] to-[#112D4E] bg-clip-text text-transparent">
+                      {userName}
+                    </span>
+                    !
                   </p>
-                  <p className="text-sm text-green-600 mt-1">
+                  <p className="text-sm text-[#3F72AF] mt-1 font-semibold">
                     Ayo lanjutkan latihanmu hari ini!
                   </p>
                 </div>
               )}
 
-              <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 mb-6 leading-tight">
-                Persiapan{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                  UTBK
-                </span>{" "}
-                yang Lebih Seru!
+              <h1 className="text-5xl md:text-6xl font-extrabold text-[#112D4E] mb-4 leading-tight drop-shadow-sm">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF] animate-gradient">
+                  QuizQuest
+                </span>
               </h1>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6 leading-tight">
-                Raih{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                  Skor
-                </span>{" "}
-                Tertinggi!
+              <h2 className="text-3xl md:text-4xl font-extrabold text-[#112D4E] mb-6 leading-tight drop-shadow-sm">
+                Persiapan SNBT yang Lebih Seru!
               </h2>
-              <p className="text-xl text-slate-600 mb-8 leading-relaxed">
+              <h3 className="text-2xl md:text-3xl font-bold text-[#3F72AF] mb-6 leading-tight">
+                Raih Skor Tertinggimu! 🎯
+              </h3>
+              <p className="text-xl text-[#112D4E]/80 mb-8 leading-relaxed">
                 Simulasi ujian dengan timer real-time, sistem scoring otomatis,
                 dan pelacakan progres yang akurat. Raih skor impianmu dengan
                 latihan yang lebih efektif!
@@ -110,12 +110,12 @@ export default function Home() {
                 {isLoggedIn ? (
                   <>
                     <Link href="/study" className="group">
-                      <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold text-lg shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                      <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-xl font-bold text-lg shadow-2xl shadow-[#3F72AF]/40 hover:shadow-[#3F72AF]/60 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-[#112D4E]/20">
                         <span>🚀</span> Mulai Latihan
                       </button>
                     </Link>
                     <Link href="/profile" className="group">
-                      <button className="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 rounded-xl font-semibold text-lg border-2 border-gray-200 hover:border-blue-600 hover:text-blue-600 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                      <button className="w-full sm:w-auto px-8 py-4 bg-[#F9F7F7] text-[#112D4E] rounded-xl font-bold text-lg border-2 border-[#3F72AF]/40 hover:border-[#3F72AF] hover:bg-[#DBE2EF] hover:text-[#112D4E] transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg">
                         <span>👤</span> Lihat Profile
                       </button>
                     </Link>
@@ -123,12 +123,12 @@ export default function Home() {
                 ) : (
                   <>
                     <Link href="/study" className="group">
-                      <button className="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold text-lg shadow-lg shadow-blue-600/30 hover:bg-blue-700 hover:shadow-xl hover:shadow-blue-600/40 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                      <button className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-xl font-bold text-lg shadow-2xl shadow-[#3F72AF]/40 hover:shadow-[#3F72AF]/60 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 border border-[#112D4E]/20">
                         <span>🚀</span> Mulai Latihan Sekarang
                       </button>
                     </Link>
                     <Link href="/login" className="group">
-                      <button className="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 rounded-xl font-semibold text-lg border-2 border-gray-200 hover:border-blue-600 hover:text-blue-600 transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+                      <button className="w-full sm:w-auto px-8 py-4 bg-[#F9F7F7] text-[#112D4E] rounded-xl font-bold text-lg border-2 border-[#3F72AF]/40 hover:border-[#3F72AF] hover:bg-[#DBE2EF] hover:text-[#112D4E] transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shadow-lg">
                         <span>👤</span> Login / Daftar
                       </button>
                     </Link>
@@ -139,38 +139,38 @@ export default function Home() {
 
             {/* Right Content - Visual */}
             <div className="relative animate-scale-in">
-              <div className="relative bg-white rounded-3xl shadow-2xl p-8 border border-gray-200">
-                <div className="absolute -top-4 -right-4 bg-green-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg animate-bounce">
+              <div className="relative bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] rounded-3xl shadow-2xl p-8 border-2 border-[#3F72AF]/30">
+                <div className="absolute -top-4 -right-4 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white px-5 py-2.5 rounded-full font-bold text-sm shadow-lg animate-bounce border-2 border-[#F9F7F7]">
                   ✓ Gratis!
                 </div>
                 <img
                   src="/logo.png"
-                  alt="UTBK"
+                  alt="SNBT"
                   className="w-full h-64 object-contain mb-6"
                 />
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3 bg-blue-50 p-4 rounded-xl">
-                    <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white text-xl">
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-[#DBE2EF] to-[#F9F7F7] p-4 rounded-xl border border-[#3F72AF]/20 shadow-md hover:shadow-lg transition-all">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[#3F72AF] to-[#112D4E] rounded-lg flex items-center justify-center text-white text-xl shadow-md">
                       ⏱️
                     </div>
                     <div className="text-left">
-                      <div className="font-semibold text-slate-800">
+                      <div className="font-semibold text-[#112D4E]">
                         Real-Time Timer
                       </div>
-                      <div className="text-sm text-slate-600">
+                      <div className="text-sm text-[#3F72AF]">
                         Simulasi seperti ujian asli
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 bg-indigo-50 p-4 rounded-xl">
-                    <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-xl">
+                  <div className="flex items-center gap-3 bg-gradient-to-r from-[#F9F7F7] to-[#DBE2EF] p-4 rounded-xl border border-[#3F72AF]/20 shadow-md hover:shadow-lg transition-all">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[#112D4E] to-[#3F72AF] rounded-lg flex items-center justify-center text-white text-xl shadow-md">
                       📊
                     </div>
                     <div className="text-left">
-                      <div className="font-semibold text-slate-800">
+                      <div className="font-semibold text-[#112D4E]">
                         Analisis Mendalam
                       </div>
-                      <div className="text-sm text-slate-600">
+                      <div className="text-sm text-[#3F72AF]">
                         Pantau progres belajarmu
                       </div>
                     </div>
@@ -183,30 +183,110 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 bg-white">
+      <section
+        id="features"
+        className="py-20 px-4 bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF]"
+      >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 animate-slide-up">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white px-6 py-2.5 rounded-full text-sm font-bold mb-6 shadow-lg">
+              <span>✨</span>
+              Fitur Lengkap & Terbaik
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-extrabold text-[#112D4E] mb-4">
               Fitur Unggulan
             </h2>
-            <p className="text-lg text-slate-600">
-              Dilengkapi dengan berbagai fitur untuk mendukung persiapan UTBK-mu
+            <p className="text-lg sm:text-xl text-[#3F72AF] font-semibold max-w-2xl mx-auto">
+              Dilengkapi dengan berbagai fitur canggih untuk mendukung persiapan
+              SNBT-mu secara maksimal
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="group bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100 hover:shadow-2xl hover:border-blue-300 transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Game Mode */}
+            <div className="group bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF]/50 to-[#F9F7F7] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#3F72AF] to-[#112D4E] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                🎮
+              </div>
+              <h3 className="text-2xl font-bold text-[#112D4E] mb-3">
+                Mode Game
+              </h3>
+              <p className="text-[#112D4E]/70 leading-relaxed mb-4">
+                Latihan dengan format game yang seru! Sistem nyawa, streak
+                bonus, dan scoring dinamis untuk pengalaman belajar yang
+                menyenangkan.
+              </p>
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>❤️</span>
+                  <span>Sistem Life & Streak</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>🔥</span>
+                  <span>Bonus Point System</span>
+                </div>
+              </div>
+              <div className="flex items-center text-[#3F72AF] font-bold group-hover:gap-2 transition-all">
+                <span>Mulai bermain</span>
+                <span className="group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
+              </div>
+            </div>
+
+            {/* Try-Out Mode */}
+            <div className="group bg-gradient-to-br from-[#DBE2EF] via-[#F9F7F7]/50 to-[#DBE2EF] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#112D4E] to-[#3F72AF] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                📝
+              </div>
+              <h3 className="text-2xl font-bold text-[#112D4E] mb-3">
+                Mode Try-Out
+              </h3>
+              <p className="text-[#112D4E]/70 leading-relaxed mb-4">
+                Simulasi ujian SNBT sesuai kategori: PBM, PM, PPU, PK, dan LBI.
+                Latihan serius dengan format seperti ujian asli!
+              </p>
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>📚</span>
+                  <span>5 Kategori TPS</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>✅</span>
+                  <span>Format SNBT Asli</span>
+                </div>
+              </div>
+              <div className="flex items-center text-[#3F72AF] font-bold group-hover:gap-2 transition-all">
+                <span>Mulai try-out</span>
+                <span className="group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
+              </div>
+            </div>
+
+            {/* Timer Real-Time */}
+            <div className="group bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF]/50 to-[#F9F7F7] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#3F72AF] to-[#112D4E] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
                 ⏱️
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">
-                Timer Challenge
+              <h3 className="text-2xl font-bold text-[#112D4E] mb-3">
+                Timer Real-Time
               </h3>
-              <p className="text-slate-600 leading-relaxed">
-                Latihan dengan batasan waktu seperti ujian UTBK asli. Tingkatkan
+              <p className="text-[#112D4E]/70 leading-relaxed mb-4">
+                Latihan dengan batasan waktu seperti ujian SNBT asli. Tingkatkan
                 kecepatan dan ketepatan dalam mengerjakan soal!
               </p>
-              <div className="mt-6 flex items-center text-blue-600 font-semibold group-hover:gap-2 transition-all">
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>⏰</span>
+                  <span>Timer Countdown</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>🎯</span>
+                  <span>Time Management</span>
+                </div>
+              </div>
+              <div className="flex items-center text-[#3F72AF] font-bold group-hover:gap-2 transition-all">
                 <span>Coba sekarang</span>
                 <span className="group-hover:translate-x-1 transition-transform">
                   →
@@ -214,18 +294,59 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="group bg-gradient-to-br from-indigo-50 to-white p-8 rounded-2xl border border-indigo-100 hover:shadow-2xl hover:border-indigo-300 transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+            {/* Analisis Performa */}
+            <div className="group bg-gradient-to-br from-[#DBE2EF] via-[#F9F7F7]/50 to-[#DBE2EF] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#112D4E] to-[#3F72AF] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                📊
+              </div>
+              <h3 className="text-2xl font-bold text-[#112D4E] mb-3">
+                Analisis Mendalam
+              </h3>
+              <p className="text-[#112D4E]/70 leading-relaxed mb-4">
+                Pantau progres belajarmu dengan detail! Statistik lengkap,
+                riwayat latihan, dan grafik performa untuk evaluasi optimal.
+              </p>
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>📈</span>
+                  <span>Grafik Performa</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>📝</span>
+                  <span>Riwayat Lengkap</span>
+                </div>
+              </div>
+              <div className="flex items-center text-[#3F72AF] font-bold group-hover:gap-2 transition-all">
+                <span>Lihat statistik</span>
+                <span className="group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
+              </div>
+            </div>
+
+            {/* Scoring System */}
+            <div className="group bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF]/50 to-[#F9F7F7] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#3F72AF] to-[#112D4E] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
                 💯
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">
-                Score System
+              <h3 className="text-2xl font-bold text-[#112D4E] mb-3">
+                Sistem Scoring
               </h3>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="text-[#112D4E]/70 leading-relaxed mb-4">
                 Sistem penilaian otomatis yang akurat. Dapatkan feedback
-                langsung setelah menyelesaikan latihan soal!
+                langsung dan nilai detail setelah menyelesaikan latihan!
               </p>
-              <div className="mt-6 flex items-center text-indigo-600 font-semibold group-hover:gap-2 transition-all">
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>✨</span>
+                  <span>Auto Scoring</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>💬</span>
+                  <span>Instant Feedback</span>
+                </div>
+              </div>
+              <div className="flex items-center text-[#3F72AF] font-bold group-hover:gap-2 transition-all">
                 <span>Pelajari lebih lanjut</span>
                 <span className="group-hover:translate-x-1 transition-transform">
                   →
@@ -233,22 +354,60 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="group bg-gradient-to-br from-pink-50 to-white p-8 rounded-2xl border border-pink-100 hover:shadow-2xl hover:border-pink-300 transition-all duration-300 hover:-translate-y-2">
-              <div className="w-16 h-16 bg-pink-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
-                ❤️
+            {/* Leaderboard */}
+            <div className="group bg-gradient-to-br from-[#DBE2EF] via-[#F9F7F7]/50 to-[#DBE2EF] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#112D4E] to-[#3F72AF] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
+                🏆
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">
-                Life System
+              <h3 className="text-2xl font-bold text-[#112D4E] mb-3">
+                Leaderboard
               </h3>
-              <p className="text-slate-600 leading-relaxed">
-                Sistem nyawa membuat latihan lebih menantang. Jaga performa
-                terbaikmu dan raih skor maksimal!
+              <p className="text-[#112D4E]/70 leading-relaxed mb-4">
+                Bersaing dengan pengguna lain! Sistem ranking mingguan dengan
+                update real-time untuk memotivasi belajarmu.
               </p>
-              <div className="mt-6 flex items-center text-pink-600 font-semibold group-hover:gap-2 transition-all">
-                <span>Mulai bermain</span>
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>🥇</span>
+                  <span>Ranking Mingguan</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-[#3F72AF]">
+                  <span>⚡</span>
+                  <span>Update Real-Time</span>
+                </div>
+              </div>
+              <div className="flex items-center text-[#3F72AF] font-bold group-hover:gap-2 transition-all">
+                <span>Lihat ranking</span>
                 <span className="group-hover:translate-x-1 transition-transform">
                   →
                 </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Features Banner */}
+          <div className="mt-16 bg-gradient-to-r from-[#3F72AF] via-[#112D4E] to-[#3F72AF] p-8 rounded-3xl text-white shadow-2xl">
+            <div className="text-center">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-4">
+                Dan masih banyak fitur lainnya!
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="text-3xl">💾</div>
+                  <div className="text-sm font-semibold">Auto Save</div>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="text-3xl">📱</div>
+                  <div className="text-sm font-semibold">Responsive</div>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="text-3xl">🔒</div>
+                  <div className="text-sm font-semibold">Secure Login</div>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="text-3xl">⚡</div>
+                  <div className="text-sm font-semibold">Fast Loading</div>
+                </div>
               </div>
             </div>
           </div>
@@ -258,40 +417,52 @@ export default function Home() {
       {/* Stats Section */}
       <section
         id="stats"
-        className="py-20 px-4 bg-gradient-to-br from-blue-600 to-indigo-600 text-white"
+        className="py-20 px-4 bg-gradient-to-br from-[#3F72AF] via-[#112D4E] to-[#3F72AF] text-white relative overflow-hidden"
       >
-        <div className="max-w-6xl mx-auto">
+        {/* Decorative overlay */}
+        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+        <div className="relative max-w-6xl mx-auto">
           <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-[#F9F7F7]/20 backdrop-blur-sm text-white px-6 py-2.5 rounded-full text-sm font-bold mb-6 border border-[#F9F7F7]/30">
+              <span>🚀</span>
+              Baru Diluncurkan!
+            </div>
             <h2 className="text-4xl font-bold mb-4">
-              Bergabung dengan Ribuan Siswa Lainnya
+              Platform Latihan SNBT Modern
             </h2>
-            <p className="text-xl text-blue-100">
-              Platform terpercaya untuk persiapan UTBK
+            <p className="text-xl text-[#DBE2EF]">
+              Mulai perjalanan persiapan SNBT-mu bersama kami
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-              <div className="text-5xl font-extrabold mb-2">1000+</div>
-              <div className="text-xl text-blue-100">Siswa Aktif</div>
-              <div className="mt-4 text-sm text-blue-200">
-                Belajar bersama setiap hari
+            <div className="bg-[#F9F7F7]/10 backdrop-blur-lg rounded-3xl p-8 border-2 border-[#F9F7F7]/20 hover:bg-[#F9F7F7]/20 hover:border-[#F9F7F7]/40 transition-all duration-300 hover:scale-105 shadow-xl">
+              <div className="text-5xl font-extrabold mb-2 bg-gradient-to-r from-[#F9F7F7] to-[#DBE2EF] bg-clip-text text-transparent">
+                500+
+              </div>
+              <div className="text-xl text-[#DBE2EF]">Soal Berkualitas</div>
+              <div className="mt-4 text-sm text-[#DBE2EF]/80">
+                Bank soal terupdate dan terverifikasi
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-              <div className="text-5xl font-extrabold mb-2">5000+</div>
-              <div className="text-xl text-blue-100">Soal Tersedia</div>
-              <div className="mt-4 text-sm text-blue-200">
-                Bank soal lengkap dan terupdate
+            <div className="bg-[#F9F7F7]/10 backdrop-blur-lg rounded-3xl p-8 border-2 border-[#F9F7F7]/20 hover:bg-[#F9F7F7]/20 hover:border-[#F9F7F7]/40 transition-all duration-300 hover:scale-105 shadow-xl">
+              <div className="text-5xl font-extrabold mb-2 bg-gradient-to-r from-[#F9F7F7] to-[#DBE2EF] bg-clip-text text-transparent">
+                2
+              </div>
+              <div className="text-xl text-[#DBE2EF]">Mode Latihan</div>
+              <div className="mt-4 text-sm text-[#DBE2EF]/80">
+                Game Mode & Try-Out Mode
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
-              <div className="text-5xl font-extrabold mb-2">95%</div>
-              <div className="text-xl text-blue-100">Tingkat Kepuasan</div>
-              <div className="mt-4 text-sm text-blue-200">
-                Rating dari pengguna kami
+            <div className="bg-[#F9F7F7]/10 backdrop-blur-lg rounded-3xl p-8 border-2 border-[#F9F7F7]/20 hover:bg-[#F9F7F7]/20 hover:border-[#F9F7F7]/40 transition-all duration-300 hover:scale-105 shadow-xl">
+              <div className="text-5xl font-extrabold mb-2 bg-gradient-to-r from-[#F9F7F7] to-[#DBE2EF] bg-clip-text text-transparent">
+                100%
+              </div>
+              <div className="text-xl text-[#DBE2EF]">Gratis</div>
+              <div className="mt-4 text-sm text-[#DBE2EF]/80">
+                Semua fitur dapat diakses gratis
               </div>
             </div>
           </div>
@@ -299,13 +470,13 @@ export default function Home() {
       </section>
 
       {/* Leaderboard Section */}
-      <section className="py-16 sm:py-20 px-4 bg-gradient-to-br from-gray-50 to-blue-50">
+      <section className="py-16 sm:py-20 px-4 bg-gradient-to-br from-[#DBE2EF] via-[#F9F7F7] to-[#DBE2EF]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 sm:mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#112D4E] mb-4">
               🏆 Top Performers
             </h2>
-            <p className="text-lg sm:text-xl text-slate-600">
+            <p className="text-lg sm:text-xl text-[#3F72AF]">
               Lihat siapa yang memimpin peringkat minggu ini!
             </p>
           </div>
@@ -317,17 +488,17 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-white">
+      <section className="py-20 px-4 bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF]">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-slate-900 mb-6">
+          <h2 className="text-4xl font-bold text-[#112D4E] mb-6">
             Siap Memulai Perjalananmu?
           </h2>
-          <p className="text-xl text-slate-600 mb-10">
+          <p className="text-xl text-[#3F72AF] mb-10">
             Bergabunglah dengan ribuan siswa yang telah meningkatkan persiapan
-            UTBK mereka
+            SNBT mereka
           </p>
           <Link href="/study">
-            <button className="px-12 py-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-xl shadow-2xl hover:shadow-blue-600/50 transition-all duration-300 hover:scale-105 active:scale-95">
+            <button className="px-12 py-5 bg-gradient-to-r from-[#3F72AF] to-[#112D4E] text-white rounded-2xl font-bold text-xl shadow-2xl hover:shadow-[#3F72AF]/60 transition-all duration-300 hover:scale-105 active:scale-95 border-2 border-[#112D4E]/20">
               Mulai Latihan Gratis 🎯
             </button>
           </Link>

@@ -13,12 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Game Simulasi UTBK - Platform Latihan UTBK Interaktif",
-  description: "Platform pembelajaran interaktif untuk persiapan UTBK dengan timer, score system, dan analisis mendalam",
+  title: "Game Simulasi SNBT - Platform Latihan SNBT Interaktif",
+  description:
+    "Platform pembelajaran interaktif untuk persiapan SNBT dengan timer, score system, dan analisis mendalam",
   icons: {
-    icon: '/logo.png',
-    shortcut: '/logo.png',
-    apple: '/logo.png',
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
 };
 

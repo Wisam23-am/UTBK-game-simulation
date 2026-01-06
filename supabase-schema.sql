@@ -162,11 +162,12 @@ SELECT
 FROM profiles p
 LEFT JOIN game_results gr ON p.id = gr.user_id
 GROUP BY p.id, p.username, p.full_name, p.avatar_url, p.school, p.target_university
+HAVING COUNT(gr.id) > 0
 ORDER BY 
   best_score DESC, 
   total_correct DESC,
   best_time ASC
-LIMIT 100;
+LIMIT 50;
 
 -- Create unique index on materialized view
 CREATE UNIQUE INDEX IF NOT EXISTS idx_global_leaderboard_id ON global_leaderboard(id);
