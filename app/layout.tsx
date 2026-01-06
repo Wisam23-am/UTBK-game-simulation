@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Game Simulasi SNBT - Platform Latihan SNBT Interaktif",
+  title: "QuizQuest - Platform SNBT Game Interaktif",
   description:
-    "Platform pembelajaran interaktif untuk persiapan SNBT dengan timer, score system, dan analisis mendalam",
+    "Platform pembelajaran SNBT yang seru dengan game mode, leaderboard kompetitif, dan sistem feedback. Raih skor tertinggi dan bersaing dengan ribuan pejuang SNBT lainnya!",
   icons: {
     icon: "/logo.png",
     shortcut: "/logo.png",
