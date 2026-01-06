@@ -83,9 +83,9 @@ function DockItem({
   const targetSize = useTransform(
     mouseDistance,
     [-distance, 0, distance],
-    [baseItemSize, magnification, baseItemSize]
+    isMobile ? [baseItemSize, baseItemSize, baseItemSize] : [baseItemSize, magnification, baseItemSize]
   );
-  const size = useSpring(isMobile ? baseItemSize : targetSize, spring);
+  const size = useSpring(targetSize, spring);
 
   return (
     <motion.div
