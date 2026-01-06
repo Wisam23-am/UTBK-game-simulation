@@ -310,26 +310,31 @@ export default function Dock({
           isHovered.set(0);
           mouseX.set(Infinity);
         }}
-        className={`${className} absolute bottom-2 left-1/2 transform -translate-x-1/2 flex items-end w-fit gap-4 rounded-2xl bg-gradient-to-br from-[#F9F7F7]/95 via-[#DBE2EF]/90 to-[#F9F7F7]/95 backdrop-blur-md border-2 border-[#3F72AF]/40 shadow-2xl pb-2 px-4`}
+        className={`${className} absolute bottom-2 left-1/2 transform -translate-x-1/2 rounded-2xl bg-gradient-to-br from-[#F9F7F7]/95 via-[#DBE2EF]/90 to-[#F9F7F7]/95 backdrop-blur-md border-2 border-[#3F72AF]/40 shadow-2xl pb-2 px-4 
+          md:w-fit md:flex md:items-end md:gap-4
+          max-w-[calc(100vw-1rem)] overflow-x-auto overflow-y-hidden scrollbar-hide snap-x snap-mandatory`}
         style={{ height: panelHeight }}
         role="toolbar"
         aria-label="Application dock"
       >
-        {dockItems.map((item, index) => (
-          <DockItem
-            key={index}
-            onClick={item.onClick}
-            className={item.className}
-            mouseX={mouseX}
-            spring={spring}
-            distance={distance}
-            magnification={magnification}
-            baseItemSize={baseItemSize}
-          >
-            <DockIcon>{item.icon}</DockIcon>
-            <DockLabel>{item.label}</DockLabel>
-          </DockItem>
-        ))}
+        <div className="flex items-end gap-4 md:gap-4 min-w-max">
+          {dockItems.map((item, index) => (
+            <div key={index} className="snap-center shrink-0">
+              <DockItem
+                onClick={item.onClick}
+                className={item.className}
+                mouseX={mouseX}
+                spring={spring}
+                distance={distance}
+                magnification={magnification}
+                baseItemSize={baseItemSize}
+              >
+                <DockIcon>{item.icon}</DockIcon>
+                <DockLabel>{item.label}</DockLabel>
+              </DockItem>
+            </div>
+          ))}
+        </div>
       </motion.div>
     </motion.div>
   );
