@@ -16,7 +16,7 @@ const teamMembers: TeamMember[] = [
     name: 'Aqila Wisam Madani M',
     role: 'Developer',
     major: 'D4 Teknik Informatika 24',
-    image: '/team/Wisam.jpg'
+    image: '/team/Wisam-Foto.png'
   },
   {
     id: 2,
