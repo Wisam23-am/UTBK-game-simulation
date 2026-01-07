@@ -29,7 +29,7 @@ const teamMembers: TeamMember[] = [
     id: 3,
     name: 'Bima Adji Kusuma',
     major: 'D4 Teknik Komputer 24',
-    image: '/team/bima-adji-kusuma.jpg'
+    image: '/team/Bima-foto.png'
   },
   {
     id: 4,
@@ -45,7 +45,7 @@ const teamMembers: TeamMember[] = [
   },
   {
     id: 6,
-    name: 'Evan',
+    name: 'Muhammad Haris Evan Dinata',
     major: 'D3 Teknik Informatika 25',
     image: '/team/Evan-foto.png'
   },
