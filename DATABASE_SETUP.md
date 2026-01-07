@@ -91,15 +91,29 @@ Bank soal UTBK dengan struktur terbaru (UTBK 2024+):
 
 **Status Soal: 350 Soal Verified ✅**
 
-| Kategori                           | Jumlah | Target | Status  |
-| ---------------------------------- | ------ | ------ | ------- |
-| PU (Penalaran Umum)                | 50     | 20     | ✅ 250% |
-| PK (Pengetahuan Kuantitatif)       | 50     | 30     | ✅ 167% |
-| PPU (Pengetahuan & Pemahaman Umum) | 50     | 20     | ✅ 250% |
-| PBM (Pemahaman Bacaan & Menulis)   | 50     | 20     | ✅ 250% |
-| LBI (Literasi Bahasa Indonesia)    | 50     | 15     | ✅ 333% |
-| LBE (Literasi Bahasa Inggris)      | 50     | 15     | ✅ 333% |
-| PM (Penalaran Matematika)          | 50     | 20     | ✅ 250% |
+**Game Mode Target (15 soal per game):**
+
+| Kategori                           | Jumlah | Target Game | Status  |
+| ---------------------------------- | ------ | ----------- | ------- |
+| PU (Penalaran Umum)                | 50     | 3           | ✅ OK   |
+| PK (Pengetahuan Kuantitatif)       | 50     | 2           | ✅ OK   |
+| PPU (Pengetahuan & Pemahaman Umum) | 50     | 2           | ✅ OK   |
+| PBM (Pemahaman Bacaan & Menulis)   | 50     | 2           | ✅ OK   |
+| LBI (Literasi Bahasa Indonesia)    | 50     | 2           | ✅ OK   |
+| LBE (Literasi Bahasa Inggris)      | 50     | 2           | ✅ OK   |
+| PM (Penalaran Matematika)          | 50     | 2           | ✅ OK   |
+
+**Try-Out Mode Target (160 soal per Try-Out - Rabu & Minggu):**
+
+| Kategori                           | Jumlah | Target Try-Out | Status     |
+| ---------------------------------- | ------ | -------------- | ---------- |
+| PU (Penalaran Umum)                | 50     | 30             | ⚠️ Need 30 |
+| PPU (Pengetahuan & Pemahaman Umum) | 50     | 20             | ✅ OK      |
+| PBM (Pemahaman Bacaan & Menulis)   | 50     | 20             | ✅ OK      |
+| PK (Pengetahuan Kuantitatif)       | 50     | 20             | ✅ OK      |
+| LBI (Literasi Bahasa Indonesia)    | 50     | 30             | ⚠️ Need 30 |
+| LBE (Literasi Bahasa Inggris)      | 50     | 20             | ✅ OK      |
+| PM (Penalaran Matematika)          | 50     | 20             | ✅ OK      |
 
 **Struktur Database:**
 
@@ -121,12 +135,28 @@ Bank soal UTBK dengan struktur terbaru (UTBK 2024+):
 - question_image_url (URL gambar/diagram soal, optional)
 - options (JSONB array dengan format [{"label":"A","text":"..."}, ...])
 - correct_answer (A-E)
-- explanation (penjelasan lengkap dengan perhitungan)
+- explanation (penjelasan lengkap dengan perhitungan + **trik cepat untuk PK/PM**)
 - stimulus_id (FK to question_stimulus untuk soal dengan bacaan bersama)
 - source (pdf-utbk-2024, pdf-utbk-2025-wangsit, etc)
 - verified (boolean, semua soal sudah verified)
 - usage_count, correct_rate (auto-update)
 ```
+
+**⚡ PENTING - Prinsip Trik Cepat SNBT:**
+
+Khusus untuk **PK (Pengetahuan Kuantitatif)**, **PU (Penalaran Umum)**, dan **PM (Penalaran Matematika)**:
+
+- ✅ Soal harus punya **jalur trik cepat** (< 1 menit)
+- ✅ Angka dipilih **strategis** (proporsional, bulat, pattern)
+- ✅ Explanation harus mention trik cepat + jalur normal
+- ✅ **TIDAK boleh** angka random tanpa alasan
+
+**Contoh:**
+- Ratio 3:5 dengan total 800 → 800 habis dibagi 8 (sengaja!)
+- 99 × 97 → dekat dengan 100² (ada trik!)
+- 36 siswa, ratio 5:7 → 36 habis dibagi 12 (ada pola!)
+
+See [SOAL-CREATION-GUIDE.md](SOAL-CREATION-GUIDE.md) untuk detail lengkap!
 
 #### 2B. `question_stimulus`
 
@@ -198,6 +228,50 @@ Leaderboard materialized view otomatis refresh setiap ada game result baru.
 
 ---
 
+## 📊 Question Requirements Analysis
+
+### **Current Status: 350 Soal Verified**
+
+### **Game Mode (READY ✅):**
+
+| Kategori | Stock | Need/Game | Games Available |
+|----------|-------|-----------|-----------------|
+| PU       | 50    | 3         | ~16 games       |
+| PK       | 50    | 2         | ~25 games       |
+| PPU      | 50    | 2         | ~25 games       |
+| PBM      | 50    | 2         | ~25 games       |
+| LBI      | 50    | 2         | ~25 games       |
+| LBE      | 50    | 2         | ~25 games       |
+| PM       | 50    | 2         | ~25 games       |
+
+**Status:** ✅ Ready (dapat support 16+ unique games)
+
+### **Try-Out Mode (PERLU PENAMBAHAN):**
+
+| Kategori | Stock | Need/Try-Out | Try-Outs Available | Need to Add |
+|----------|-------|--------------|-------------------|-------------|
+| PU       | 50    | 30           | ~1.6 Try-Outs     | ⚠️ +100 soal |
+| PPU      | 50    | 20           | ~2.5 Try-Outs     | ✅ OK       |
+| PBM      | 50    | 20           | ~2.5 Try-Outs     | ✅ OK       |
+| PK       | 50    | 20           | ~2.5 Try-Outs     | ✅ OK       |
+| LBI      | 50    | 30           | ~1.6 Try-Outs     | ⚠️ +100 soal |
+| LBE      | 50    | 20           | ~2.5 Try-Outs     | ✅ OK       |
+| PM       | 50    | 20           | ~2.5 Try-Outs     | ✅ OK       |
+
+**Target:** 8 Try-Outs per bulan (2 per minggu × 4 minggu)
+
+**Rekomendasi:**
+- ⚠️ **Priority High:** Tambah **100 soal PU** (total jadi 150)
+- ⚠️ **Priority High:** Tambah **100 soal LBI** (total jadi 150)
+- ✅ Kategori lain sudah cukup untuk 2-3 Try-Outs
+
+**Dengan penambahan:**
+- PU: 150 soal → 5 Try-Outs
+- LBI: 150 soal → 5 Try-Outs
+- Total capacity: **5 Try-Outs unik** (cukup untuk 1+ bulan)
+
+---
+
 ## Next Steps
 
 After database setup:
@@ -230,44 +304,134 @@ ALTER TABLE game_results ADD COLUMN IF NOT EXISTS streak_bonus INTEGER DEFAULT 0
 
 ### For Try-Out Mode (Phase 3B):
 
+**Format Baru (January 7, 2026):**
+- Try-Out dijadwalkan setiap **Rabu & Minggu**
+- **2 Pilihan:** TPS (90 soal) atau Literasi (70 soal)
+- User dapat memilih salah satu atau kedua Try-Out
+- IRT Scoring dengan **dynamic difficulty**
+
+**A. TPS (Tes Potensi Skolastik) - Total 90 soal, 135 menit:**
+
+| Kategori | Jumlah Soal | Waktu |
+|----------|-------------|-------|
+| PU (Penalaran Umum) | 30 soal | **45 menit** |
+| PPU (Pengetahuan & Pemahaman Umum) | 20 soal | **30 menit** |
+| PBM (Pemahaman Bacaan & Menulis) | 20 soal | **30 menit** |
+| PK (Pengetahuan Kuantitatif) | 20 soal | **30 menit** |
+| **TOTAL TPS** | **90 soal** | **135 menit** |
+
+**B. Literasi - Total 70 soal, 75 menit:**
+
+| Kategori | Jumlah Soal | Waktu |
+|----------|-------------|-------|
+| LBI (Literasi Bahasa Indonesia) | 30 soal | **30 menit** |
+| LBE (Literasi Bahasa Inggris) | 20 soal | **30 menit** |
+| PM (Penalaran Matematika) | 20 soal | **15 menit** |
+| **TOTAL Literasi** | **70 soal** | **75 menit** |
+
+**IRT Scoring System:**
+
+Item Response Theory (IRT) adalah model statistik untuk scoring yang lebih **fair** berdasarkan kesulitan soal dan performa peserta lain.
+
+**Formula:**
+```javascript
+// Per soal:
+difficulty_factor = difficulty_weight // 8 (easy), 10 (medium), 12 (hard)
+rarity_bonus = 1 + (1 - correct_rate) // correct_rate dari database
+
+// Point per soal:
+points = difficulty_factor × rarity_bonus
+
+// Contoh:
+// Soal Hard (weight=12), correct_rate=30% → points = 12 × 1.7 = 20.4
+// Soal Medium (weight=10), correct_rate=70% → points = 10 × 1.3 = 13
+// Soal Easy (weight=8), correct_rate=90% → points = 8 × 1.1 = 8.8
+
+// Total score per section (scaled 200-1000):
+raw_score = Σ points
+max_possible = Σ (12 × 2) // asumsi semua hard, correct_rate=0%
+scaled_score = 200 + (raw_score / max_possible) × 800
+```
+
+**Kenapa IRT?**
+- Soal yang **susah** (banyak dijawab salah) → nilai benar lebih tinggi
+- Soal yang **mudah** (hampir semua benar) → nilai benar lebih rendah
+- **Fair** untuk semua peserta, tidak tergantung luck
+- Update real-time berdasarkan `usage_count` dan `correct_rate`
+
 ```sql
 -- ============================================
--- NEW TABLE: Try-Out Sessions
+-- NEW TABLE: Try-Out Sessions (Scheduled)
 -- ============================================
 CREATE TABLE IF NOT EXISTS tryout_sessions (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES auth.users NOT NULL,
 
   -- Session Info
-  test_type VARCHAR(20) NOT NULL, -- 'tps-only', 'saintek', 'soshum', 'campuran'
+  test_type VARCHAR(20) NOT NULL, -- 'tps' atau 'literasi'
+  scheduled_date DATE NOT NULL, -- Rabu atau Minggu
   status VARCHAR(20) DEFAULT 'in-progress', -- 'in-progress', 'completed', 'abandoned'
 
   -- Timing
   started_at TIMESTAMP DEFAULT NOW(),
   completed_at TIMESTAMP,
-  total_time_spent INTEGER, -- in seconds
+  total_time_spent INTEGER, -- in seconds (max 8100 for TPS / 4500 for Literasi)
 
-  -- Overall Scores (IRT-based, 0-1000 per section)
-  tps_score INTEGER,
-  skolastik_score INTEGER,
-  final_score INTEGER, -- average of both
+  -- Overall Scores (IRT-based, scaled 200-1000)
+  -- For TPS: average dari 4 sections (PU, PPU, PBM, PK)
+  -- For Literasi: average dari 3 sections (LBI, LBE, PM)
+  final_score INTEGER, -- Average dari semua sections dalam test_type
 
   -- Section breakdown (JSONB for flexibility)
   section_scores JSONB,
-  /* Example:
+  /* Example untuk TPS (test_type = 'tps'):
   {
-    "penalaran_umum": {"score": 667, "correct": 15, "total": 20, "time": 1800},
-    "kuantitatif": {"score": 720, "correct": 12, "total": 15, "time": 1200},
-    "penalaran_matematika": {"score": 580, "correct": 13, "total": 20, "time": 1650},
-    ...
+    "pu": {"score": 667, "correct": 22, "total": 30, "time": 2550, "raw_points": 385.4, "max_time": 2700},
+    "ppu": {"score": 720, "correct": 16, "total": 20, "time": 1680, "raw_points": 189.2, "max_time": 1800},
+    "pbm": {"score": 580, "correct": 13, "total": 20, "time": 1750, "raw_points": 152.8, "max_time": 1800},
+    "pk": {"score": 650, "correct": 14, "total": 20, "time": 1620, "raw_points": 168.5, "max_time": 1800}
+  }
+  
+  Example untuk Literasi (test_type = 'literasi'):
+  {
+    "lbi": {"score": 750, "correct": 25, "total": 30, "time": 1680, "raw_points": 428.6, "max_time": 1800},
+    "lbe": {"score": 680, "correct": 15, "total": 20, "time": 1720, "raw_points": 185.3, "max_time": 1800},
+    "pm": {"score": 620, "correct": 13, "total": 20, "time": 830, "raw_points": 158.7, "max_time": 900}
   }
   */
 
   -- Question IDs used (for review)
   questions_used JSONB,
 
-  -- User answers (for detailed review)
+  -- User answers (for detailed review with IRT points)
   user_answers JSONB,
+  /* Example:
+  [
+    {
+      "question_id": "uuid-xxx",
+      "user_answer": "B",
+      "correct_answer": "B",
+      "is_correct": true,
+      "time_spent": 45,
+      "difficulty_weight": 12,
+      "correct_rate": 0.35,
+      "points_earned": 19.8 // = 12 × (1 + 0.65)
+    },
+    {
+      "question_id": "uuid-yyy",
+      "user_answer": "C",
+      "correct_answer": "A",
+      "is_correct": false,
+      "time_spent": 62,
+      "difficulty_weight": 10,
+      "correct_rate": 0.68,
+      "points_earned": 0
+    }
+  ]
+  */
+
+  -- IRT Metadata (untuk analytics)
+  irt_metadata JSONB,
   /* Example:
   [
     {"question_id": "uuid", "section": "penalaran_umum", "answer": "B",
@@ -285,6 +449,26 @@ CREATE TABLE IF NOT EXISTS tryout_sessions (
 ALTER TABLE questions ADD COLUMN IF NOT EXISTS difficulty_weight INTEGER DEFAULT 10;
 -- Easy: 8, Medium: 10, Hard: 12
 
+ALTER TABLE questions ADD COLUMN IF NOT EXISTS usage_count INTEGER DEFAULT 0;
+-- Track berapa kali soal ini digunakan di Try-Out
+
+ALTER TABLE questions ADD COLUMN IF NOT EXISTS correct_rate DECIMAL DEFAULT 0.5;
+-- Track persentase peserta yang jawab benar (0.0 - 1.0)
+
+ALTER TABLE questions ADD COLUMN IF NOT EXISTS subcategory VARCHAR(100);
+-- NEW: Subcategory untuk material rotation
+/* Examples:
+  PU: 'penarikan-kesimpulan', 'sebab-akibat', 'silogisme', 'pola-bilangan'
+  PPU: 'makna-kata', 'ide-pokok', 'sinonim-antonim', 'kalimat-efektif'
+  PBM: 'ide-pokok', 'simpulan', 'struktur-teks', 'penilaian-argumen'
+  PK: 'hitung-cepat', 'logaritma', 'geometri', 'statistika'
+  LBI: 'teks-argumentasi', 'teks-narasi', 'inferensi'
+  LBE: 'main-idea', 'vocabulary', 'inference'
+  PM: 'soal-cerita', 'grafik-tabel', 'pemodelan'
+  
+  See TRYOUT-MATERIALS-ROTATION.md untuk daftar lengkap
+*/
+
 ALTER TABLE questions ADD COLUMN IF NOT EXISTS utbk_section VARCHAR(50);
 /* Valid values:
   TPS: 'penalaran-umum', 'kuantitatif', 'penalaran-matematika',
@@ -292,6 +476,30 @@ ALTER TABLE questions ADD COLUMN IF NOT EXISTS utbk_section VARCHAR(50);
   SAINTEK: 'matematika', 'fisika', 'kimia', 'biologi'
   SOSHUM: 'sejarah', 'geografi', 'sosiologi', 'ekonomi'
 */
+
+-- ============================================
+-- NEW TABLE: Try-Out Material Usage (Rotation Tracking)
+-- ============================================
+CREATE TABLE IF NOT EXISTS tryout_material_usage (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tryout_date DATE NOT NULL, -- Rabu atau Minggu
+  test_type VARCHAR(20) NOT NULL, -- 'tps' atau 'literasi'
+  category VARCHAR(10) NOT NULL, -- 'pu', 'ppu', 'pbm', 'pk', 'lbi', 'lbe', 'pm'
+  subcategories_used JSONB NOT NULL, -- Array of subcategories used
+  /* Example:
+  {
+    "wajib": ["penarikan-kesimpulan", "hubungan-pernyataan", "konsistensi-logika"],
+    "rotasi": ["sebab-akibat", "silogisme", "pola-gambar"]
+  }
+  */
+  created_at TIMESTAMP DEFAULT NOW(),
+  
+  -- Constraint: unique per date, test_type, category
+  UNIQUE(tryout_date, test_type, category)
+);
+
+-- Index untuk query cepat
+CREATE INDEX idx_material_usage ON tryout_material_usage(tryout_date, test_type, category);
 
 -- ============================================
 -- INDEXES for Try-Out

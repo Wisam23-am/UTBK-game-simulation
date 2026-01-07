@@ -199,8 +199,9 @@
 - **NEW: Answer review cards in results**
 - **NEW: Advanced leaderboard ranking (score → correct → time)**
 
-### **🎉 Recent Achievements (January 7, 2026) - Sprint 2 Day 3:**
+### **🎉 Recent Achievements (January 7, 2026) - Sprint 2 Complete:**
 
+#### **Day 3 (Morning):**
 - ✅ **Login Page Complete Redesign**
   - Animated gradient background (from-[#F9F7F7] via-[#DBE2EF] to-[#3F72AF]/20)
   - 3 animated blob decorations with staggered animations
@@ -228,6 +229,72 @@
   - Resolved ECMAScript syntax error
   - Clean code with proper string formatting
 
+#### **Day 3 (Afternoon) - Try-Out Mode Planning:**
+- ✅ **Try-Out Format Redesign**
+  - Scheduled: Rabu & Minggu (2x per week)
+  - **TPS Test** (90 soal, 135 menit):
+    - PU: 30 soal, 45 menit
+    - PPU: 20 soal, 30 menit
+    - PBM: 20 soal, 30 menit
+    - PK: 20 soal, 30 menit
+  - **Literasi Test** (70 soal, 75 menit):
+    - LBI: 30 soal, 30 menit
+    - LBE: 20 soal, 30 menit
+    - PM: 20 soal, 15 menit
+  - User dapat pilih TPS saja, Literasi saja, atau keduanya
+
+- ✅ **Material Rotation System Design**
+  - 4-week minimum gap between same subcategories
+  - Prevent repetitive content for returning users
+  - Mandatory vs rotation materials defined per category
+  - Track usage via `tryout_material_usage` table
+
+- ✅ **Comprehensive Documentation Created:**
+  1. **TRYOUT-MATERIALS-ROTATION.md** (NEW)
+     - Complete material lists for all 7 categories
+     - Wajib vs Rotasi materials defined
+     - Helper function designs (selectRotatingSubcategories, generateTryoutQuestions)
+     - Database schema for material tracking
+     - Quick reference table with distribution
+  
+  2. **SOAL-CREATION-GUIDE.md** (NEW)
+     - Question characteristics per category (ciri & syarat)
+     - Examples: good vs bad questions
+     - QA checklist (Self-Check, Peer Review, Final Verification)
+     - Template formats for explanations
+     - **⚡ Trik Cepat SNBT Section:**
+       - Elimination techniques (digit checking)
+       - Butterfly method for fractions
+       - Pattern recognition (a² - b², 99×97)
+       - Strategic number selection guidelines
+       - Quality metrics: trik harus 3-4x lebih cepat
+       - Timing requirements: PK must < 45 seconds
+  
+  3. **IRT-SCORING-SYSTEM.md** (NEW)
+     - IRT scoring formula for Try-Out mode
+     - `points = difficulty_weight × (1 + (1 - correct_rate))`
+     - TypeScript helper functions
+     - Separate scoring for TPS vs Literasi
+     - Auto-update correct_rate via triggers
+  
+  4. **DATABASE_SETUP.md** (UPDATED)
+     - Added `subcategory` column to questions table
+     - Added `usage_count`, `correct_rate` for IRT
+     - New `tryout_material_usage` table with JSONB tracking
+     - New `tryout_sessions` table with test_type ('tps'/'literasi')
+     - **⚡ Quick tricks reminder** for strategic number selection
+  
+  5. **README.md** (UPDATED)
+     - Added links to all new documentation files
+     - Documentation section expanded to 8 files
+
+- ✅ **SNBT Question Standards Established**
+  - ✅ Angka harus strategis/proporsional (36 bisa dibagi 12, 800 bulat, 99×97 ada pattern)
+  - ✅ Setiap soal PK/PM WAJIB ada jalur trik cepat
+  - ✅ Explanation format: Jalur Normal + ⚡ Trik Cepat
+  - ✅ Target timing: < 45 detik dengan trik, < 1 menit ideal
+  - ✅ DILARANG: angka random tanpa alasan (735219, 87×53, dll)
+
 ### **🎉 Sprint 2 Day 2 Achievements (January 5-6, 2026):**
 
 - ✅ **QuizQuest Branding Established**
@@ -250,6 +317,27 @@
   - PDDikti API integration for 4400+ universities
   - Debounced search for better performance
   - School autocomplete functionality
+
+### **📅 Sprint 3 Planning (January 7, 2026):**
+
+- 🔄 **Try-Out Mode Format Updated**
+  - Changed to **2 separate Try-Outs**: TPS atau Literasi
+  - Scheduled every **Rabu & Minggu**
+  - **TPS**: 90 soal, 135 menit (4 sections: PU, PPU, PBM, PK)
+  - **Literasi**: 70 soal, 75 menit (3 sections: LBI, LBE, PM)
+  - User dapat memilih salah satu atau kedua Try-Out
+  - Waktu sesuai standar SNBT resmi
+  - **NEW: Material Rotation System**
+    - Setiap Try-Out menggunakan kombinasi materi berbeda
+    - Hindari materi yang sama muncul berulang (min gap: 4 minggu)
+    - Materi wajib (core skills) selalu ada di setiap sesi
+    - Contoh: Jika Rabu pakai "Sebab-Akibat" di PU, maka Minggu tidak pakai
+    - See [TRYOUT-MATERIALS-ROTATION.md](TRYOUT-MATERIALS-ROTATION.md) untuk detail lengkap
+  - IRT scoring dengan dynamic difficulty:
+    - Track `correct_rate` & `usage_count` per soal
+    - Formula: `points = difficulty_weight × (1 + (1 - correct_rate))`
+    - Soal susah (banyak yang salah) → nilai tinggi
+  - Documentation updated (README, PROGRESS, DATABASE_SETUP, IRT-SCORING-SYSTEM, TRYOUT-MATERIALS-ROTATION)
 
 ### **🎉 Sprint 2 Day 1 Achievements (January 5, 2026):**
 
@@ -312,9 +400,9 @@
 
 ### **⏳ In Progress:**
 
-None - Sprint 2 completed! ✅ All authentication UI, feedback system, and leaderboard enhancements are production-ready.
+None - Sprint 2 completed! ✅ Sprint 3 planning (Try-Out Mode) documentation phase complete!
 
-### **🎯 Next Priorities (Sprint 3):**
+### **🎯 Next Priorities (Sprint 3 - Implementation Phase):**
 
 1. **Phase 3A: Enhanced Game Mode** - COMPLETE ✅
 
@@ -327,15 +415,76 @@ None - Sprint 2 completed! ✅ All authentication UI, feedback system, and leade
    - ❌ Category filter - NOT NEEDED (reserved for Try-Out Mode)
    - ❌ Difficulty selection - NOT NEEDED (auto-optimized)
 
-2. **Phase 3B: Try-Out Mode** (5-7 hours) - HIGH PRIORITY
+2. **Phase 3B: Try-Out Mode Documentation** - COMPLETE ✅ (January 7, 2026)
 
-   - Full UTBK simulation (105 questions total)
-   - IRT-based scoring using difficulty_weight (0-1000 per section)
-   - Multi-section navigation with timer
-   - Private results with detailed analytics
-   - Review mode for all answers
+   **✅ Planning & Design Completed:**
+   - ✅ Try-Out format defined (TPS 90 soal/135 min, Literasi 70 soal/75 min)
+   - ✅ Material rotation system designed (4-week gap, wajib vs rotasi)
+   - ✅ IRT scoring system documented with formulas
+   - ✅ Question creation standards with SNBT trik cepat principles
+   - ✅ Database schema designed (subcategory, tryout_material_usage)
+   - ✅ Helper function designs completed
+   
+   **📋 Documentation Created (4 new files):**
+   - ✅ [TRYOUT-MATERIALS-ROTATION.md](TRYOUT-MATERIALS-ROTATION.md) - Material rotation with helper functions
+   - ✅ [SOAL-CREATION-GUIDE.md](SOAL-CREATION-GUIDE.md) - Question standards with ⚡ trik cepat section
+   - ✅ [IRT-SCORING-SYSTEM.md](IRT-SCORING-SYSTEM.md) - IRT formula and implementation
+   - ✅ [DATABASE_SETUP.md](DATABASE_SETUP.md) - Updated with Try-Out schema & quick tricks reminder
 
-2. **Testing & Bug Fixes** (30 min)
+   **🔜 Next Steps (Implementation):**
+   1. Execute database schema updates (ALTER TABLE + CREATE TABLE)
+   2. Implement material rotation helpers (`lib/tryout/material-rotation-helpers.ts`)
+   3. Build Try-Out UI:
+      - Schedule page dengan countdown (Rabu & Minggu)
+      - Try-Out selection (TPS/Literasi/Both)
+      - Multi-section navigation (4 TPS sections / 3 Literasi sections)
+      - Section-based timer with auto-transition
+      - Access lock system (jadwal-based)
+   4. Implement IRT scoring system
+   5. Create separate Try-Out leaderboards (TPS & Literasi)
+   6. Build detailed analytics page per section
+   7. Testing & optimization
+
+3. **Phase 3C: Try-Out Mode (Implementation)** - READY TO START (7-9 hours)
+
+   **Format:** Try-Out dijadwalkan setiap **Rabu & Minggu**
+   
+   **2 Pilihan Try-Out:**
+   
+   **A. TPS (Tes Potensi Skolastik) - 90 soal, 135 menit:**
+   - PU (Penalaran Umum): 30 soal, **45 menit**
+   - PPU (Pengetahuan & Pemahaman Umum): 20 soal, **30 menit**
+   - PBM (Pemahaman Bacaan & Menulis): 20 soal, **30 menit**
+   - PK (Pengetahuan Kuantitatif): 20 soal, **30 menit**
+   
+   **B. Literasi - 70 soal, 75 menit:**
+   - LBI (Literasi Bahasa Indonesia): 30 soal, **30 menit**
+   - LBE (Literasi Bahasa Inggris): 20 soal, **30 menit**
+   - PM (Penalaran Matematika): 20 soal, **15 menit**
+   
+   **Features:**
+   - Try-Out selection page (pilih TPS atau Literasi)
+   - Schedule page dengan countdown (Rabu & Minggu)
+   - Access lock (hanya bisa diakses di jadwal)
+   - Multi-section navigation (4 sections TPS / 3 sections Literasi)
+   - Section-based timer (auto-transition antar section)
+   - **Material Rotation System** (NEW!)
+     - Setiap Try-Out menggunakan materi berbeda
+     - Track `subcategory` usage per Try-Out
+     - Hindari materi sama muncul 2x dalam 4 minggu
+     - Materi wajib (core skills) selalu ada
+     - See [TRYOUT-MATERIALS-ROTATION.md](TRYOUT-MATERIALS-ROTATION.md)
+   - IRT-based scoring dengan dynamic difficulty
+     - Formula: `points = difficulty_weight × (1 + (1 - correct_rate))`
+     - Soal yang banyak dijawab salah → nilai benar lebih tinggi
+     - Track `usage_count` & `correct_rate` per soal
+   - Separate leaderboard untuk TPS & Literasi
+   - Detailed analytics per section (scaled 200-1000)
+   - Ranking & badge untuk top 10
+   - Peserta bisa ikut kedua Try-Out di hari yang sama
+   - **Estimated: 7-9 hours implementation**
+
+4. **Testing & Bug Fixes** (30 min)
 
    - End-to-end testing: Register → Login → Play Both Modes → Results
    - Test Try-Out Mode flow (multi-section, scoring, analytics)
@@ -344,7 +493,7 @@ None - Sprint 2 completed! ✅ All authentication UI, feedback system, and leade
    - Fix any UI/UX issues
    - Test on mobile devices
 
-3. **Deploy to Production** (1 hour)
+5. **Deploy to Production** (1 hour)
    - Deploy to Vercel
    - Configure environment variables
    - Test production build

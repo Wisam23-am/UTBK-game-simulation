@@ -1,6 +1,10 @@
 # 🎮 QuizQuest - SNBT Game Platform
 
-Platform latihan SNBT (Seleksi Nasional Berbasis Tes) yang inovatif dengan **Game Mode** untuk practice cepat dengan leaderboard kompetitif. **Try-Out Mode** coming soon!
+Platform latihan SNBT (Seleksi Nasional Berbasis Tes) yang inovatif dengan:
+- **Game Mode** - Practice cepat (15 soal) dengan leaderboard kompetitif 🎮
+- **Try-Out Mode** - Simulasi UTBK setiap Rabu & Minggu dengan IRT scoring 📅✨
+  - **TPS**: 90 soal, 135 menit (4 sections)
+  - **Literasi**: 70 soal, 75 menit (3 sections)
 
 **Brand**: QuizQuest - Misi kami adalah menciptakan revolusi belajar SNBT untuk generasi juara Indonesia! 🎯✨
 
@@ -76,6 +80,33 @@ Platform latihan SNBT (Seleksi Nasional Berbasis Tes) yang inovatif dengan **Gam
 - ✅ Game history with filters
 - ✅ Editable profile (name, school, university)
 - ✅ School autocomplete (SMAN 1 Paciran only)
+
+#### Try-Out Mode (Coming Soon)
+
+- 🔄 Scheduled Try-Out setiap **Rabu & Minggu**
+- 🔄 **2 Pilihan Try-Out:**
+  - **TPS (Tes Potensi Skolastik)**: 90 soal, 135 menit
+    - PU (Penalaran Umum): 30 soal, 45 menit
+    - PPU (Pengetahuan & Pemahaman Umum): 20 soal, 30 menit
+    - PBM (Pemahaman Bacaan & Menulis): 20 soal, 30 menit
+    - PK (Pengetahuan Kuantitatif): 20 soal, 30 menit
+  - **Literasi**: 70 soal, 75 menit
+    - LBI (Literasi Bahasa Indonesia): 30 soal, 30 menit
+    - LBE (Literasi Bahasa Inggris): 20 soal, 30 menit
+    - PM (Penalaran Matematika): 20 soal, 15 menit
+- 🔄 **Sistem Rotasi Materi**
+  - Setiap Try-Out menggunakan materi berbeda
+  - Hindari materi yang sama muncul 2x berturut-turut
+  - Materi wajib (core skills) selalu ada di setiap sesi
+  - Variasi konten untuk pengalaman belajar yang optimal
+- 🔄 **IRT Scoring System** (dynamic difficulty)
+  - Soal yang banyak dijawab salah → nilai benar lebih tinggi
+  - Real-time `correct_rate` & `usage_count` tracking
+  - Formula: `points = difficulty_weight × (1 + (1 - correct_rate))`
+- 🔄 Separate leaderboard untuk TPS & Literasi
+- 🔄 Detailed analytics per section
+- 🔄 Ranking & badge untuk top 10
+- 🔄 Access lock (hanya bisa diakses di jadwal)
 - ✅ University search with PDDikti API (4400+ universities)
 - ✅ Debounced search for better performance
 
@@ -330,8 +361,12 @@ Buka [http://localhost:3000](http://localhost:3000)
 ## 📖 Documentation
 
 - **Setup Guide**: [DATABASE_SETUP.md](DATABASE_SETUP.md)
-- **Troubleshooting**: [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 - **Progress Tracking**: [PROGRESS.md](PROGRESS.md)
+- **Question Creation**: [SOAL-CREATION-GUIDE.md](SOAL-CREATION-GUIDE.md) - Panduan lengkap membuat soal
+- **Material Rotation**: [TRYOUT-MATERIALS-ROTATION.md](TRYOUT-MATERIALS-ROTATION.md) - Sistem rotasi materi
+- **IRT Scoring**: [IRT-SCORING-SYSTEM.md](IRT-SCORING-SYSTEM.md) - Dynamic difficulty scoring
+- **Question Validation**: [QUESTION_VALIDATION.md](QUESTION_VALIDATION.md) - Validation checklist
+- **Troubleshooting**: [TROUBLESHOOTING.md](TROUBLESHOOTING.md)
 - **Database Schema**: [supabase-schema.sql](supabase-schema.sql)
 
 ## 🔧 Developer Tools
