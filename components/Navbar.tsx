@@ -84,7 +84,7 @@ export default function Navbar() {
                 QuizQuest
               </span>
               <span className="text-[8px] text-[#3F72AF]/70 font-semibold -mt-1">
-                SNBT Game Platform
+                SNBT Game Platform by PENS X SMAPA
               </span>
             </div>
           </Link>
