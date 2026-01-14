@@ -35,7 +35,7 @@ const teamMembers: TeamMember[] = [
     id: 4,
     name: 'Robby Arsani Fiorentino',
     major: 'D4 Teknik Komputer 23',
-    image: '/team/robby-arsani-fiorentino.jpg'
+    image: '/team/robby-foto.png'
   },
   {
     id: 5,
