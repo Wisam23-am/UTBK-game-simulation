@@ -22,7 +22,7 @@ export default function DiagnosticPage() {
 
   useEffect(() => {
     if (!mounted) return;
-    
+
     async function runDiagnostics() {
       setLoading(true);
 

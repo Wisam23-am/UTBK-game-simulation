@@ -83,7 +83,9 @@ function DockItem({
   const targetSize = useTransform(
     mouseDistance,
     [-distance, 0, distance],
-    isMobile ? [baseItemSize, baseItemSize, baseItemSize] : [baseItemSize, magnification, baseItemSize]
+    isMobile
+      ? [baseItemSize, baseItemSize, baseItemSize]
+      : [baseItemSize, magnification, baseItemSize],
   );
   const size = useSpring(targetSize, spring);
 
@@ -108,9 +110,9 @@ function DockItem({
         React.isValidElement(child)
           ? cloneElement(
               child as React.ReactElement<{ isHovered?: MotionValue<number> }>,
-              { isHovered }
+              { isHovered },
             )
-          : child
+          : child,
       )}
     </motion.div>
   );
@@ -308,7 +310,7 @@ export default function Dock({
 
   const maxHeight = useMemo(
     () => Math.max(dockHeight, magnification + magnification / 2 + 4),
-    [magnification]
+    [magnification],
   );
   const heightRow = useTransform(isHovered, [0, 1], [panelHeight, maxHeight]);
   const height = useSpring(heightRow, spring);

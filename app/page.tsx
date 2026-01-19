@@ -63,6 +63,24 @@ export default function Home() {
           style={{ animationDelay: "1s" }}
         ></div>
 
+        {/* Maskot Hiu Cerdas - Kanan Atas */}
+        <div className="absolute top-20 right-10 w-24 md:w-32 lg:w-36 hidden sm:block opacity-90">
+          <img
+            src="/mascots/shark-happy.png"
+            alt="Professor Sharky"
+            className="w-full h-auto drop-shadow-xl"
+          />
+        </div>
+
+        {/* Maskot Buaya Belajar - Kiri Bawah */}
+        <div className="absolute bottom-32 left-10 w-28 md:w-36 lg:w-40 hidden md:block opacity-80">
+          <img
+            src="/mascots/dino-book.png"
+            alt="Dino Scholar"
+            className="w-full h-auto drop-shadow-xl"
+          />
+        </div>
+
         <div className="relative max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
@@ -202,9 +220,17 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
             {/* Game Mode */}
-            <div className="group bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF]/50 to-[#F9F7F7] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+            <div className="group bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF]/50 to-[#F9F7F7] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+              {/* Mini Maskot Buaya di Corner */}
+              <div className="absolute -bottom-3 -right-3 w-16 opacity-20 group-hover:opacity-25 transition-opacity">
+                <img
+                  src="/mascots/dino-wave.png"
+                  alt="Dino"
+                  className="w-full h-auto"
+                />
+              </div>
               <div className="w-16 h-16 bg-gradient-to-br from-[#3F72AF] to-[#112D4E] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
                 🎮
               </div>
@@ -235,7 +261,15 @@ export default function Home() {
             </div>
 
             {/* Try-Out Mode */}
-            <div className="group bg-gradient-to-br from-[#DBE2EF] via-[#F9F7F7]/50 to-[#DBE2EF] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+            <div className="group bg-gradient-to-br from-[#DBE2EF] via-[#F9F7F7]/50 to-[#DBE2EF] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+              {/* Mini Maskot Hiu di Corner */}
+              <div className="absolute -top-3 -right-3 w-16 opacity-20 group-hover:opacity-25 transition-opacity">
+                <img
+                  src="/mascots/shark-thinking.png"
+                  alt="Shark Thinking"
+                  className="w-full h-auto"
+                />
+              </div>
               <div className="w-16 h-16 bg-gradient-to-br from-[#112D4E] to-[#3F72AF] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
                 📝
               </div>
@@ -325,7 +359,15 @@ export default function Home() {
             </div>
 
             {/* Scoring System */}
-            <div className="group bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF]/50 to-[#F9F7F7] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+            <div className="group bg-gradient-to-br from-[#F9F7F7] via-[#DBE2EF]/50 to-[#F9F7F7] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+              {/* Mini Maskot Buaya Membaca */}
+              <div className="absolute -bottom-4 -left-4 w-20 opacity-15 group-hover:opacity-20 transition-opacity">
+                <img
+                  src="/mascots/dino-book.png"
+                  alt="Dino Reading"
+                  className="w-full h-auto"
+                />
+              </div>
               <div className="w-16 h-16 bg-gradient-to-br from-[#3F72AF] to-[#112D4E] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
                 💯
               </div>
@@ -355,7 +397,15 @@ export default function Home() {
             </div>
 
             {/* Leaderboard */}
-            <div className="group bg-gradient-to-br from-[#DBE2EF] via-[#F9F7F7]/50 to-[#DBE2EF] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2">
+            <div className="group bg-gradient-to-br from-[#DBE2EF] via-[#F9F7F7]/50 to-[#DBE2EF] p-8 rounded-3xl border-2 border-[#3F72AF]/30 hover:border-[#3F72AF] hover:shadow-2xl hover:shadow-[#3F72AF]/20 transition-all duration-300 hover:-translate-y-2 relative overflow-hidden">
+              {/* Mini Maskot Hiu Senang */}
+              <div className="absolute -top-4 -left-4 w-20 opacity-15 group-hover:opacity-20 transition-opacity">
+                <img
+                  src="/mascots/shark-happy.png"
+                  alt="Happy Shark"
+                  className="w-full h-auto"
+                />
+              </div>
               <div className="w-16 h-16 bg-gradient-to-br from-[#112D4E] to-[#3F72AF] rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg">
                 🏆
               </div>

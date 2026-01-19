@@ -43,7 +43,7 @@ export default function StudyPage() {
   const handleTryOutMode = () => {
     // Coming soon
     alert(
-      "🚧 Try-Out Mode segera hadir!\n\nFitur yang akan tersedia:\n• Simulasi SNBT lengkap\n• Scoring realistis (0-1000)\n• Analytics mendalam\n• Review mode lengkap\n\nGunakan Game Mode untuk latihan! 🎮"
+      "🚧 Try-Out Mode segera hadir!\n\nFitur yang akan tersedia:\n• Simulasi SNBT lengkap\n• Scoring realistis (0-1000)\n• Analytics mendalam\n• Review mode lengkap\n\nGunakan Game Mode untuk latihan! 🎮",
     );
   };
 
@@ -55,6 +55,24 @@ export default function StudyPage() {
       <section className="relative pt-24 pb-12 px-4">
         {/* Decorative blob */}
         <div className="absolute top-20 right-10 w-64 h-64 bg-[#3F72AF]/30 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-pulse"></div>
+
+        {/* Maskot Buaya Belajar */}
+        <div className="absolute top-16 left-10 w-32 md:w-36 hidden lg:block opacity-80">
+          <img
+            src="/mascots/dino-book.png"
+            alt="Dino Scholar"
+            className="w-full h-auto drop-shadow-xl"
+          />
+        </div>
+
+        {/* Maskot Hiu Cerdas */}
+        <div className="absolute top-16 right-16 w-28 md:w-32 hidden xl:block opacity-70">
+          <img
+            src="/mascots/shark-thinking.png"
+            alt="Professor Sharky"
+            className="w-full h-auto drop-shadow-xl"
+          />
+        </div>
 
         <div className="relative max-w-6xl mx-auto text-center mb-12">
           {!isLoading && userName && (
@@ -77,10 +95,19 @@ export default function StudyPage() {
           {/* Game Mode Card */}
           <div
             onClick={handleGameMode}
-            className="group relative bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] rounded-3xl p-8 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl border-2 border-[#3F72AF]/40 hover:border-[#3F72AF]"
+            className="group relative bg-gradient-to-br from-[#F9F7F7] to-[#DBE2EF] rounded-3xl p-8 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl border-2 border-[#3F72AF]/40 hover:border-[#3F72AF] overflow-hidden"
           >
+            {/* Maskot Mini Buaya */}
+            <div className="absolute -bottom-4 -right-4 w-24 opacity-15 group-hover:opacity-20 transition-opacity">
+              <img
+                src="/mascots/dino-wave.png"
+                alt="Dino"
+                className="w-full h-auto"
+              />
+            </div>
+
             {/* Badge */}
-            <div className="absolute top-6 right-6 bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <div className="absolute top-6 right-6 bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-10">
               ⚡ AVAILABLE
             </div>
 
@@ -145,10 +172,19 @@ export default function StudyPage() {
           {/* Try-Out Mode Card */}
           <div
             onClick={handleTryOutMode}
-            className="group relative bg-gradient-to-br from-[#DBE2EF] to-[#F9F7F7] rounded-3xl p-8 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl border-2 border-dashed border-[#3F72AF]/30 hover:border-purple-400 opacity-80 hover:opacity-100"
+            className="group relative bg-gradient-to-br from-[#DBE2EF] to-[#F9F7F7] rounded-3xl p-8 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl border-2 border-dashed border-[#3F72AF]/30 hover:border-purple-400 opacity-80 hover:opacity-100 overflow-hidden"
           >
+            {/* Maskot Mini Hiu */}
+            <div className="absolute -top-4 -left-4 w-20 opacity-12 group-hover:opacity-18 transition-opacity">
+              <img
+                src="/mascots/shark-tablet.png"
+                alt="Shark"
+                className="w-full h-auto"
+              />
+            </div>
+
             {/* Badge */}
-            <div className="absolute top-6 right-6 bg-purple-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+            <div className="absolute top-6 right-6 bg-purple-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-10">
               🚧 SOON
             </div>
 
